@@ -254,7 +254,7 @@ void Player::handle_use_chat()
 		{
 			// packet
 			PacketCreator packet9;
-			packet9.carnival_pq_died(true, mcpq_constants::kTeamRed, name_);
+			packet9.carnival_pq_died(10, mcpq_constants::kTeamRed, name_);
 			send_packet(&packet9);
 		}
 
@@ -263,7 +263,7 @@ void Player::handle_use_chat()
 		{
 			// packet
 			PacketCreator packet10;
-			packet10.leave_carnival_pq(true, mcpq_constants::kTeamRed, name_);
+			packet10.leave_carnival_pq(mcpq_constants::kTeamRed, name_);
 			send_packet(&packet10);
 		}
 

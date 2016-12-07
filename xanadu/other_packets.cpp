@@ -37,6 +37,8 @@
 #include "tools.hpp"
 #include "constants.hpp"
 
+// monster carnival party quest packets
+
 void PacketCreator::StartCarnivalPartyQuest(unsigned char team)
 {
 	write<short>(send_headers::kMONSTER_CARNIVAL_START);
@@ -66,32 +68,11 @@ void PacketCreator::obtain_party_cp(unsigned char team)
 	write<short>(200); // Total Obtained CP
 }
 
-// info for carnival_pq_message function
-
-// possible message values:
-// 1 = You don't have enough CP to continue.
-// 2 = You can no longer summon the Monster.
-// 3 = You can no longer summon the being.
-// 4 = This being is already summoned.
-// 5 = This request has failed due to an unknown error.
-
 void PacketCreator::carnival_pq_message(signed char message)
 {
 	write<short>(send_headers::kMONSTER_CARNIVAL_MESSAGE);
 	write<signed char>(message);
 }
-
-// info for carnival_pq_summon function
-
-// possible values for tab:
-// TAB_SPAWNS/SUMMONS/MOBS = 0;
-// TAB_DEBUFF/SKILL = 1;
-// TAB_GUARDIAN = 2;
-
-// possible values for summon number:
-// 0 = Brown Teddy
-// 1 = Bloctopus
-// 2 = Ratz
 
 void PacketCreator::carnival_pq_summon(signed char tab, signed char summon_number, std::string player_name)
 {
@@ -101,21 +82,25 @@ void PacketCreator::carnival_pq_summon(signed char tab, signed char summon_numbe
 	write<std::string>(player_name);
 }
 
-void PacketCreator::carnival_pq_died(bool lost_cp, unsigned char team, std::string player_name)
+void PacketCreator::carnival_pq_died(signed char lost_cp, unsigned char team, std::string player_name)
 {
 	write<short>(send_headers::kMONSTER_CARNIVAL_DIED);
 	write<unsigned char>(team);
 	write<std::string>(player_name);
-	write<bool>(lost_cp);
+	write<signed char>(lost_cp);
 }
 
-void PacketCreator::leave_carnival_pq(bool party_leader, unsigned char team, std::string player_name)
+void PacketCreator::leave_carnival_pq(unsigned char team, std::string player_name)
 {
 	write<short>(send_headers::kMONSTER_CARNIVAL_LEAVE);
-	write<bool>(party_leader);
+	write<signed char>(0);
 	write<unsigned char>(team);
 	write<std::string>(player_name);
 }
+
+// end of monster carnival party quest packets
+
+// start of other packets
 
 void PacketCreator::GainExp(int exp, bool in_chat, bool white, int party_bonus)
 {
