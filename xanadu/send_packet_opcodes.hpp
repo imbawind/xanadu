@@ -36,7 +36,6 @@ namespace send_headers
 	constexpr short kSPAWN_PORTAL = 0x40;
 	constexpr short kSERVERMESSAGE = 0x41;
 	constexpr short kYELLOW_TIP = 0x4A;
-	constexpr short kENERGY_ATTACK = 0x5c; // maybe wrong
 	constexpr short kSHOW_AVATAR_MEGA = 0x54;
 	constexpr short kWARP_TO_MAP = 0x5C;
 	constexpr short kOPEN_CASHSHOP = 0x5E;
@@ -64,6 +63,7 @@ namespace send_headers
 	constexpr short kCLOSE_RANGE_ATTACK = 0x8E;
 	constexpr short kRANGED_ATTACK = 0x8F;
 	constexpr short kMAGIC_ATTACK = 0x90;
+	constexpr short kENERGY_ATTACK = 0x91;
 	constexpr short kSKILL_EFFECT = 0x92;
 	constexpr short kCANCEL_SKILL_EFFECT = 0x93;
 	constexpr short kDAMAGE_PLAYER = 0x94;
@@ -104,8 +104,8 @@ namespace send_headers
 	constexpr short kMONSTER_CARNIVAL_PARTY_CP = 0xE4;
 	constexpr short kMONSTER_CARNIVAL_SUMMON = 0xE5;
 	constexpr short kMONSTER_CARNIVAL_MESSAGE = 0xE6;
-	//constexpr short kMONSTER_CARNIVAL_DIED = 0xE7; // maybe wrong
-	//constexpr short kMONSTER_CARNIVAL_LEAVE = 0xE9; // maybe wrong
+	constexpr short kMONSTER_CARNIVAL_DIED = 0xE7;
+	constexpr short kMONSTER_CARNIVAL_LEAVE = 0xE8;
 	constexpr short kNPC_TALK = 0xED;
 	constexpr short kOPEN_NPC_SHOP = 0xEE;
 	constexpr short kCONFIRM_SHOP_TRANSACTION = 0xEF;

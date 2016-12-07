@@ -67,8 +67,6 @@ need to work out the details of these features first
 
 - to-do fix pet fullness
 
-- to-do fix the monster carnival and energy send headers
-
 - to-do fix target character doesn't get buddy invite after logging in if someone sent buddy request while he was offline
 
 - to-do fix sender character doesn't get notification if the target declined the buddy invite (not sure if this is a bug)

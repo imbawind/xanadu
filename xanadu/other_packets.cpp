@@ -37,9 +37,6 @@
 #include "tools.hpp"
 #include "constants.hpp"
 
-// info for StartCarnivalPartyQuest function
-// possible team values: 0 = red, 1 = blue, 2 = no team but started, 0xFF = no team but not started
-
 void PacketCreator::StartCarnivalPartyQuest(unsigned char team)
 {
 	write<short>(send_headers::kMONSTER_CARNIVAL_START);
@@ -101,6 +98,22 @@ void PacketCreator::carnival_pq_summon(signed char tab, signed char summon_numbe
 	write<short>(send_headers::kMONSTER_CARNIVAL_SUMMON);
 	write<signed char>(tab);
 	write<signed char>(summon_number); // each mob in cpq has a specific summon number
+	write<std::string>(player_name);
+}
+
+void PacketCreator::carnival_pq_died(bool lost_cp, unsigned char team, std::string player_name)
+{
+	write<short>(send_headers::kMONSTER_CARNIVAL_DIED);
+	write<unsigned char>(team);
+	write<std::string>(player_name);
+	write<bool>(lost_cp);
+}
+
+void PacketCreator::leave_carnival_pq(bool party_leader, unsigned char team, std::string player_name)
+{
+	write<short>(send_headers::kMONSTER_CARNIVAL_LEAVE);
+	write<bool>(party_leader);
+	write<unsigned char>(team);
 	write<std::string>(player_name);
 }
 

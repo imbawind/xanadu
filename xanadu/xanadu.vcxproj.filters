@@ -726,5 +726,8 @@
     <ClInclude Include="game_constants.hpp">
       <Filter>constants</Filter>
     </ClInclude>
+    <ClInclude Include="pq_constants.hpp">
+      <Filter>constants</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

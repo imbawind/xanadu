@@ -305,6 +305,7 @@
     <ClInclude Include="pet_data_provider.hpp" />
     <ClInclude Include="player.hpp" />
     <ClInclude Include="playernpc.hpp" />
+    <ClInclude Include="pq_constants.hpp" />
     <ClInclude Include="quest_data_provider.hpp" />
     <ClInclude Include="shop_data_provider.hpp" />
     <ClInclude Include="skill.hpp" />

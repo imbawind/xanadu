@@ -31,6 +31,7 @@
 #include "mob_data_provider.hpp"
 #include "drop_constants.hpp"
 #include "constants.hpp"
+#include "pq_constants.hpp"
 
 // constructor
 
@@ -491,7 +492,7 @@ void Map::add_player(Player *player)
 	if (id_ == 980000101)
 	{
 		PacketCreator packet15;
-		packet15.StartCarnivalPartyQuest(0);
+		packet15.StartCarnivalPartyQuest(mcpq_constants::kTeamRed);
 		send_packet(&packet15);
 	}
 }

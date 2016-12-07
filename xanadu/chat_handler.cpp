@@ -15,6 +15,7 @@
 #include "job_constants.hpp"
 #include "tools.hpp"
 #include "constants.hpp"
+#include "pq_constants.hpp"
 
 void Player::handle_chat_command()
 {
@@ -226,7 +227,7 @@ void Player::handle_use_chat()
 		{
 			// packet
 			PacketCreator packet6;
-			packet6.obtain_party_cp(0);
+			packet6.obtain_party_cp(mcpq_constants::kTeamRed);
 			send_packet(&packet6);
 		}
 
@@ -246,6 +247,24 @@ void Player::handle_use_chat()
 			PacketCreator packet8;
 			packet8.carnival_pq_summon(0, 2, name_);
 			send_packet(&packet8);
+		}
+
+		// for development purposes only
+		else if (command == "posi")
+		{
+			// packet
+			PacketCreator packet9;
+			packet9.carnival_pq_died(true, mcpq_constants::kTeamRed, name_);
+			send_packet(&packet9);
+		}
+
+		// for development purposes only
+		else if (command == "posj")
+		{
+			// packet
+			PacketCreator packet10;
+			packet10.leave_carnival_pq(true, mcpq_constants::kTeamRed, name_);
+			send_packet(&packet10);
 		}
 
 		else if (command == "maxskills")
