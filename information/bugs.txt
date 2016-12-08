@@ -83,12 +83,6 @@ need to work out the details of these features first
 
 - to-do fix inventory item merging and sorting, make it properly work (at the moment it's only item sorting)
 
-- to-do fix handle_pet_command in pet_handler
- 
-- to-do fix handle_pet_chat in pet_handler
- 
-- to-do fix handle_pet_loot in pet_handler
-
 -------------------- other --------------------
 
 - to-do maybe change guild data loading and saving (right now its loaded at server startup from mysql, then kept in ram, then saved to mysql but only when doing a proper shutdown)
