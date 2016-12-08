@@ -354,11 +354,7 @@ public:
 	void handle_cancel_skill_buff();
 	void handle_use_skill();
 	void handle_use_special_skill();
-	void handle_use_magic_attack();
-	void handle_use_close_range_attack();
-	void handle_use_ranged_attack();
-	void handle_use_energy_attack();
-	void handle_use_attack_base(PlayerAttackInfo &attack, signed char attack_handler_type);
+	void handle_use_attack(signed char attack_type);
 	void handle_mob_movement();
 	void handle_damage_mob_summon();
 	void handle_merchant_storage_request();

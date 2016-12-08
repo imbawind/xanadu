@@ -54,6 +54,17 @@ constexpr signed char kItemConstantsEquippedSlotsTamingMob = -18;
 constexpr signed char kItemConstantsEquippedSlotsTamingMobSaddle = -19;
 constexpr signed char kItemConstantsEquippedSlotsMedal = -49;
 
+namespace attack_type_constants
+{
+	enum : signed char
+	{
+		kCloseRange,
+		kRanged,
+		kMagic,
+		kEnergy
+	};
+}
+
 constexpr int kCharacterStatsSkin = 0x1;
 constexpr int kCharacterStatsFace = 0x2;
 constexpr int kCharacterStatsHair = 0x4;

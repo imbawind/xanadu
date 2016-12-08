@@ -410,8 +410,24 @@ void PacketCreator::ShowTimer(int seconds)
 	write<int>(seconds);
 }
 
-void PacketCreator::PlayerAttack(PlayerAttackInfo &attack)
+void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &attack)
 {
+	switch (attack_type)
+	{
+	case attack_type_constants::kCloseRange:
+		write<short>(send_headers::kCLOSE_RANGE_ATTACK);
+		break;
+	case attack_type_constants::kRanged:
+		write<short>(send_headers::kRANGED_ATTACK);
+		break;
+	case attack_type_constants::kMagic:
+		write<short>(send_headers::kMAGIC_ATTACK);
+		break;
+	case attack_type_constants::kEnergy:
+		write<short>(send_headers::kENERGY_ATTACK);
+		break;
+	}
+
 	write<int>(attack.player_id_);
 	write<signed char>(attack.info_byte_);
 	write<signed char>(attack.skill_level_);
@@ -441,38 +457,17 @@ void PacketCreator::PlayerAttack(PlayerAttackInfo &attack)
 			write<int>(damage);
 		}
 	}
-}
 
-void PacketCreator::PlayerCloseRangedAttack(PlayerAttackInfo &attack)
-{
-	write<short>(send_headers::kCLOSE_RANGE_ATTACK);
-	PlayerAttack(attack);
-}
-
-void PacketCreator::PlayerRangedAttack(PlayerAttackInfo &attack)
-{
-	write<short>(send_headers::kRANGED_ATTACK);
-	PlayerAttack(attack);
-}
-
-void PacketCreator::PlayerMagicAttack(PlayerAttackInfo &attack)
-{
-	write<short>(send_headers::kMAGIC_ATTACK);
-	PlayerAttack(attack);
-
-	// mage Big Bang skills
-	if (attack.skill_id_ == 2121001 ||
-		attack.skill_id_ == 2221001 ||
-		attack.skill_id_ == 2321001)
+	if (attack_type == attack_type_constants::kMagic)
 	{
-		write<int>(attack.charge_);
+		// mage Big Bang skills
+		if (attack.skill_id_ == 2121001 ||
+			attack.skill_id_ == 2221001 ||
+			attack.skill_id_ == 2321001)
+		{
+			write<int>(attack.charge_);
+		}
 	}
-}
-
-void PacketCreator::PlayerEnergyAttack(PlayerAttackInfo &attack)
-{
-	write<short>(send_headers::kENERGY_ATTACK);
-	PlayerAttack(attack);
 }
 
 void PacketCreator::ForfeitQuest(short quest_id)

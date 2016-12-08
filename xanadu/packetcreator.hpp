@@ -158,11 +158,7 @@ public:
 	void ShowBossHp(int mob_id, int hp, int max_hp, signed char color, signed char background_color);
 	void ShowMobHp(int mob_object_id, signed char hp_percent);
 	void KillMob(int mob_object_id);
-	void PlayerAttack(PlayerAttackInfo &attack);
-	void PlayerCloseRangedAttack(PlayerAttackInfo &attack);
-	void PlayerRangedAttack(PlayerAttackInfo &attack);
-	void PlayerMagicAttack(PlayerAttackInfo &attack);
-	void PlayerEnergyAttack(PlayerAttackInfo &attack);
+	void PlayerAttack(signed char attack_type, PlayerAttackInfo &attack);
 	void DamageSummon(int player_id, int skill_id, int damage, signed char unk, int mob_id_from);
 	void DamageMobSummon(Player *player, int summon_object_id, signed char animation, std::unordered_map<int, int> damages);
 	// npcs

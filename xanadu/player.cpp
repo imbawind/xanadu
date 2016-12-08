@@ -433,16 +433,16 @@ void Player::handle_packet_in_game()
 			handle_player_hit();
 			break;
 		case receive_headers::kREQUEST_CLOSE_RANGE_ATTACK:
-			handle_use_close_range_attack();
+			handle_use_attack(attack_type_constants::kCloseRange);
 			break;
 		case receive_headers::kRANGED_ATTACK:
-			handle_use_ranged_attack();
+			handle_use_attack(attack_type_constants::kRanged);
 			break;
 		case receive_headers::kMAGIC_ATTACK:
-			handle_use_magic_attack();
+			handle_use_attack(attack_type_constants::kMagic);
 			break;
 		case receive_headers::kENERGY_ATTACK:
-			handle_use_energy_attack();
+			handle_use_attack(attack_type_constants::kEnergy);
 			break;
 		case receive_headers::kMOVE_LIFE:
 			handle_mob_movement();

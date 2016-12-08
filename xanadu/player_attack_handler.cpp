@@ -11,140 +11,10 @@
 #include "buffstat_constants.hpp"
 #include "constants.hpp"
 
-enum AttackHandlerTypes
-{
-	kCloseRange,
-	kRanged,
-	kMagic,
-	kEnergy
-};
-
-void Player::handle_use_close_range_attack()
+void Player::handle_use_attack(signed char attack_type)
 {
 	PlayerAttackInfo attack;
 
-	handle_use_attack_base(attack, kCloseRange);
-
-	// nothing to send if there are no other players in the map
-
-	if (map_->get_players()->size() > 1)
-	{
-		// packet
-		PacketCreator packet1;
-		packet1.PlayerCloseRangedAttack(attack);
-		map_->send_packet(&packet1, this);
-	}
-
-	int mob_object_id = 0;
-
-	for (auto &it : attack.damages_)
-	{
-		mob_object_id = it.first;
-
-		Mob *mob = map_->get_mob(mob_object_id);
-
-		if (mob && !mob->is_dead() && mob->get_hp() == 0)
-		{
-			map_->kill(mob);
-		}
-	}
-}
-
-void Player::handle_use_ranged_attack()
-{
-	PlayerAttackInfo attack;
-
-	handle_use_attack_base(attack, kRanged);
-
-	// nothing to send if there are no other players in the map
-
-	if (map_->get_players()->size() > 1)
-	{
-		// packet
-		PacketCreator packet1;
-		packet1.PlayerRangedAttack(attack);
-		map_->send_packet(&packet1, this);
-	}
-
-	int mob_object_id = 0;
-
-	for (auto &it : attack.damages_)
-	{
-		mob_object_id = it.first;
-
-		Mob *mob = map_->get_mob(mob_object_id);
-
-		if (mob && !mob->is_dead() && mob->get_hp() == 0)
-		{
-			map_->kill(mob);
-		}
-	}
-}
-
-void Player::handle_use_magic_attack()
-{
-	PlayerAttackInfo attack;
-
-	handle_use_attack_base(attack, kMagic);
-
-	// nothing to send if there are no other players in the map
-
-	if (map_->get_players()->size() > 1)
-	{
-		// packet
-		PacketCreator packet1;
-		packet1.PlayerMagicAttack(attack);
-		map_->send_packet(&packet1, this);
-	}
-
-	int mob_object_id = 0;
-
-	for (auto &it : attack.damages_)
-	{
-		mob_object_id = it.first;
-
-		Mob *mob = map_->get_mob(mob_object_id);
-
-		if (mob && !mob->is_dead() && mob->get_hp() == 0)
-		{
-			map_->kill(mob);
-		}
-	}
-}
-
-void Player::handle_use_energy_attack()
-{
-	PlayerAttackInfo attack;
-
-	handle_use_attack_base(attack, kEnergy);
-
-	// nothing to send if there are no other players in the map
-
-	if (map_->get_players()->size() > 1)
-	{
-		// packet
-		PacketCreator packet1;
-		packet1.PlayerEnergyAttack(attack);
-		map_->send_packet(&packet1, this);
-	}
-
-	int mob_object_id = 0;
-
-	for (auto &it : attack.damages_)
-	{
-		mob_object_id = it.first;
-
-		Mob *mob = map_->get_mob(mob_object_id);
-
-		if (mob && !mob->is_dead() && mob->get_hp() == 0)
-		{
-			map_->kill(mob);
-		}
-	}
-}
-
-void Player::handle_use_attack_base(PlayerAttackInfo &attack, signed char attack_handler_type)
-{
 	attack.item_id_ = 0;
 	attack.player_id_ = get_id();
 
@@ -196,7 +66,7 @@ void Player::handle_use_attack_base(PlayerAttackInfo &attack, signed char attack
 	short star_slot = 0;
 	short cash_star_slot = 0;
 
-	if (attack_handler_type == kRanged)
+	if (attack_type == attack_type_constants::kRanged)
 	{
 		star_slot = read<short>();
 		cash_star_slot = read<short>();
@@ -459,5 +329,29 @@ void Player::handle_use_attack_base(PlayerAttackInfo &attack, signed char attack
 	if (attack.skill_id_ > 0)
 	{
 		apply_attack_skill_costs(attack.skill_id_, attack.skill_level_);
+	}
+
+	// nothing to send if there are no other players in the map
+
+	if (map_->get_players()->size() > 1)
+	{
+		// packet
+		PacketCreator packet1;
+		packet1.PlayerAttack(attack_type, attack);
+		map_->send_packet(&packet1, this);
+	}
+
+	mob_object_id = 0;
+
+	for (auto &it : attack.damages_)
+	{
+		mob_object_id = it.first;
+
+		Mob *mob = map_->get_mob(mob_object_id);
+
+		if (mob && !mob->is_dead() && mob->get_hp() == 0)
+		{
+			map_->kill(mob);
+		}
 	}
 }
