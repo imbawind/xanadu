@@ -10,6 +10,8 @@ void Player::handle_thief_job_advancer()
 
 	case job_ids::kBeginner:
 	{
+		set_state(1000);
+
 		if (level_ >= 10)
 		{
 			set_job(job_ids::kRogue);
@@ -43,6 +45,10 @@ void Player::handle_thief_job_advancer()
 				}
 			}
 		}
+		else
+		{
+			set_state(1000);
+		}
 
 		break;
 	}
@@ -50,6 +56,8 @@ void Player::handle_thief_job_advancer()
 	case job_ids::kAssassin:
 	case job_ids::kBandit:
 	{
+		set_state(1000);
+
 		if (level_ >= 70)
 		{
 			switch (job_)
@@ -70,6 +78,8 @@ void Player::handle_thief_job_advancer()
 	case job_ids::kHermit:
 	case job_ids::kChiefBandit:
 	{
+		set_state(1000);
+
 		if (level_ >= 120)
 		{
 			switch (job_)
@@ -86,5 +96,9 @@ void Player::handle_thief_job_advancer()
 
 		break;
 	}
+
+	default:
+		set_state(1000);
+		break;
 	}
 }

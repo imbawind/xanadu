@@ -6,6 +6,8 @@
 
 void Player::handle_hpq_tory_npc()
 {
+	set_state(1000);
+
 	if (map_->get_id() == 100000200)
 	{
 		set_map(910010000);
@@ -19,6 +21,8 @@ void Player::handle_hpq_tory_npc()
 
 void Player::handle_hpq_tommy_npc()
 {
+	set_state(1000);
+
 	if (map_->get_id() == 910010300)
 	{
 		set_map(100000200);
@@ -37,6 +41,8 @@ void Player::handle_hpq_tommy_npc()
 
 void Player::handle_hpq_growlie_npc()
 {
+	set_state(1000);
+
 	short amount = get_item_amount(4001101);
 
 	if (amount >= 10)

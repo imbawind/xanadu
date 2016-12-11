@@ -6,6 +6,8 @@
 
 void Player::handle_npc_lmpq_pietri()
 {
+	set_state(1000);
+
 	short amount = get_item_amount(4001106);
 
 	if (get_item_amount(4001106) >= 30)
@@ -28,6 +30,8 @@ void Player::handle_npc_lmpq_pietri()
 
 void Player::handle_npc_lmpq_rolly()
 {
+	set_state(1000);
+
 	set_map(809050000);
 }
 
@@ -35,6 +39,8 @@ void Player::handle_npc_lmpq_rolly()
 
 void Player::handle_npc_lmpq_rolly2()
 {
+	set_state(1000);
+
 	set_map(220000000);
 }
 
@@ -42,6 +48,8 @@ void Player::handle_npc_lmpq_rolly2()
 
 void Player::handle_npc_lmpq_rolly3()
 {
+	set_state(1000);
+
 	give_item(2000000, 1);
 	set_map(220000000);
 }

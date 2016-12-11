@@ -10,6 +10,8 @@ void Player::handle_mage_job_advancer()
 
 	case job_ids::kBeginner:
 	{
+		set_state(1000);
+
 		if (level_ >= 8)
 		{
 			set_job(job_ids::kMagician);
@@ -48,6 +50,10 @@ void Player::handle_mage_job_advancer()
 				}
 			}
 		}
+		else
+		{
+			set_state(1000);
+		}
 
 		break;
 	}
@@ -56,6 +62,8 @@ void Player::handle_mage_job_advancer()
 	case job_ids::kIlWizard:
 	case job_ids::kCleric:
 	{
+		set_state(1000);
+
 		if (level_ >= 70)
 		{
 			switch (job_)
@@ -81,6 +89,8 @@ void Player::handle_mage_job_advancer()
 	case job_ids::kIlMage:
 	case job_ids::kPriest:
 	{
+		set_state(1000);
+
 		if (level_ >= 120)
 		{
 			switch (job_)
@@ -101,5 +111,9 @@ void Player::handle_mage_job_advancer()
 
 		break;
 	}
+
+	default:
+		set_state(1000);
+		break;
 	}
 }

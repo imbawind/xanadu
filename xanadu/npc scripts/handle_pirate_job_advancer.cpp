@@ -10,6 +10,8 @@ void Player::handle_pirate_job_advancer()
 
 	case job_ids::kBeginner:
 	{
+		set_state(1000);
+
 		if (level_ >= 10)
 		{
 			set_job(job_ids::kPirate);
@@ -43,6 +45,11 @@ void Player::handle_pirate_job_advancer()
 				}
 			}
 		}
+		else
+		{
+			set_state(1000);
+		}
+
 
 		break;
 	}
@@ -50,6 +57,8 @@ void Player::handle_pirate_job_advancer()
 	case job_ids::kBrawler:
 	case job_ids::kGunslinger:
 	{
+		set_state(1000);
+
 		if (level_ >= 70)
 		{
 			switch (job_)
@@ -70,6 +79,8 @@ void Player::handle_pirate_job_advancer()
 	case job_ids::kMarauder:
 	case job_ids::kOutlaw:
 	{
+		set_state(1000);
+
 		if (level_ >= 120)
 		{
 			switch (job_)
@@ -86,5 +97,9 @@ void Player::handle_pirate_job_advancer()
 
 		break;
 	}
+
+	default:
+		set_state(1000);
+		break;
 	}
 }

@@ -6,6 +6,8 @@
 
 void Player::handle_npc_ppq_guon()
 {
+	set_state(1000);
+
 	set_map(925100000);
 }
 
@@ -13,5 +15,5 @@ void Player::handle_npc_ppq_guon()
 
 void Player::handle_npc_ppq_guon2()
 {
-
+	set_state(1000);
 }
