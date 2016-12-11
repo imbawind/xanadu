@@ -224,30 +224,13 @@ void World::ShutdownServer()
 	}
 
 	// save hired merchants into owners fredrick merchant storage
-	std::vector<int> hired_merchant_map_ids;
 
-	hired_merchant_map_ids.push_back(910000001);
-	hired_merchant_map_ids.push_back(910000002);
-	hired_merchant_map_ids.push_back(910000003);
-	hired_merchant_map_ids.push_back(910000004);
-	hired_merchant_map_ids.push_back(910000005);
-	hired_merchant_map_ids.push_back(910000006);
-	hired_merchant_map_ids.push_back(910000007);
-	hired_merchant_map_ids.push_back(910000008);
-	hired_merchant_map_ids.push_back(910000009);
-	hired_merchant_map_ids.push_back(910000010);
-	hired_merchant_map_ids.push_back(910000011);
-	hired_merchant_map_ids.push_back(910000012);
-	hired_merchant_map_ids.push_back(910000013);
-	hired_merchant_map_ids.push_back(910000014);
-	hired_merchant_map_ids.push_back(910000015);
-	hired_merchant_map_ids.push_back(910000016);
-	hired_merchant_map_ids.push_back(910000017);
-	hired_merchant_map_ids.push_back(910000018);
-	hired_merchant_map_ids.push_back(910000019);
-	hired_merchant_map_ids.push_back(910000020);
-	hired_merchant_map_ids.push_back(910000021);
-	hired_merchant_map_ids.push_back(910000022);
+	// collect the map id's of the maps where hired merchants can be spawned (free market maps 1 - 22) into a vector
+	std::vector<int> hired_merchant_map_ids;
+	for (int hired_merchant_map_id = 910000001; hired_merchant_map_id <= 910000022; ++hired_merchant_map_id)
+	{
+		hired_merchant_map_ids.push_back(hired_merchant_map_id);
+	}
 
 	for (auto &it : channels_)
 	{
@@ -278,7 +261,8 @@ void World::ShutdownServer()
 					<< "' WHERE id = " << owner_player_id;
 				statement3.execute();
 
-				// merchant storage equips
+				// save the merchant storage equips
+
 				Poco::Data::Statement statement4(mysql_session_);
 				statement4 << "DELETE FROM merchant_storage_equips WHERE player_id = " << owner_player_id;
 				statement4.execute();
@@ -335,7 +319,8 @@ void World::ShutdownServer()
 					statement5.execute();
 				}
 
-				// merchant storage items
+				// save the merchant storage items
+
 				Poco::Data::Statement statement6(mysql_session_);
 				statement6 << "DELETE FROM merchant_storage_items WHERE player_id = " << owner_player_id;
 				statement6.execute();
