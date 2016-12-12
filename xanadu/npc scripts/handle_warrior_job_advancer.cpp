@@ -10,11 +10,33 @@ void Player::handle_warrior_job_advancer()
 
 	case job_ids::kBeginner:
 	{
-		set_state(1000);
+		//set_state(1000);
 
 		if (level_ >= 10)
 		{
-			set_job(job_ids::kSwordsman);
+			if (get_state() == 0)
+			{
+				send_simple("Do you want to become a Warrior? \r\n#L0#Yes.#l \r\n#L1#No.#l");
+			}
+			else if (get_state() == 1)
+			{
+				switch (get_selected())
+				{
+				case 0:
+					set_job(job_ids::kSwordsman);
+					send_ok("You have chosen wisely. Now go, go with pride.");
+					break;
+
+				case 1:
+					send_ok("Come to me again when you made up your mind.");
+					break;
+				}
+			}
+		}
+
+		else {
+			send_ok("If you want to become a Warrior, come and see me after you are at least 10 level.");
+			set_state(1000);
 		}
 
 		break;
@@ -22,11 +44,11 @@ void Player::handle_warrior_job_advancer()
 
 	case job_ids::kSwordsman:
 	{
-		if (level_ >= 30)
+		if (level_ >= 30 && get_sp() == 0)
 		{
 			if (get_state() == 0)
 			{
-				send_simple("Choose the path you wish to follow. \r\n#L0#lFighter#1 \r\n#L1#Page#l \r\n#L2#Spearman#l");
+				send_simple("Choose the path you wish to follow. \r\n#L0#Fighter#l \r\n#L1#Page#l \r\n#L2#Spearman#l");
 			}
 
 			else if (get_state() == 1)
@@ -52,6 +74,10 @@ void Player::handle_warrior_job_advancer()
 		}
 		else
 		{
+			if (level_ >= 30 && get_sp() > 0)
+				send_ok("Your time has yet to come.");
+			else
+				send_ok("You have chosen wisely");
 			set_state(1000);
 		}
 
@@ -62,10 +88,11 @@ void Player::handle_warrior_job_advancer()
 	case job_ids::kPage:
 	case job_ids::kSpearman:
 	{
-		set_state(1000);
+		//set_state(1000);
 
-		if (level_ >= 70)
+		if (level_ >= 70 && get_sp() == 0)
 		{
+			send_ok("You are really a strong one.");
 			switch (job_)
 			{
 			case job_ids::kFighter:
@@ -81,6 +108,14 @@ void Player::handle_warrior_job_advancer()
 				break;
 			}
 		}
+		else
+		{
+			if (level_ >= 70 && get_sp() > 0)
+				send_ok("Your time has yet to come.");
+			else
+				send_ok("You have chosen wisely");
+			set_state(1000);
+		}
 
 		break;
 	}
@@ -89,10 +124,11 @@ void Player::handle_warrior_job_advancer()
 	case job_ids::kWhiteKnight:
 	case job_ids::kDragonKnight:
 	{
-		set_state(1000);
+		//set_state(1000);
 
-		if (level_ >= 120)
+		if (level_ >= 120 && get_sp() == 0)
 		{
+			send_ok("I knew this day would come.");
 			switch (job_)
 			{
 			case job_ids::kCrusader:
@@ -107,6 +143,14 @@ void Player::handle_warrior_job_advancer()
 				set_job(job_ids::kDarkKnight);
 				break;
 			}
+		}
+		else
+		{
+			if (level_ >= 120 && get_sp() > 0)
+				send_ok("Your time has yet to come.");
+			else
+				send_ok("You have chosen wisely");
+			set_state(1000);
 		}
 
 		break;
