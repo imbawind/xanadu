@@ -451,6 +451,12 @@
     <ClCompile Include="logger.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
+    <ClCompile Include="npc scripts\handle_npc_sera.cpp">
+      <Filter>npc scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="npc scripts\handle_npc_spinel.cpp">
+      <Filter>npc scripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aes\aes.h">

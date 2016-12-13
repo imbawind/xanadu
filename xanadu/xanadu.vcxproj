@@ -132,6 +132,8 @@
     <ClCompile Include="npc scripts\guild_emblem_npc.cpp" />
     <ClCompile Include="npc scripts\handle_bowman_job_advancer.cpp" />
     <ClCompile Include="npc scripts\handle_mage_job_advancer.cpp" />
+    <ClCompile Include="npc scripts\handle_npc_sera.cpp" />
+    <ClCompile Include="npc scripts\handle_npc_spinel.cpp" />
     <ClCompile Include="npc scripts\handle_pirate_job_advancer.cpp" />
     <ClCompile Include="npc scripts\handle_thief_job_advancer.cpp" />
     <ClCompile Include="npc scripts\handle_warrior_job_advancer.cpp" />

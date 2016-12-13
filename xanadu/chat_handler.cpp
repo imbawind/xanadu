@@ -352,7 +352,10 @@ void Player::handle_use_chat()
 		else if (command == "mesos")
 		{
 			mesos_ = stoi(message.substr(message.find(" ") + 1));
-
+			if (mesos_ < 0)
+			{
+				mesos_ = 0;
+			}
 			// packet
 			PacketCreator packet55;
 			packet55.UpdateStatInt(kCharacterStatsMesos, mesos_);
@@ -361,13 +364,30 @@ void Player::handle_use_chat()
 
 		else if (command == "level")
 		{
-			set_exp(0);
-			set_level(stoi(message.substr(message.find(" ") + 1)));
+			int level_var = stoi(message.substr(message.find(" ") + 1));
+			if (level_var > 0)
+			{
+				set_exp(0);
+				set_level(stoi(message.substr(message.find(" ") + 1)));
+			}
+			
 		}
 
 		else if (command == "levelup")
 		{
-			level_up();
+			int loop_var = stoi(message.substr(message.find(" ") + 1));
+
+			if (loop_var <= 1)
+			{
+				level_up();
+			}
+			else if (loop_var > 1)
+			{
+				for (int i = 0; i < loop_var; i++)
+				{
+					level_up();
+				}
+			}
 		}
 
 		else if (command == "job")
@@ -377,32 +397,62 @@ void Player::handle_use_chat()
 
 		else if (command == "sp")
 		{
-			set_sp(stoi(message.substr(message.find(" ") + 1)));
+			int sp_var = stoi(message.substr(message.find(" ") + 1));
+			if (sp_var <= 0)
+			{
+				sp_var = 0;
+			}
+			set_sp(sp_var);
 		}
 
 		else if (command == "ap")
 		{
-			set_ap(stoi(message.substr(message.find(" ") + 1)));
+			int ap_var = stoi(message.substr(message.find(" ") + 1));
+			if (ap_var <= 0)
+			{
+				ap_var = 0;
+			}
+			set_ap(ap_var);
 		}
 
 		else if (command == "str")
 		{
-			set_str(stoi(message.substr(message.find(" ") + 1)));
+			int str_var = stoi(message.substr(message.find(" ") + 1));
+			if (str_var <= 0)
+			{
+				str_var = 0;
+			}
+			set_str(str_var);
 		}
 
 		else if (command == "dex")
 		{
-			set_dex(stoi(message.substr(message.find(" ") + 1)));
+			int dex_var = stoi(message.substr(message.find(" ") + 1));
+			if (dex_var <= 0)
+			{
+				dex_var = 0;
+			}
+			set_dex(dex_var);
 		}
 
 		else if (command == "int")
 		{
-			set_int(stoi(message.substr(message.find(" ") + 1)));
+			int int_var = stoi(message.substr(message.find(" ") + 1));
+			if (int_var <= 0)
+			{
+				int_var = 0;
+			}
+			set_int(int_var);
 		}
 
 		else if (command == "luk")
 		{
-			set_luk(stoi(message.substr(message.find(" ") + 1)));
+			int luk_var = stoi(message.substr(message.find(" ") + 1));
+			if (luk_var <= 0)
+			{
+				luk_var = 0;
+			}
+			set_luk(luk_var);
 		}
 
 		else if (command == "hp")

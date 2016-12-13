@@ -23,6 +23,7 @@ void Player::handle_warrior_job_advancer()
 				{
 				case 0:
 					set_job(job_ids::kSwordsman);
+					give_item(1402001, 1);
 					send_ok("You have chosen wisely. Now go, go with pride.");
 					break;
 

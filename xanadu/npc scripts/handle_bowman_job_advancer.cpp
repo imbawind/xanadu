@@ -24,6 +24,7 @@ void Player::handle_bowman_job_advancer()
 				case 0:
 					set_job(job_ids::kArcher);
 					give_item(1452002, 1);
+					give_item(2060004, 5000);
 					send_ok("You have chosen wisely. Now go, go with pride.");
 					break;
 

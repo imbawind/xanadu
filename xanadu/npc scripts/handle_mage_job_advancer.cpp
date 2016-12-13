@@ -22,6 +22,7 @@ void Player::handle_mage_job_advancer()
 				{
 				case 0:
 					set_job(job_ids::kMagician);
+					give_item(1372005, 1);
 					send_ok("You have chosen wisely. Now go, go with pride.");
 					break;
 

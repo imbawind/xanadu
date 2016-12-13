@@ -23,6 +23,10 @@ void Player::handle_thief_job_advancer()
 				{
 				case 0:
 					set_job(job_ids::kRogue);
+					give_item(1472000, 1);
+					give_item(2070006, 800);
+					give_item(2070006, 800);
+					give_item(2070006, 800);
 					send_ok("You have chosen wisely. Now go, go with pride.");
 					break;
 
