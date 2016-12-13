@@ -33,15 +33,13 @@ need to work out the details of these features first
 
 -------------------- skills --------------------
 
-- fix door skill (bishop)
+- door skill (bishop)
 
-- fix mist skills (poison mist and so on by mages)
+- poison mist (mage)
 
-- fix pirate skills
+- pirate skills need to be checked and fixed
 
-- fix other skills that do not fully work yet
-
-- fix player summontimer
+- player summontimer needs to be fixed
 
 -------------------- npcs --------------------
 

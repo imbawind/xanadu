@@ -64,12 +64,11 @@ void Player::handle_use_attack(signed char attack_type)
 	skip_bytes(4);
 
 	short star_slot = 0;
-	short cash_star_slot = 0;
 
 	if (attack_type == attack_type_constants::kRanged)
 	{
 		star_slot = read<short>();
-		cash_star_slot = read<short>();
+		skip_bytes(2); // could be cash star slot?
 		skip_bytes(1);
 
 		switch (attack.skill_id_)
@@ -203,36 +202,15 @@ void Player::handle_use_attack(signed char attack_type)
 
 		std::shared_ptr<Item> item = inventory->get_item_by_slot(static_cast<signed char>(star_slot));
 
-		if (!item)
+		if (item)
 		{
-			return;
-		}
+			attack.item_id_ = item->get_item_id();
 
-		attack.item_id_ = item->get_item_id();
-
-		if (!is_buff_stat_active(buffstat_constants::kSoulArrow) && // Soul Arrow
-			!is_buff_id_active(4111009)) // Shadow Stars
-		{
-			inventory->remove_item_by_slot(static_cast<signed char>(star_slot), hits);
-		}
-	}
-
-	// ranged only
-
-	if (cash_star_slot > 0)
-	{
-		Inventory *inventory = get_inventory(kInventoryConstantsTypesCash);
-
-		if (!inventory)
-		{
-			return;
-		}
-
-		std::shared_ptr<Item> item = inventory->get_item_by_slot(static_cast<signed char>(cash_star_slot));
-
-		if (!item)
-		{
-			return;
+			if (!is_buff_stat_active(buffstat_constants::kSoulArrow) && // Soul Arrow
+				!is_buff_id_active(4111009)) // Shadow Stars
+			{
+				inventory->remove_item_by_slot(static_cast<signed char>(star_slot), hits);
+			}
 		}
 	}
 

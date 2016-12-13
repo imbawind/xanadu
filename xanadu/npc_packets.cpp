@@ -13,7 +13,7 @@
 
 // functions
 
-void PacketCreator::ShowNpc(Npc * npc)
+void PacketCreator::ShowNpc(Npc *npc)
 {
 	write<short>(send_headers::kSPAWN_NPC);
 	write<int>(npc->get_object_id());
