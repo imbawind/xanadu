@@ -10,9 +10,8 @@ void Player::handle_warrior_job_advancer()
 
 	case job_ids::kBeginner:
 	{
-		//set_state(1000);
 
-		if (level_ >= 10)
+		if (level_ >= 10 && get_str() >= 35)
 		{
 			if (get_state() == 0)
 			{
@@ -35,7 +34,7 @@ void Player::handle_warrior_job_advancer()
 		}
 
 		else {
-			send_ok("If you want to become a Warrior, come and see me after you are at least 10 level.");
+			send_ok("Train a bit more and I can show you the way of the #rWarrior#k.");
 			set_state(1000);
 		}
 
