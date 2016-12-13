@@ -10,8 +10,7 @@ void Player::handle_mage_job_advancer()
 
 	case job_ids::kBeginner:
 	{
-		//set_state(1000);
-		if (level_ >= 8)
+		if (level_ >= 8 && get_int() >= 20)
 		{
 			if (get_state() == 0)
 			{
@@ -33,7 +32,7 @@ void Player::handle_mage_job_advancer()
 			}
 		}
 		else {
-			send_ok("If you want to become a Magician, come and see me after you are at least 8 level.");
+			send_ok("Train a bit more and I can show you the way of the #rMagician#k.");
 			set_state(1000);
 		}
 		break;
@@ -85,7 +84,6 @@ void Player::handle_mage_job_advancer()
 	case job_ids::kIlWizard:
 	case job_ids::kCleric:
 	{
-		//set_state(1000);
 
 		if (level_ >= 70 && get_sp() == 0)
 		{
@@ -121,7 +119,6 @@ void Player::handle_mage_job_advancer()
 	case job_ids::kIlMage:
 	case job_ids::kPriest:
 	{
-		//set_state(1000);
 
 		if (level_ >= 120 && get_sp() == 0)
 		{

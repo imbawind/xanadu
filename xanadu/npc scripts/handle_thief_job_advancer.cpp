@@ -10,9 +10,8 @@ void Player::handle_thief_job_advancer()
 
 	case job_ids::kBeginner:
 	{
-		//set_state(1000);
 
-		if (level_ >= 10)
+		if (level_ >= 10 && get_dex() >= 25)
 		{
 			if (get_state() == 0)
 			{
@@ -35,7 +34,7 @@ void Player::handle_thief_job_advancer()
 		}
 
 		else {
-			send_ok("If you want to become a Rogue, come and see me after you are at least 10 level.");
+			send_ok("Train a bit more and I can show you the way of the #rRogue#k.");
 			set_state(1000);
 		}
 
@@ -57,26 +56,20 @@ void Player::handle_thief_job_advancer()
 				{
 				case 0:
 					set_job(job_ids::kAssassin);
-
 					break;
 
 				case 1:
 					set_job(job_ids::kBandit);
-
 					break;
 				}
-			}
-			else
-			{
-				if (level_ >= 30 && get_sp() > 0)
-					send_ok("Your time has yet to come.");
-				else
-					send_ok("You have chosen wisely");
-				set_state(1000);
 			}
 		}
 		else
 		{
+			if (level_ >= 30 && get_sp() > 0)
+				send_ok("Your time has yet to come.");
+			else
+				send_ok("You have chosen wisely");
 			set_state(1000);
 		}
 
@@ -86,7 +79,6 @@ void Player::handle_thief_job_advancer()
 	case job_ids::kAssassin:
 	case job_ids::kBandit:
 	{
-		//set_state(1000);
 
 		if (level_ >= 70 && get_sp() == 0)
 		{
@@ -117,7 +109,6 @@ void Player::handle_thief_job_advancer()
 	case job_ids::kHermit:
 	case job_ids::kChiefBandit:
 	{
-		//set_state(1000);
 
 		if (level_ >= 120 && get_sp() == 0)
 		{
@@ -143,6 +134,13 @@ void Player::handle_thief_job_advancer()
 		}
 
 		break;
+	}
+
+	case job_ids::kNightLord:
+	case job_ids::kShadower:
+	{
+		send_ok("You have chosen wisely");
+		set_state(1000);
 	}
 
 	default:

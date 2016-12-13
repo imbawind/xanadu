@@ -10,9 +10,8 @@ void Player::handle_pirate_job_advancer()
 
 	case job_ids::kBeginner:
 	{
-		//set_state(1000);
 
-		if (level_ >= 10)
+		if (level_ >= 10 && get_dex() >= 20)
 		{
 			if (get_state() == 0)
 			{
@@ -35,7 +34,7 @@ void Player::handle_pirate_job_advancer()
 		}
 
 		else {
-			send_ok("If you want to become a Pirate, come and see me after you are at least 10 level.");
+			send_ok("Train a bit more and I can show you the way of the #rPirate#k.");
 			set_state(1000);
 		}
 
@@ -83,7 +82,6 @@ void Player::handle_pirate_job_advancer()
 	case job_ids::kBrawler:
 	case job_ids::kGunslinger:
 	{
-		//set_state(1000);
 
 		if (level_ >= 70 && get_sp() == 0)
 		{
@@ -114,7 +112,6 @@ void Player::handle_pirate_job_advancer()
 	case job_ids::kMarauder:
 	case job_ids::kOutlaw:
 	{
-		//set_state(1000);
 
 		if (level_ >= 120 && get_sp() == 0)
 		{
