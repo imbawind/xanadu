@@ -1357,7 +1357,6 @@ void Player::set_job(short newjob)
 	*/
 
 	// reset the ap for beginner
-	/*
 	if (is_beginner_job(job_))
 	{
 		short temp = (str_ - 4 + dex_ - 4 + int_ - 4 + luk_ - 4);
@@ -1367,7 +1366,6 @@ void Player::set_job(short newjob)
 		set_luk(4);
 		set_int(4);
 	}
-	*/
 
 	// update the job
 	job_ = newjob;

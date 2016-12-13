@@ -374,7 +374,7 @@ void Player::handle_use_chat()
 		}
 
 		else if (command == "levelup")
-		{
+		{/*
 			int loop_var = stoi(message.substr(message.find(" ") + 1));
 
 			if (loop_var <= 1)
@@ -387,6 +387,21 @@ void Player::handle_use_chat()
 				{
 					level_up();
 				}
+			}*/
+
+			int loopvar;
+			size_t p = message.find(" ");
+			if (p == std::string::npos)
+			{
+				loopvar = 1;
+			}
+			else
+			{
+				loopvar = stoi(message.substr(message.find(" ") + 1));
+			}
+			for (int i = 0; i < loopvar; i++)
+			{
+				level_up();
 			}
 		}
 
