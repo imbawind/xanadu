@@ -1200,16 +1200,9 @@ void Player::handle_gachapon_npc()
 
 				auto itemx = inventory->give_item_special(success, item_id);
 
-				if (!itemx || !success)
+				if (itemx && success)
 				{
-					send_ok("The item couldn't be added to your inventory, check if you have free slots.");
-					return;
-				}
-
-				inventory->remove_item(5220000, 1);
-
-				if (success)
-				{
+					inventory->remove_item(5220000, 1);
 
 					short watt = itemx->get_weapon_attack();
 					short matt = itemx->get_magic_attack();
@@ -1222,6 +1215,10 @@ void Player::handle_gachapon_npc()
 					packet118.NewItem(itemx, false);
 					send_packet(&packet118);
 				}
+			}
+			else
+			{
+				send_ok("The item couldn't be added to your inventory, check if you have free slots.");
 			}
 		}
 	}
