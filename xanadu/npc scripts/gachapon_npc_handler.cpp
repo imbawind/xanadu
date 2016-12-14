@@ -1219,6 +1219,10 @@ void Player::handle_gachapon_npc()
 					send_ok("The item couldn't be added to your inventory, check if you have free slots.");
 				}
 			}
+			else
+			{
+				send_ok("You need one or more gachapon tickets.");
+			}
 		}
 	}
 }
