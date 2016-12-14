@@ -1183,8 +1183,6 @@ void Player::handle_gachapon_npc()
 		{
 			if (ticket_amount >= 1)
 			{
-				inventory->remove_item(5220000, 1);
-
 				int array_size = sizeof(items) / sizeof(items[0]);
 
 				int random_value = tools::random_int(0, array_size - 1);
@@ -1201,6 +1199,14 @@ void Player::handle_gachapon_npc()
 				bool success = false;
 
 				auto itemx = inventory->give_item_special(success, item_id);
+
+				if (!itemx || !success)
+				{
+					send_ok("The item couldn't be added to your inventory, check if you have free slots.");
+					return;
+				}
+
+				inventory->remove_item(5220000, 1);
 
 				if (success)
 				{
