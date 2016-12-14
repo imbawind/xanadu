@@ -1203,12 +1203,11 @@ void Player::handle_gachapon_npc()
 				if (itemx && success)
 				{
 					inventory->remove_item(5220000, 1);
-
-					short watt = itemx->get_weapon_attack();
-					short matt = itemx->get_magic_attack();
-
-					itemx->set_weapon_attack(watt + static_cast<short>(tools::random_int(0, 0)));
-					itemx->set_magic_attack(matt + static_cast<short>(tools::random_int(0, 0)));
+					
+					//short watt = itemx->get_weapon_attack();
+					//short matt = itemx->get_magic_attack();
+					//itemx->set_weapon_attack(watt + static_cast<short>(tools::random_int(0, 0)));
+					//itemx->set_magic_attack(matt + static_cast<short>(tools::random_int(0, 0)));
 
 					// packet
 					PacketCreator packet118;
