@@ -193,36 +193,6 @@ void World::ShutdownServer()
 		player->disconnect();
 	}
 
-	// clear guilds
-	Poco::Data::Statement statement1(mysql_session_);
-	statement1 << "DELETE FROM guilds";
-	statement1.execute();
-
-	// save guilds
-	for (auto &it : guilds_)
-	{
-		Guild *guild = it.second;
-
-		Poco::Data::Statement statement2(mysql_session_);
-
-		statement2 << "INSERT INTO guilds(guild_id, guild_name, notice, rank1, rank2, rank3, rank4, rank5, logo_bg, logo_bg_color, logo, logo_color) VALUES("
-			<< guild->get_id() << ",'"
-			<< guild->get_name() << "','"
-			<< guild->GetNotice() << "','"
-			<< guild->GetRank1() << "','"
-			<< guild->GetRank2() << "','"
-			<< guild->GetRank3() << "','"
-			<< guild->GetRank4() << "','"
-			<< guild->GetRank5() << "',"
-			<< static_cast<int>(guild->get_logo_background()) << ","
-			<< static_cast<int>(guild->get_logo_background_color()) << ","
-			<< static_cast<int>(guild->get_logo()) << ","
-			<< static_cast<int>(guild->get_logo_color())
-			<< ")";
-
-		statement2.execute();
-	}
-
 	// save hired merchants into owners fredrick merchant storage
 
 	// collect the map id's of the maps where hired merchants can be spawned (free market maps 1 - 22) into a vector
