@@ -72,12 +72,16 @@ namespace tools
 
 	bool is_puppet(int skill_id)
 	{
-		if (skill_id == 3111002 || skill_id == 3211002 || skill_id == 3120012 || skill_id == 3220012) // Ranger Puppet, Sniper Puppet, Bowmaster Elite Puppet, Marksman Elite Puppet
+		switch (skill_id)
 		{
+		case 3111002:
+		case 3211002:
+		case 3120012:
+		case 3220012: // Ranger Puppet, Sniper Puppet, Bowmaster Elite Puppet, Marksman Elite Puppet
 			return true;
+		default:
+			return false;
 		}
-
-		return false;
 	}
 
 	bool skill_id_is_special_skill(int skill_id)
