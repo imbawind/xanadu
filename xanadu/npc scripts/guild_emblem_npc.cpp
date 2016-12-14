@@ -19,6 +19,7 @@ void Player::handle_lea_guild_emblem_npc()
 				{
 					add_mesos(-50000000);
 					change_guild_emblem();
+					set_state(1000);
 				}
 				else
 				{

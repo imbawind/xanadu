@@ -35,6 +35,7 @@ void Player::handle_heracle_guild_creator_npc()
 			if (get_has_guild() && guild_rank_ == 1)
 			{
 				disband_guild();
+				set_state(1000);
 			}
 			else
 			{

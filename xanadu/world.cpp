@@ -877,7 +877,7 @@ void World::delete_guild(int guild_id)
 
 	// mysql query
 	Poco::Data::Statement statement(mysql_session_);
-	statement << "DELETE * FROM guilds WHERE guild_id = " << guild_id;
+	statement << "DELETE FROM guilds WHERE guild_id = " << guild_id;
 	statement.execute();
 
 	// send a packet
