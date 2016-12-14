@@ -2952,7 +2952,26 @@ void Player::send_npc_final()
 	switch (npc_->id_)
 	{
 		// custom Free Market npcs
-	case 9100117: // Gachapon
+	case 9100117: // Nautilus Gachapon
+	case 9100100: //Spa (Female)
+	case 9100101: //Ellinia
+	case 9100102: //Perion
+	case 9100103: //Kerning City
+	case 9100104: //Sleepywood
+	case 9100105: //Mushroom Shrine
+	case 9100106: //Spa (Male)
+	case 9100107: //Spa (Female)
+	case 9100109: //NLC
+	case 9100110: //Henesys
+	case 9100111: //Singapore
+	case 9100112: //EXP Gachapon
+	//get these gachapon IDs in V62 npc wz, but not sure where they located
+	case 9100108:
+	case 9110011:
+	case 9110012:
+	case 9110013:
+	case 9110014:
+	case 9270043:
 		handle_gachapon_npc();
 		break;
 	case 9001000: // Donator Npc
