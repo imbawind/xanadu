@@ -9,7 +9,7 @@ void Player::handle_gachapon_npc()
 {
 	int items[] =
 	{
-		
+
 		1002033, // old wisconsin
 		1002584, // red wisconsin
 		1002585, // blue wisconsin
@@ -1183,8 +1183,6 @@ void Player::handle_gachapon_npc()
 		{
 			if (ticket_amount >= 1)
 			{
-				inventory->remove_item(5220000, 1);
-
 				int array_size = sizeof(items) / sizeof(items[0]);
 
 				int random_value = tools::random_int(0, array_size - 1);
@@ -1202,20 +1200,28 @@ void Player::handle_gachapon_npc()
 
 				auto itemx = inventory->give_item_special(success, item_id);
 
-				if (success)
+				if (itemx && success)
 				{
-
-					short watt = itemx->get_weapon_attack();
-					short matt = itemx->get_magic_attack();
-
-					itemx->set_weapon_attack(watt + static_cast<short>(tools::random_int(0, 0)));
-					itemx->set_magic_attack(matt + static_cast<short>(tools::random_int(0, 0)));
+					inventory->remove_item(5220000, 1);
+					
+					//short watt = itemx->get_weapon_attack();
+					//short matt = itemx->get_magic_attack();
+					//itemx->set_weapon_attack(watt + static_cast<short>(tools::random_int(0, 0)));
+					//itemx->set_magic_attack(matt + static_cast<short>(tools::random_int(0, 0)));
 
 					// packet
 					PacketCreator packet118;
 					packet118.NewItem(itemx, false);
 					send_packet(&packet118);
 				}
+				else
+				{
+					send_ok("The item couldn't be added to your inventory, check if you have free slots.");
+				}
+			}
+			else
+			{
+				send_ok("You need one or more gachapon tickets.");
 			}
 		}
 	}
