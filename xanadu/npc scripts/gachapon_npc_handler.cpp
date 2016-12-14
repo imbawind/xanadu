@@ -9,7 +9,7 @@ void Player::handle_gachapon_npc()
 {
 	int items[] =
 	{
-		
+
 		1002033, // old wisconsin
 		1002584, // red wisconsin
 		1002585, // blue wisconsin
@@ -1215,10 +1215,10 @@ void Player::handle_gachapon_npc()
 					packet118.NewItem(itemx, false);
 					send_packet(&packet118);
 				}
-			}
-			else
-			{
-				send_ok("The item couldn't be added to your inventory, check if you have free slots.");
+				else
+				{
+					send_ok("The item couldn't be added to your inventory, check if you have free slots.");
+				}
 			}
 		}
 	}
