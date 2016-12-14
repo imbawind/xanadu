@@ -168,99 +168,99 @@ void ItemDataProvider::load_data()
 				{
 					item->move_to = it23.get_int_value();
 				}
+			}
 
-				// scroll data
+			// scroll data
 
-				WZNode node24 = wz_reader->base_["Item"]["Consume"][valuename2.c_str()][valuename21.c_str()]["info"];
+			WZNode node24 = wz_reader->base_["Item"]["Consume"][valuename2.c_str()][valuename21.c_str()]["info"];
 
-				for (auto it24 : node24)
+			for (auto it24 : node24)
+			{
+				std::string valuename24 = it24.name();
+
+				if (valuename24 == "success")
 				{
-					std::string valuename24 = it24.name();
+					item->success = it24.get_int_value();
+				}
 
-					if (valuename24 == "success")
-					{
-						item->success = it24.get_int_value();
-					}
+				else if (valuename24 == "cursed")
+				{
+					item->cursed = it24.get_int_value();
+				}
 
-					else if (valuename24 == "cursed")
-					{
-						item->cursed = it24.get_int_value();
-					}
+				else if (valuename24 == "recover")
+				{
+					item->recover = it24.get_int_value() != 0;
+				}
 
-					else if (valuename24 == "recover")
-					{
-						item->recover = it24.get_int_value() != 0;
-					}
+				else if (valuename24 == "incJump")
+				{
+					item->jump = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incJump")
-					{
-						item->jump = it24.get_int_value();
-					}
+				else if (valuename24 == "incSpeed")
+				{
+					item->speed = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incSpeed")
-					{
-						item->speed = it24.get_int_value();
-					}
+				else if (valuename24 == "incSTR")
+				{
+					item->str = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incSTR")
-					{
-						item->str = it24.get_int_value();
-					}
+				else if (valuename24 == "incDEX")
+				{
+					item->dex = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incDEX")
-					{
-						item->dex = it24.get_int_value();
-					}
+				else if (valuename24 == "incINT")
+				{
+					item->intt = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incINT")
-					{
-						item->intt = it24.get_int_value();
-					}
+				else if (valuename24 == "incLUK")
+				{
+					item->luk = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incLUK")
-					{
-						item->luk = it24.get_int_value();
-					}
+				else if (valuename24 == "incMHP")
+				{
+					item->hp = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incMHP")
-					{
-						item->hp = it24.get_int_value();
-					}
+				else if (valuename24 == "incMMP")
+				{
+					item->mp = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incMMP")
-					{
-						item->mp = it24.get_int_value();
-					}
+				else if (valuename24 == "incEVA")
+				{
+					item->avo = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incEVA")
-					{
-						item->avo = it24.get_int_value();
-					}
+				else if (valuename24 == "incACC")
+				{
+					item->acc = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incACC")
-					{
-						item->acc = it24.get_int_value();
-					}
+				else if (valuename24 == "incPAD")
+				{
+					item->watk = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incPAD")
-					{
-						item->watk = it24.get_int_value();
-					}
+				else if (valuename24 == "incMAD")
+				{
+					item->matk = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incMAD")
-					{
-						item->matk = it24.get_int_value();
-					}
+				else if (valuename24 == "incPDD")
+				{
+					item->wdef = it24.get_int_value();
+				}
 
-					else if (valuename24 == "incPDD")
-					{
-						item->wdef = it24.get_int_value();
-					}
-
-					else if (valuename24 == "incMDD")
-					{
-						item->mdef = it24.get_int_value();
-					}
+				else if (valuename24 == "incMDD")
+				{
+					item->mdef = it24.get_int_value();
 				}
 			}
 
