@@ -242,6 +242,8 @@ public:
 	void send_npc_final();
 
 	// npc script handlers
+	void handle_npc_sera();
+	void handle_npc_spinel();
 	void handle_donator_npc();
 	void handle_maple_leaf_exchanger_npc();
 	void handle_gachapon_npc();

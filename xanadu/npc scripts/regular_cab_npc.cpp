@@ -39,4 +39,8 @@ void Player::handle_regular_cab_npc()
 			send_ok("There's a lot to see in this town, too. Come back and find me when you need to go to a different town.");
 		}
 	}
+	else
+	{
+		set_state(1000);
+	}
 }

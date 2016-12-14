@@ -5,14 +5,16 @@
 
 void Player::handle_thief_job_advancer()
 {
+	//Initialize variables
+	int level_diff = 0;
+	bool sp_correct = false;
 	switch (job_)
 	{
 
 	case job_ids::kBeginner:
 	{
-		//set_state(1000);
 
-		if (level_ >= 10)
+		if (level_ >= 10 && get_dex() >= 25)
 		{
 			if (get_state() == 0)
 			{
@@ -23,7 +25,16 @@ void Player::handle_thief_job_advancer()
 				switch (get_selected())
 				{
 				case 0:
+					level_diff = get_level() - 10;
 					set_job(job_ids::kRogue);
+					if (level_diff > 0)
+					{
+						add_sp(level_diff * 3);
+					}
+					give_item(1472000, 1);
+					give_item(2070006, 800);
+					give_item(2070006, 800);
+					give_item(2070006, 800);
 					send_ok("You have chosen wisely. Now go, go with pride.");
 					break;
 
@@ -35,7 +46,7 @@ void Player::handle_thief_job_advancer()
 		}
 
 		else {
-			send_ok("If you want to become a Rogue, come and see me after you are at least 10 level.");
+			send_ok("Train a bit more and I can show you the way of the #rRogue#k.");
 			set_state(1000);
 		}
 
@@ -44,7 +55,10 @@ void Player::handle_thief_job_advancer()
 
 	case job_ids::kRogue:
 	{
-		if (level_ >= 30 && get_sp() == 0)
+		level_diff = get_level() - 30;
+		if (get_sp() <= (level_diff * 3))
+			sp_correct = true;
+		if (level_ >= 30 && sp_correct)
 		{
 			if (get_state() == 0)
 			{
@@ -57,26 +71,20 @@ void Player::handle_thief_job_advancer()
 				{
 				case 0:
 					set_job(job_ids::kAssassin);
-
 					break;
 
 				case 1:
 					set_job(job_ids::kBandit);
-
 					break;
 				}
-			}
-			else
-			{
-				if (level_ >= 30 && get_sp() > 0)
-					send_ok("Your time has yet to come.");
-				else
-					send_ok("You have chosen wisely");
-				set_state(1000);
 			}
 		}
 		else
 		{
+			if (level_ >= 30 && !sp_correct)
+				send_ok("Your time has yet to come.");
+			else
+				send_ok("You have chosen wisely");
 			set_state(1000);
 		}
 
@@ -86,9 +94,11 @@ void Player::handle_thief_job_advancer()
 	case job_ids::kAssassin:
 	case job_ids::kBandit:
 	{
-		//set_state(1000);
 
-		if (level_ >= 70 && get_sp() == 0)
+		level_diff = get_level() - 70;
+		if (get_sp() <= (level_diff * 3))
+			sp_correct = true;
+		if (level_ >= 70 && sp_correct)
 		{
 			send_ok("You are really a strong one.");
 			switch (job_)
@@ -104,7 +114,7 @@ void Player::handle_thief_job_advancer()
 		}
 		else
 		{
-			if (level_ >= 70 && get_sp() > 0)
+			if (level_ >= 70 && !sp_correct)
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
@@ -117,9 +127,11 @@ void Player::handle_thief_job_advancer()
 	case job_ids::kHermit:
 	case job_ids::kChiefBandit:
 	{
-		//set_state(1000);
 
-		if (level_ >= 120 && get_sp() == 0)
+		level_diff = get_level() - 120;
+		if (get_sp() <= (level_diff * 3))
+			sp_correct = true;
+		if (level_ >= 120 && sp_correct)
 		{
 			send_ok("I knew this day would come.");
 			switch (job_)
@@ -135,7 +147,7 @@ void Player::handle_thief_job_advancer()
 		}
 		else
 		{
-			if (level_ >= 120 && get_sp() > 0)
+			if (level_ >= 120 && !sp_correct)
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
@@ -143,6 +155,13 @@ void Player::handle_thief_job_advancer()
 		}
 
 		break;
+	}
+
+	case job_ids::kNightLord:
+	case job_ids::kShadower:
+	{
+		send_ok("You have chosen wisely");
+		set_state(1000);
 	}
 
 	default:

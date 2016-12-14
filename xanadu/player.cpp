@@ -1349,10 +1349,12 @@ void Player::set_level(unsigned char newlevel)
 void Player::set_job(short newjob)
 {
 	// player starts with level 10 -> mage starts at level 8 normally
+	/*
 	if (newjob == job_ids::kMagician)
 	{
 		add_sp(6);
 	}
+	*/
 
 	// reset the ap for beginner
 	if (is_beginner_job(job_))
@@ -3074,6 +3076,9 @@ void Player::send_npc_final()
 
 		// misc npcs
 	case 1012000: // Regular Cab in Victoria
+	case 1022001:
+	case 1032000:
+	case 1052016:
 		handle_regular_cab_npc();
 		break;
 	case 9201056: // NLC Taxi
@@ -3115,7 +3120,7 @@ void Player::send_npc_final()
 
 		// maple camp npcs
 	case 2100: // Sera
-		set_map(100000000);
+		handle_npc_sera();
 		break;
 
 		// ship, subway and plane npcs
@@ -3153,7 +3158,7 @@ void Player::send_npc_final()
 		// misc npcs
 
 	case 9000020: // Spinel
-		set_map(800000000);
+		handle_npc_spinel();
 		break;
 	case 9201022: // Thomas Swift
 		set_map(680000000);

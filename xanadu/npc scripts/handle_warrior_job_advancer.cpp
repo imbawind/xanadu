@@ -5,14 +5,16 @@
 
 void Player::handle_warrior_job_advancer()
 {
+	//Initialize variables
+	int level_diff = 0;
+	bool sp_correct = false;
 	switch (job_)
 	{
 
 	case job_ids::kBeginner:
 	{
-		//set_state(1000);
 
-		if (level_ >= 10)
+		if (level_ >= 10 && get_str() >= 35)
 		{
 			if (get_state() == 0)
 			{
@@ -23,7 +25,13 @@ void Player::handle_warrior_job_advancer()
 				switch (get_selected())
 				{
 				case 0:
+					level_diff = get_level() - 10;
 					set_job(job_ids::kSwordsman);
+					if (level_diff > 0)
+					{
+						add_sp(level_diff * 3);
+					}
+					give_item(1402001, 1);
 					send_ok("You have chosen wisely. Now go, go with pride.");
 					break;
 
@@ -35,7 +43,7 @@ void Player::handle_warrior_job_advancer()
 		}
 
 		else {
-			send_ok("If you want to become a Warrior, come and see me after you are at least 10 level.");
+			send_ok("Train a bit more and I can show you the way of the #rWarrior#k.");
 			set_state(1000);
 		}
 
@@ -44,7 +52,10 @@ void Player::handle_warrior_job_advancer()
 
 	case job_ids::kSwordsman:
 	{
-		if (level_ >= 30 && get_sp() == 0)
+		level_diff = get_level() - 30;
+		if (get_sp() <= (level_diff * 3))
+			sp_correct = true;
+		if (level_ >= 30 && sp_correct)
 		{
 			if (get_state() == 0)
 			{
@@ -74,7 +85,7 @@ void Player::handle_warrior_job_advancer()
 		}
 		else
 		{
-			if (level_ >= 30 && get_sp() > 0)
+			if (level_ >= 30 && !sp_correct)
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
@@ -88,9 +99,10 @@ void Player::handle_warrior_job_advancer()
 	case job_ids::kPage:
 	case job_ids::kSpearman:
 	{
-		//set_state(1000);
-
-		if (level_ >= 70 && get_sp() == 0)
+		level_diff = get_level() - 70;
+		if (get_sp() <= (level_diff * 3))
+			sp_correct = true;
+		if (level_ >= 70 && sp_correct)
 		{
 			send_ok("You are really a strong one.");
 			switch (job_)
@@ -110,7 +122,7 @@ void Player::handle_warrior_job_advancer()
 		}
 		else
 		{
-			if (level_ >= 70 && get_sp() > 0)
+			if (level_ >= 70 && !sp_correct)
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
@@ -124,9 +136,11 @@ void Player::handle_warrior_job_advancer()
 	case job_ids::kWhiteKnight:
 	case job_ids::kDragonKnight:
 	{
-		//set_state(1000);
 
-		if (level_ >= 120 && get_sp() == 0)
+		level_diff = get_level() - 120;
+		if (get_sp() <= (level_diff * 3))
+			sp_correct = true;
+		if (level_ >= 120 && sp_correct)
 		{
 			send_ok("I knew this day would come.");
 			switch (job_)
@@ -146,7 +160,7 @@ void Player::handle_warrior_job_advancer()
 		}
 		else
 		{
-			if (level_ >= 120 && get_sp() > 0)
+			if (level_ >= 120 && !sp_correct)
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
