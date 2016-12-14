@@ -53,7 +53,7 @@ World::World(bool is_dedicated_server) :
 	exp_rate_(kExpRate),
 	name_(kWorld1Name),
 	header_message_(kHeaderMessage), // standard header message ingame
-	mysql_session_("MySQL", "user=root;password=maplestory;db=xanadu62;auto-reconnect=true")
+	mysql_session_("MySQL", "user=root;password=xxxx;db=xanadu62;auto-reconnect=true")
 {
 	instance_ = this;
 }
