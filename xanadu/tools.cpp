@@ -9,11 +9,11 @@ namespace tools
 {
 	int random_int(int min, int max)
 	{
-		std::mt19937 rng;
-		rng.seed(std::random_device()());
+		std::random_device rd;
+		std::mt19937 mt(rd());
 		std::uniform_int_distribution<std::mt19937::result_type> dist(min, max); // distribution in range [min, max]
 
-		return dist(rng);
+		return dist(mt);
 	}
 
 	int get_distance(short pos1_x, short pos1_y, short pos2_x, short pos2_y)
