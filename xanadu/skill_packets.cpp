@@ -61,10 +61,15 @@ void PacketCreator::UpdateSkill(int skill_id, int skill_level, int master_level)
 {
 	write<short>(send_headers::kUPDATE_SKILLS);
 	write<signed char>(1);
-	write<short>(1); // size
+
+	write<short>(1); // amount of data elements
+
+	// for each data element, this data is written in a loop
+
 	write<int>(skill_id);
 	write<int>(skill_level);
 	write<int>(master_level);
+
 	write<signed char>(1);
 }
 
@@ -122,4 +127,3 @@ void PacketCreator::RemoveMist(int object_id)
 	write<short>(send_headers::kREMOVE_MIST);
 	write<int>(object_id);
 }
-

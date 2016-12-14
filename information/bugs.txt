@@ -33,13 +33,55 @@ need to work out the details of these features first
 
 -------------------- skills --------------------
 
-- door skill (bishop)
+- Door (bishop)
 
-- poison mist (mage)
+- Poison Breath has no effect on mob (Mage F/P)
 
-- pirate skills need to be checked and fixed
+- Slow (Mage F/P)
 
-- player summontimer needs to be fixed
+- Poison Mist (Mage F/P)
+
+- Seal (Mage F/P)
+
+- Element composition has no effect on mob (Mage F/P)
+
+- Slow (mage I/L)
+
+- Cold Beam has no effect on mob (Mage I/L)
+
+- Seal (Mage I/L)
+
+- Element composition has no effect on mob (Mage I/L)
+
+- Dash (Pirate)
+
+- Oak Barrel (Brawler)
+
+- Energy Charge System (Marauder)
+
+- Energy Charge System (Buccaneer)
+
+- Transformation and it's related skills (Buccaneer)
+
+- Time Leap (Buccaneer)
+
+- Pirate's Rage (Buccaneer)
+
+- Gaviota (Outlaw)
+
+- Octopus (Outlaw)
+
+- Homing Beacon has no effect on mob (Outlaw)
+
+- Bullseye (Corsair)
+
+- Speed Infusion (Corsair)
+
+- Wrath of the Octopi (Corsair)
+
+- Hypnotize has no effect on mob (Corsair)
+
+- Battleship and it's related skills (Corsair)
 
 -------------------- npcs --------------------
 
@@ -58,6 +100,8 @@ need to work out the details of these features first
 - to-do fix when closing hired merchant, items are stored, but it seems that amount of items stays at 1, so if multiple items were put it, some are lost
 
 -------------------- bugs --------------------
+
+- player summontimer needs to be fixed
 
 - to-do fix cash shop inventory 
 

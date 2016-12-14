@@ -153,7 +153,7 @@ public:
 	void ControlMob(Mob *mob, signed char spawn_type);
 	void EndControlMob(int mob_object_id);
 	void SpawnMonster(Mob *mob, signed char spawn_type, int from = -1);
-	void MoveMob(int mob_object_id, bool use_skill, signed char action, int unk, short start_position_x, short start_position_y, unsigned char *buffer, int buffer_size);
+	void MoveMob(int mob_object_id, bool use_skill, signed char action, signed char skill_id, signed char skill_level, short option, short start_position_x, short start_position_y, unsigned char *buffer, int buffer_size);
 	void MoveMobResponse(Mob *mob, short move_id, bool use_skill, signed char skill_id, signed char skill_level);
 	void ShowBossHp(int mob_id, int hp, int max_hp, signed char color, signed char background_color);
 	void ShowMobHp(int mob_object_id, signed char hp_percent);

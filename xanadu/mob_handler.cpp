@@ -18,9 +18,12 @@ void Player::handle_mob_movement()
 	}
 
 	short move_id = read<short>();
-	bool use_skill = read<bool>();
-	signed char skill = read<signed char>();
-	int unk = read<int>();
+	signed char nibbles  = read<signed char>();
+	signed char action = read<signed char>();
+	signed char skill_id = read<signed char>();
+	signed char skill_level = read<signed char>();
+	short option = read<short>();
+
 	skip_bytes(5);
 
 	short start_position_x = read<short>();
@@ -100,14 +103,13 @@ void Player::handle_mob_movement()
 	{
 		mob->update_position(mob_position_x, mob_position_y);
 	}
-
-	signed char skill_id = 0;
-	signed char skill_level = 0;
+	
+	bool next_movement_could_be_skill = (nibbles & 0x0F) != 0;
 
 	// send a packet to the player which is used to make the client continue mob movement for the player
 
 	PacketCreator packet1;
-	packet1.MoveMobResponse(mob, move_id, use_skill, skill_id, skill_level);
+	packet1.MoveMobResponse(mob, move_id, next_movement_could_be_skill, skill_id, skill_level);
 	send_packet(&packet1);
 
 	// only send the packet if there are atleast 2 players in the map
@@ -120,7 +122,7 @@ void Player::handle_mob_movement()
 
 		const int excluded_bytes = (21 + 2);
 		PacketCreator packet2;
-		packet2.MoveMob(monster_object_id, use_skill, skill, unk, start_position_x, start_position_y, session_->get_receive_buffer() + excluded_bytes, recv_length_ - excluded_bytes);
+		packet2.MoveMob(monster_object_id, next_movement_could_be_skill, action, skill_id, skill_level, option, start_position_x, start_position_y, session_->get_receive_buffer() + excluded_bytes, recv_length_ - excluded_bytes);
 		map_->send_packet(&packet2, this);
 	}
 }
