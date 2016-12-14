@@ -44,7 +44,6 @@ void Player::handle_warrior_job_advancer()
 
 		else {
 			send_ok("Train a bit more and I can show you the way of the #rWarrior#k.");
-			set_state(1000);
 		}
 
 		break;
@@ -89,7 +88,6 @@ void Player::handle_warrior_job_advancer()
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
-			set_state(1000);
 		}
 
 		break;
@@ -126,7 +124,6 @@ void Player::handle_warrior_job_advancer()
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
-			set_state(1000);
 		}
 
 		break;
@@ -164,9 +161,16 @@ void Player::handle_warrior_job_advancer()
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
-			set_state(1000);
 		}
 
+		break;
+	}
+
+	case job_ids::kHero:
+	case job_ids::kPaladin:
+	case job_ids::kDarkKnight:
+	{
+		send_ok("You have chosen wisely");
 		break;
 	}
 

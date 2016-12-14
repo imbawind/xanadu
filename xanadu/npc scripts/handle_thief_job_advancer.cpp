@@ -47,7 +47,6 @@ void Player::handle_thief_job_advancer()
 
 		else {
 			send_ok("Train a bit more and I can show you the way of the #rRogue#k.");
-			set_state(1000);
 		}
 
 		break;
@@ -85,7 +84,6 @@ void Player::handle_thief_job_advancer()
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
-			set_state(1000);
 		}
 
 		break;
@@ -118,7 +116,6 @@ void Player::handle_thief_job_advancer()
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
-			set_state(1000);
 		}
 
 		break;
@@ -151,7 +148,6 @@ void Player::handle_thief_job_advancer()
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
-			set_state(1000);
 		}
 
 		break;
@@ -161,7 +157,7 @@ void Player::handle_thief_job_advancer()
 	case job_ids::kShadower:
 	{
 		send_ok("You have chosen wisely");
-		set_state(1000);
+		break;
 	}
 
 	default:

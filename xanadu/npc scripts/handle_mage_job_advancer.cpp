@@ -43,7 +43,6 @@ void Player::handle_mage_job_advancer()
 		}
 		else {
 			send_ok("Train a bit more and I can show you the way of the #rMagician#k.");
-			set_state(1000);
 		}
 		break;
 	}
@@ -87,7 +86,6 @@ void Player::handle_mage_job_advancer()
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
-			set_state(1000);
 		}
 
 		break;
@@ -125,7 +123,6 @@ void Player::handle_mage_job_advancer()
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
-			set_state(1000);
 		}
 
 		break;
@@ -163,9 +160,16 @@ void Player::handle_mage_job_advancer()
 				send_ok("Your time has yet to come.");
 			else
 				send_ok("You have chosen wisely");
-			set_state(1000);
 		}
 
+		break;
+	}
+
+	case job_ids::kFpArchMage:
+	case job_ids::kIlArchMage:
+	case job_ids::kBishop:
+	{
+		send_ok("You have chosen wisely");
 		break;
 	}
 
