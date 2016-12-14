@@ -105,11 +105,11 @@ void Player::handle_guild_action()
 			std::string rank4 = read<std::string>();
 			std::string rank5 = read<std::string>();
 
-			guild_->SetRank1(rank1);
-			guild_->SetRank2(rank2);
-			guild_->SetRank3(rank3);
-			guild_->SetRank4(rank4);
-			guild_->SetRank5(rank5);
+			guild_->SetRank1(rank1, false);
+			guild_->SetRank2(rank2, false);
+			guild_->SetRank3(rank3, false);
+			guild_->SetRank4(rank4, false);
+			guild_->SetRank5(rank5, false);
 
 			// send a packet
 			PacketCreator packet24;
@@ -140,6 +140,7 @@ void Player::handle_guild_action()
 			{
 				target_player->set_guild_rank(new_rank);
 			}
+
 			// send a packet
 			PacketCreator packet25;
 			packet25.ChangeRank(guild_->get_id(), target_player_id, new_rank);
@@ -154,10 +155,11 @@ void Player::handle_guild_action()
 				return;
 			}
 
-			guild_->SetLogoBackground(read<short>());
-			guild_->SetLogoBackgroundColor(read<signed char>());
-			guild_->SetLogo(read<short>());
-			guild_->SetLogoColor(read<signed char>());
+			guild_->SetLogoBackground(read<short>(), false);
+			guild_->SetLogoBackgroundColor(read<signed char>(), false);
+			guild_->SetLogo(read<short>(), false);
+			guild_->SetLogoColor(read<signed char>(), false);
+
 			// send a packet
 			PacketCreator packet26;
 			packet26.ShowGuildEmblem(guild_);
@@ -173,7 +175,7 @@ void Player::handle_guild_action()
 			}
 
 			std::string &notice = read<std::string>();
-			guild_->SetNotice(notice);
+			guild_->SetNotice(notice, false);
 
 			// send a packet
 			PacketCreator packet27;

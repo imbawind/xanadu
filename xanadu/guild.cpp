@@ -4,6 +4,9 @@
 
 #include "guild_member.hpp"
 #include "player.hpp"
+#include "world.hpp"
+
+#include "Poco\Data\RecordSet.h"
 
 // constructor
 
@@ -118,59 +121,169 @@ std::unordered_map<int, std::unique_ptr<GuildMember>> *Guild::get_members()
 	return &members_;
 }
 
-void Guild::SetLogoColor(signed char color_)
+void Guild::SetLogoColor(signed char color_, bool init)
 {
 	logo_color_ = color_;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET logo_color = " << logo_color_
+			<< " WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::SetLogoBackgroundColor(signed char background_color)
+void Guild::SetLogoBackgroundColor(signed char background_color, bool init)
 {
 	logo_background_color_ = background_color;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET logo_bg_color = " << logo_background_color_
+			<< " WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::SetLogo(short logo)
+void Guild::SetLogo(short logo, bool init)
 {
 	logo_ = logo;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET logo = " << logo_
+			<< " WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::SetLogoBackground(short background)
+void Guild::SetLogoBackground(short background, bool init)
 {
 	logo_background_ = background;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET logo_bg = " << logo_background_
+			<< " WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::set_name(const std::string &name)
+void Guild::set_name(const std::string &name, bool init)
 {
 	name_ = name;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET guild_name = '" << name_
+			<< "' WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::SetNotice(const std::string &notice)
+void Guild::SetNotice(const std::string &notice, bool init)
 {
 	notice_ = notice;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET notice = '" << notice_
+			<< "' WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::SetRank1(std::string rank)
+void Guild::SetRank1(std::string rank, bool init)
 {
 	rank1_ = rank;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET rank1 = '" << rank1_
+			<< "' WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::SetRank2(std::string rank)
+void Guild::SetRank2(std::string rank, bool init)
 {
 	rank2_ = rank;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET rank2 = '" << rank2_
+			<< "' WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::SetRank3(std::string rank)
+void Guild::SetRank3(std::string rank, bool init)
 {
 	rank3_ = rank;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET rank3 = '" << rank3_
+			<< "' WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::SetRank4(std::string rank)
+void Guild::SetRank4(std::string rank, bool init)
 {
 	rank4_ = rank;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET rank4 = '" << rank4_
+			<< "' WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
-void Guild::SetRank5(std::string rank)
+void Guild::SetRank5(std::string rank, bool init)
 {
 	rank5_ = rank;
+
+	if (!init)
+	{
+		// mysql query
+		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
+		Poco::Data::Statement statement(mysql_session);
+		statement << "UPDATE guilds SET rank5 = '" << rank5_
+			<< "' WHERE guild_id = " << id_;
+		statement.execute();
+	}
 }
 
 GuildMember *Guild::GetMember(int player_id)

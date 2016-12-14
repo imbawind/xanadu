@@ -118,16 +118,16 @@ void World::initialize()
 
 		Guild *guild = new Guild(guild_id, guild_name);
 
-		guild->SetNotice(recordset1["notice"]);
-		guild->SetRank1(recordset1["rank1"]);
-		guild->SetRank2(recordset1["rank2"]);
-		guild->SetRank3(recordset1["rank3"]);
-		guild->SetRank4(recordset1["rank4"]);
-		guild->SetRank5(recordset1["rank5"]);
-		guild->SetLogoBackground(recordset1["logo_bg"]);
-		guild->SetLogoBackgroundColor(recordset1["logo_bg_color"]);
-		guild->SetLogo(recordset1["logo"]);
-		guild->SetLogoColor(recordset1["logo_color"]);
+		guild->SetNotice(recordset1["notice"], true);
+		guild->SetRank1(recordset1["rank1"], true);
+		guild->SetRank2(recordset1["rank2"], true);
+		guild->SetRank3(recordset1["rank3"], true);
+		guild->SetRank4(recordset1["rank4"], true);
+		guild->SetRank5(recordset1["rank5"], true);
+		guild->SetLogoBackground(recordset1["logo_bg"], true);
+		guild->SetLogoBackgroundColor(recordset1["logo_bg_color"], true);
+		guild->SetLogo(recordset1["logo"], true);
+		guild->SetLogoColor(recordset1["logo_color"], true);
 
 		guilds_[guild_id] = guild;
 		guild_ids_ = guild_id;
@@ -788,6 +788,27 @@ void World::create_guild(Player *player, std::string guild_name)
 	int guild_id = get_guild_id();
 	Guild *guild = new Guild(guild_id, guild_name);
 	guilds_[guild->get_id()] = guild;
+
+	// mysql query
+	Poco::Data::Statement statement(mysql_session_);
+
+	statement << "INSERT INTO guilds(guild_id, guild_name, notice, rank1, rank2, rank3, rank4, rank5, logo_bg, logo_bg_color, logo, logo_color) VALUES("
+		<< guild->get_id() << ",'"
+		<< guild->get_name() << "','"
+		<< guild->GetNotice() << "','"
+		<< guild->GetRank1() << "','"
+		<< guild->GetRank2() << "','"
+		<< guild->GetRank3() << "','"
+		<< guild->GetRank4() << "','"
+		<< guild->GetRank5() << "',"
+		<< static_cast<int>(guild->get_logo_background()) << ","
+		<< static_cast<int>(guild->get_logo_background_color()) << ","
+		<< static_cast<int>(guild->get_logo()) << ","
+		<< static_cast<int>(guild->get_logo_color())
+		<< ")";
+
+	statement.execute();
+
 	guild->AddMember(player);
 	player->set_guild(guild);
 
@@ -853,6 +874,11 @@ void World::delete_guild(int guild_id)
 	{
 		return;
 	}
+
+	// mysql query
+	Poco::Data::Statement statement(mysql_session_);
+	statement << "DELETE * FROM guilds WHERE guild_id = " << guild_id;
+	statement.execute();
 
 	// send a packet
 	PacketCreator packet22;
