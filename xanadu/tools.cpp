@@ -9,11 +9,11 @@ namespace tools
 {
 	int random_int(int min, int max)
 	{
-		std::mt19937 rng;
-		rng.seed(std::random_device()());
+		std::random_device rd;
+		std::mt19937 mt(rd());
 		std::uniform_int_distribution<std::mt19937::result_type> dist(min, max); // distribution in range [min, max]
 
-		return dist(rng);
+		return dist(mt);
 	}
 
 	int get_distance(short pos1_x, short pos1_y, short pos2_x, short pos2_y)
@@ -72,12 +72,16 @@ namespace tools
 
 	bool is_puppet(int skill_id)
 	{
-		if (skill_id == 3111002 || skill_id == 3211002 || skill_id == 3120012 || skill_id == 3220012) // Ranger Puppet, Sniper Puppet, Bowmaster Elite Puppet, Marksman Elite Puppet
+		switch (skill_id)
 		{
+		case 3111002:
+		case 3211002:
+		case 3120012:
+		case 3220012: // Ranger Puppet, Sniper Puppet, Bowmaster Elite Puppet, Marksman Elite Puppet
 			return true;
+		default:
+			return false;
 		}
-
-		return false;
 	}
 
 	bool skill_id_is_special_skill(int skill_id)
