@@ -255,15 +255,13 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	// end of guild info
 
-	// buff info already?
+	// buff info
 
 	write<int>(0);
 	write<int>(1);
 	write<signed char>(0); // morph
 	write<short>(0);
 	write<unsigned char>(0xF8);
-
-	// start of buff info
 
 	long long buff_mask = 0;
 	signed char buff_value = 0;
@@ -305,11 +303,16 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	int CHAR_MAGIC_SPAWN = 4562313;
 
-	write_null(6);
+	write<int>(0);
+	write<short>(0);
 	write<int>(CHAR_MAGIC_SPAWN);
-	write_null(10);
+	write<int>(0);
+	write<int>(0);
+	write<short>(0);
 	write<int>(CHAR_MAGIC_SPAWN);
-	write_null(10);
+	write<int>(0);
+	write<int>(0);
+	write<short>(0);
 	write<int>(CHAR_MAGIC_SPAWN);
 	write<short>(0);
 
@@ -378,24 +381,26 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	write<int>(1); // level
 	write<int>(0); // exp
-	write<int>(0); // tiredness
+	write<int>(0); // tiredness/fatigue
 
 	// playershop/minigame info
 
 	bool has_minigame = false;
 
-	write<signed char>(has_minigame);
+	write<bool>(has_minigame);
 
 	if (has_minigame)
 	{
 		write<int>(0); // map object id
 		write<std::string>("hello"); // description text
-		write<signed char>(0);
+		write<signed char>(0); // specific if game if private?
 		write<signed char>(10); // type
 		write<signed char>(1); // amount of players that are already inside the minigame
 		write<signed char>(2); // max players inside the minigame
 		write<signed char>(0); // determines wether joinable or not? 1/0? unsure
 	}
+
+	// end of playershop/minigame info
 
 	// chalkboard info
 
@@ -409,15 +414,40 @@ void PacketCreator::ShowPlayer(Player *player)
 		write<std::string>(chalkboard_text);
 	}
 
-	// ring info
+	// end of chalkboard info
 
-	write<signed char>(0); // ring
-	write<signed char>(0); // ring
-	write<signed char>(0); // marriage ring
+	// rings info
 
-	// end of ring info
+	bool has_couple_ring = false;
 
-	write<signed char>(0); // carnival party quest team maybe?
+	write<bool>(has_couple_ring); // couple ring
+
+	if (has_couple_ring)
+	{
+		// to-do
+	}
+
+	bool has_friendship_ring = false;
+
+	write<bool>(has_friendship_ring); // friendship ring
+
+	if (has_friendship_ring)
+	{
+		// to-do
+	}
+
+	bool has_marriage_ring = false;
+
+	write<bool>(has_marriage_ring); // marriage ring
+
+	if (has_marriage_ring)
+	{
+		// to-do
+	}
+
+	// end of rings info
+
+	write<signed char>(0); // carnival party quest team for some fields maybe?
 }
 
 void PacketCreator::RemovePlayer(Player *player)
