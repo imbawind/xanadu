@@ -447,6 +447,25 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	// end of rings info
 
+	/*
+	from lithium v111:
+
+			mplew.write(chr.getStat().Berserk ? 1 : 0); // 0x1 = dark force, 0x2 = dragon, 0x4 = swallow (wild hunter?), for (0x8, 0x10 and 0x20, extra int)
+		mplew.writeInt(0);
+		mplew.write(0); // new year cards boolean
+
+		mplew.writeInt(0); //no clue
+		final boolean pvp = chr.inPVP();
+		if (pvp) {
+			mplew.write(Integer.parseInt(chr.getEventInstance().getProperty("type")));
+		}
+		if (chr.getCarnivalParty() != null) {
+			mplew.write(chr.getCarnivalParty().getTeam());
+		} else if (GameConstants.isTeamMap(chr.getMapId())) {
+			mplew.write(chr.getTeam() + (pvp ? 1 : 0)); //is it 0/1 or is it 1/2?
+		}
+		*/
+
 	write<signed char>(0); // carnival party quest team for some fields maybe?
 }
 
@@ -939,10 +958,39 @@ void PacketCreator::UpdatePlayer(Player *player)
 	write<int>(player->get_id());
 	write<signed char>(1);
 	AddCharLook(player);
-	write<signed char>(0); // crush ring info
-	write<signed char>(0); // ring info
-	write<signed char>(0); // marriage ring info
-	write<int>(0);
+
+	// rings info
+
+	bool has_couple_ring = false;
+
+	write<bool>(has_couple_ring); // couple ring
+
+	if (has_couple_ring)
+	{
+		// to-do
+	}
+
+	bool has_friendship_ring = false;
+
+	write<bool>(has_friendship_ring); // friendship ring
+
+	if (has_friendship_ring)
+	{
+		// to-do
+	}
+
+	bool has_marriage_ring = false;
+
+	write<bool>(has_marriage_ring); // marriage ring
+
+	if (has_marriage_ring)
+	{
+		// to-do
+	}
+
+	// end of rings info
+
+	write<int>(player->get_chair());
 }
 
 void PacketCreator::ShowKeymap(Player *player)
@@ -1004,8 +1052,7 @@ void PacketCreator::ShowInfo(Player *player)
 
 	write<std::string>(""); // guild alliance name
 
-	bool is_self = false;
-	write<signed char>(is_self);
+	write<signed char>(0); // medal info/MedalAchievementInfo according to client data
 
 	// pets info
 
@@ -1065,12 +1112,13 @@ void PacketCreator::ShowInfo(Player *player)
 	// wishlist info
 	write<signed char>(0); // size
 
-	// monster book
+	// monster book info
 	write<int>(1);
 	write<int>(0);
 	write<int>(0);
 	write<int>(0);
 	write<int>(0);
+	// end of monster book info
 
 	// equipped medal info
 	Inventory *inventory = player->get_inventory(kInventoryConstantsTypesEquipped);
