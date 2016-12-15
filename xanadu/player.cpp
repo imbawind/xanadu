@@ -1693,10 +1693,7 @@ void Player::set_mp(short smp)
 
 void Player::set_max_hp(short max_hp)
 {
-	// does this check even make sense?
-	int test = max_hp + max_hp_;
-
-	if (test > SHRT_MAX)
+	if (max_hp > SHRT_MAX)
 	{
 		max_hp = SHRT_MAX;
 	}
@@ -1722,9 +1719,6 @@ void Player::set_max_hp(short max_hp)
 
 void Player::set_max_mp(short max_mp)
 {
-	// does this check even make sense?
-	int test = max_mp + max_mp_;
-
 	if (max_mp > SHRT_MAX)
 	{
 		max_mp = SHRT_MAX;

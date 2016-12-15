@@ -267,6 +267,15 @@ void Player::handle_use_chat()
 			send_packet(&packet10);
 		}
 
+		// for development purposes only
+		else if (command == "posk")
+		{
+			// packet
+			PacketCreator packet11;
+			packet11.cpq_show_game_result(11);
+			send_packet(&packet11);
+		}
+
 		else if (command == "maxskills")
 		{
 			// max skills for 4th jobs

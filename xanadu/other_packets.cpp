@@ -49,8 +49,7 @@ void PacketCreator::StartCarnivalPartyQuest(unsigned char team)
 	write<short>(0); // Total Obtained CP of the team
 	write<short>(0); // Obtained CP - Used CP of the enemy team
 	write<short>(0); // Total Obtained CP of the enemy team
-	write<short>(0);
-	write<long long>(0);
+	write_null(10); // one byte for each cpq mob?
 }
 
 void PacketCreator::obtain_cp()
@@ -93,9 +92,21 @@ void PacketCreator::carnival_pq_died(signed char lost_cp, unsigned char team, st
 void PacketCreator::leave_carnival_pq(unsigned char team, std::string player_name)
 {
 	write<short>(send_headers::kMONSTER_CARNIVAL_LEAVE);
-	write<signed char>(0);
-	write<unsigned char>(team);
+	write<signed char>(0); // number 6 has some meaning?
+	write<unsigned char>(team); // maybe wrong, might not be team, maybe result message
 	write<std::string>(player_name);
+}
+
+// cpq_show_game_result
+// 8: You have won the Monster Carnival. Please wait as you'll be transported out of here shortly.
+// 9: Unfortunately, you have lost the Monster Carnival. Please wait as you'll be transported out of here shortly.
+// 10: Despite the Overtime, the carnival ended in a draw. Please wait as you'll be transported out of here shortly.
+// 11: Monster Carnival has ended abruptly due to the opposing team leaving the game too early. Please wait as you'll be transported out of here shortly.
+
+void PacketCreator::cpq_show_game_result(signed char result)
+{
+	write<short>(send_headers::kMONSTER_CARNIVAL_SHOW_GAME_RESULT);
+	write<signed char>(result);
 }
 
 // end of monster carnival party quest packets
