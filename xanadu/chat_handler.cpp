@@ -263,7 +263,7 @@ void Player::handle_use_chat()
 		{
 			// packet
 			PacketCreator packet10;
-			packet10.leave_carnival_pq(mcpq_constants::kTeamRed, name_);
+			packet10.leave_carnival_pq(false, mcpq_constants::kTeamBlue, name_);
 			send_packet(&packet10);
 		}
 

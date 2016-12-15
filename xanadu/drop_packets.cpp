@@ -44,7 +44,7 @@ void PacketCreator::ShowDrop(signed char type, std::shared_ptr<Drop> drop, short
 	{
 		write<short>(position_x); // the origin drop position
 		write<short>(position_y); // the origin drop position
-		write<short>(0);
+		write<short>(0); // delay?
 	}
 
 	if (!drop->is_mesos())
@@ -58,14 +58,14 @@ void PacketCreator::ShowDrop(signed char type, std::shared_ptr<Drop> drop, short
 void PacketCreator::RemoveDrop(int drop_id, signed char animation, int player_id, signed char pet_slot)
 {
 	write<short>(send_headers::kREMOVE_ITEM_FROM_MAP);
-	write<signed char>(animation); // 0 = expire, 1 = without animation, 2 = pickup, 4 = explode, 5 = pet pickup
+	write<signed char>(animation); // 0 = expire, 1 = without animation, 2 = pickup, 3 = ?, 4 = explode, 5 = pet pickup ?
 	write<int>(drop_id);
 
-	if (animation >= 2)
+	if (animation >= 2) // 2, 3, 5 = integer byte? and 4 = short byte?
 	{
 		write<int>(player_id);
 
-		if (pet_slot >= 0)
+		if (pet_slot >= 0) // pet slot integer only for animation 5 but then always written?
 		{
 			write<int>(pet_slot);
 		}

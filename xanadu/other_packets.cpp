@@ -89,11 +89,14 @@ void PacketCreator::carnival_pq_died(signed char lost_cp, unsigned char team, st
 	write<signed char>(lost_cp);
 }
 
-void PacketCreator::leave_carnival_pq(unsigned char team, std::string player_name)
+// player_is_leader != 6: [teamname] of Team [playername] has quit the Monster Carnival.
+// player_is_leader == 6: Since the leader of the Team [teamname] quit the Monster Carnival, [playername] has been appointed as the new leader of the team.
+
+void PacketCreator::leave_carnival_pq(bool player_is_leader, unsigned char team, std::string player_name)
 {
 	write<short>(send_headers::kMONSTER_CARNIVAL_LEAVE);
-	write<signed char>(0); // number 6 has some meaning?
-	write<unsigned char>(team); // maybe wrong, might not be team, maybe result message
+	write<signed char>(player_is_leader ? 6 : 0);
+	write<unsigned char>(team);
 	write<std::string>(player_name);
 }
 
@@ -113,10 +116,29 @@ void PacketCreator::cpq_show_game_result(signed char result)
 
 // start of other packets
 
+// kSHOW_STATUS_INFO
+// CWvsContext::OnMessage
+// not confirmed yet, but probably correct:
+// 0 = droppickup
+// 1 = questrecord
+// 2 = cashitemexpire
+// 3 = increase exp
+// 4 = increase sp
+// 5 = increase fame
+// 6 = increase money
+// 7 = increase guild points
+// 8 = give buff message
+// 9 = OnGeneralItemExpireMessage
+// 10 = OnSystemMessage
+// 11 = OnQuestRecordExMessage
+// 12 = OnItemProtectExpireMessage
+// 13 = OnItemExpireReplaceMessage
+// 14 = OnSkillExpireMessage
+
 void PacketCreator::GainExp(int exp, bool in_chat, bool white, int party_bonus)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(3); // 3 = exp, 4 = sp, 5 = fame, 6 = mesos, 7 = guild points, 8 = guild contribution (untested)
+	write<signed char>(3); // 3 = increase exp, there are also much other types
 	write<bool>(white); // white or yellow
 	write<int>(exp); // amount of exp
 	write<bool>(in_chat); // in chat or on screen
@@ -130,7 +152,8 @@ void PacketCreator::GainExp(int exp, bool in_chat, bool white, int party_bonus)
 void PacketCreator::GainItem(int itemid, short amount)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<short>(0);
+	write<signed char>(0); // 0 = drop pickup, there are also much other types
+	write<signed char>(0); // 0 = item, 1 = mesos
 	write<int>(itemid);
 	write<int>(amount);
 }
@@ -138,8 +161,8 @@ void PacketCreator::GainItem(int itemid, short amount)
 void PacketCreator::GainMesos(int amount)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(0);
-	write<signed char>(1);
+	write<signed char>(0); // 0 = drop pickup, there are also much other types
+	write<signed char>(1); // 0 = item, 1 = mesos
 	write<int>(amount);
 	write<short>(0);
 }
@@ -484,7 +507,7 @@ void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &atta
 void PacketCreator::ForfeitQuest(short quest_id)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(1);
+	write<signed char>(1); // 1 = quest message, there are also much other types
 	write<short>(quest_id);
 	write<short>(0);
 }
@@ -502,7 +525,7 @@ void PacketCreator::UpdateQuest(Quest *quest, int npc_id)
 void PacketCreator::UpdateQuestInfo(Quest *quest)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(1);
+	write<signed char>(1); // 1 = quest message, there are also much other types
 	write<short>(quest->get_id());
 
 	if (quest->is_completed())
@@ -533,7 +556,7 @@ void PacketCreator::ItemGainChat(int itemid, int amount, signed char items_size)
 void PacketCreator::MesosGainChat(int amount)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(5);
+	write<signed char>(5); // 5 = increase mesos, there are also much other types
 	write<int>(amount);
 	write<short>(0);
 }
@@ -541,7 +564,7 @@ void PacketCreator::MesosGainChat(int amount)
 void PacketCreator::FameGainChat(int amount)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(4);
+	write<signed char>(4); // 4 = increase fame, there are also much other types
 	write<int>(amount);
 }
 
@@ -1122,6 +1145,6 @@ void PacketCreator::get_inventory_full()
 void PacketCreator::CantGetAnymoreItems()
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(0);
+	write<signed char>(0); // 0 = drop pickup, there are also much other types
 	write<unsigned char>(0xFF); // mode
 }

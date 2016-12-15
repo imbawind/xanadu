@@ -284,7 +284,7 @@ public:
 	void carnival_pq_message(signed char message);
 	void carnival_pq_summon(signed char tab, signed char summon_number, std::string player_name);
 	void carnival_pq_died(signed char lost_cp, unsigned char team, std::string player_name);
-	void leave_carnival_pq(unsigned char team, std::string player_name);
+	void leave_carnival_pq(bool player_is_leader, unsigned char team, std::string player_name);
 	void cpq_show_game_result(signed char result);
 
 	// templates
