@@ -87,8 +87,6 @@ need to work out the details of these features first
 
 - fix storage npcs (use the correct id's in player.cpp in the npc function)
 
-- to-do npc interactions? maybe needs to be coded
-
 -------------------- hired merchants --------------------
 
 - to-do fix hired merchant when store owner enters merchant for maintenance, it needs to be shown in the map on the merchant

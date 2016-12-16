@@ -5,11 +5,15 @@ to-do features:
 
 - maybe guild bbs
 
-- to-do maybe implement rings
+- maybe implement rings
 
-- to-do maybe implement marriage
+- maybe implement marriage
 
-- to-do maybe implement skillbooks
+- maybe implement skillbooks
+
+- maybe implement npc interactions
+
+- maybe implement skill macros
 
 - ping/pong functionality? maybe needs to be implemented
 

@@ -794,12 +794,12 @@ void Player::player_connect()
 	merchant_storage_mesos_ = rs1["merchant_storage_mesos"];
 
 	// initialize inventories
-	inventories_[0] = new Inventory(this, 0, 24); // Equipped
+	inventories_[0] = new Inventory(this, 0, 48); // Equipped
 	inventories_[1] = new Inventory(this, 1, equip_slots); // Equip
 	inventories_[2] = new Inventory(this, 2, use_slots); // Use
 	inventories_[3] = new Inventory(this, 3, setup_slots); // Setup
 	inventories_[4] = new Inventory(this, 4, etc_slots); // Etc
-	inventories_[5] = new Inventory(this, 5, 24); // Cash
+	inventories_[5] = new Inventory(this, 5, 48); // Cash
 
 	// account data
 	Poco::Data::Statement statement4(mysql_session);
@@ -813,7 +813,7 @@ void Player::player_connect()
 	donation_points_ = rs2["donation_points"];
 	storage_mesos_ = rs2["storage_mesos"];
 	nx_cash_credit_ = rs2["nxcash_credit"];
-	storage_slots_ = 24;
+	storage_slots_ = 48;
 
 	// storage equips
 	Poco::Data::Statement statement5(mysql_session);
@@ -2433,7 +2433,7 @@ void Player::save_storage_items()
 	bool firstrun = true;
 	for (auto item : storage_items_)
 	{
-		if (item->get_inventory_id() == kInventoryConstantsTypesEquip || kInventoryConstantsTypesCash)
+		if (item->get_inventory_id() == kInventoryConstantsTypesEquip || item->get_inventory_id() == kInventoryConstantsTypesCash)
 		{
 			continue;
 		}
