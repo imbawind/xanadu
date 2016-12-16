@@ -1189,21 +1189,13 @@ void Player::handle_gachapon_npc()
 
 				int item_id = items[random_value];
 
-				inventory = get_inventory(static_cast<signed char>(tools::get_inventory_id_from_item_id(item_id)));
 
-				if (!inventory)
-				{
-					return;
-				}
+				bool success = give_item(item_id, 1);
 
-				bool success = false;
-
-				auto itemx = inventory->give_item_special(success, item_id);
-
-				if (itemx && success)
+				if (success)
 				{
 					inventory->remove_item(5220000, 1);
-					
+
 					//short watt = itemx->get_weapon_attack();
 					//short matt = itemx->get_magic_attack();
 					//itemx->set_weapon_attack(watt + static_cast<short>(tools::random_int(0, 0)));
@@ -1211,7 +1203,7 @@ void Player::handle_gachapon_npc()
 
 					// packet
 					PacketCreator packet118;
-					packet118.NewItem(itemx, false);
+					packet118.ItemGainChat(item_id, 1);
 					send_packet(&packet118);
 				}
 				else
