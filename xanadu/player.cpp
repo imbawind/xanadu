@@ -794,12 +794,12 @@ void Player::player_connect()
 	merchant_storage_mesos_ = rs1["merchant_storage_mesos"];
 
 	// initialize inventories
-	inventories_[0] = new Inventory(this, 0, 24); // Equipped
+	inventories_[0] = new Inventory(this, 0, 48); // Equipped
 	inventories_[1] = new Inventory(this, 1, equip_slots); // Equip
 	inventories_[2] = new Inventory(this, 2, use_slots); // Use
 	inventories_[3] = new Inventory(this, 3, setup_slots); // Setup
 	inventories_[4] = new Inventory(this, 4, etc_slots); // Etc
-	inventories_[5] = new Inventory(this, 5, 24); // Cash
+	inventories_[5] = new Inventory(this, 5, 48); // Cash
 
 	// account data
 	Poco::Data::Statement statement4(mysql_session);
@@ -813,7 +813,7 @@ void Player::player_connect()
 	donation_points_ = rs2["donation_points"];
 	storage_mesos_ = rs2["storage_mesos"];
 	nx_cash_credit_ = rs2["nxcash_credit"];
-	storage_slots_ = 24;
+	storage_slots_ = 48;
 
 	// storage equips
 	Poco::Data::Statement statement5(mysql_session);
@@ -1693,10 +1693,7 @@ void Player::set_mp(short smp)
 
 void Player::set_max_hp(short max_hp)
 {
-	// does this check even make sense?
-	int test = max_hp + max_hp_;
-
-	if (test > SHRT_MAX)
+	if (max_hp > SHRT_MAX)
 	{
 		max_hp = SHRT_MAX;
 	}
@@ -1722,9 +1719,6 @@ void Player::set_max_hp(short max_hp)
 
 void Player::set_max_mp(short max_mp)
 {
-	// does this check even make sense?
-	int test = max_mp + max_mp_;
-
 	if (max_mp > SHRT_MAX)
 	{
 		max_mp = SHRT_MAX;
@@ -2439,7 +2433,7 @@ void Player::save_storage_items()
 	bool firstrun = true;
 	for (auto item : storage_items_)
 	{
-		if (item->get_inventory_id() == kInventoryConstantsTypesEquip || kInventoryConstantsTypesCash)
+		if (item->get_inventory_id() == kInventoryConstantsTypesEquip || item->get_inventory_id() == kInventoryConstantsTypesCash)
 		{
 			continue;
 		}

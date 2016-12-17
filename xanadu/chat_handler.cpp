@@ -263,8 +263,17 @@ void Player::handle_use_chat()
 		{
 			// packet
 			PacketCreator packet10;
-			packet10.leave_carnival_pq(mcpq_constants::kTeamRed, name_);
+			packet10.leave_carnival_pq(false, mcpq_constants::kTeamBlue, name_);
 			send_packet(&packet10);
+		}
+
+		// for development purposes only
+		else if (command == "posk")
+		{
+			// packet
+			PacketCreator packet11;
+			packet11.cpq_show_game_result(11);
+			send_packet(&packet11);
 		}
 
 		else if (command == "maxskills")

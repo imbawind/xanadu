@@ -36,10 +36,10 @@ CREATE TABLE characters (
   `party_id` INT NOT NULL DEFAULT '0',
   `guild_id` INT NOT NULL DEFAULT '0',
   `guild_rank` INT NOT NULL DEFAULT '5',
-  `equip_slots` INT NOT NULL DEFAULT '24',
-  `use_slots` INT NOT NULL DEFAULT '24',
-  `setup_slots` INT NOT NULL DEFAULT '24',
-  `etc_slots` INT NOT NULL DEFAULT '24',
+  `equip_slots` INT NOT NULL DEFAULT '48',
+  `use_slots` INT NOT NULL DEFAULT '48',
+  `setup_slots` INT NOT NULL DEFAULT '48',
+  `etc_slots` INT NOT NULL DEFAULT '48',
   `merchant_storage_mesos` BIGINT NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 );

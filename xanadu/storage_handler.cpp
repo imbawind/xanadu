@@ -111,10 +111,7 @@ void Player::handle_storage_reqest()
 	}
 	case kArrange:
 	{
-		// packet
-		PacketCreator packet17;
-		packet17.EnableAction();
-		send_packet(&packet17);
+		// to-do
 
 		break;
 	}

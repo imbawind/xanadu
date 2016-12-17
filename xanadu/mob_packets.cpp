@@ -65,14 +65,16 @@ void PacketCreator::SpawnMonster(Mob *mob, signed char spawn_type, int from)
 	write<int>(0);
 }
 
-void PacketCreator::MoveMob(int mob_object_id, bool use_skill, signed char action, int unk, short start_position_x, short start_position_y, unsigned char *buffer, int buffer_size)
+void PacketCreator::MoveMob(int mob_object_id, bool use_skill, signed char action, signed char skill_id, signed char skill_level, short option, short start_position_x, short start_position_y, unsigned char *buffer, int buffer_size)
 {
 	write<short>(send_headers::kMOVE_MONSTER);
 
 	write<int>(mob_object_id);
 	write<bool>(use_skill);
 	write<signed char>(action);
-	write<int>(unk);
+	write<signed char>(skill_id);
+	write<signed char>(skill_level);
+	write<short>(option);
 	write<short>(start_position_x);
 	write<short>(start_position_y);
 

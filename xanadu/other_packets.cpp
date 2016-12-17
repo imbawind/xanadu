@@ -49,8 +49,7 @@ void PacketCreator::StartCarnivalPartyQuest(unsigned char team)
 	write<short>(0); // Total Obtained CP of the team
 	write<short>(0); // Obtained CP - Used CP of the enemy team
 	write<short>(0); // Total Obtained CP of the enemy team
-	write<short>(0);
-	write<long long>(0);
+	write_null(10); // one byte for each cpq mob?
 }
 
 void PacketCreator::obtain_cp()
@@ -90,22 +89,56 @@ void PacketCreator::carnival_pq_died(signed char lost_cp, unsigned char team, st
 	write<signed char>(lost_cp);
 }
 
-void PacketCreator::leave_carnival_pq(unsigned char team, std::string player_name)
+// player_is_leader != 6: [teamname] of Team [playername] has quit the Monster Carnival.
+// player_is_leader == 6: Since the leader of the Team [teamname] quit the Monster Carnival, [playername] has been appointed as the new leader of the team.
+
+void PacketCreator::leave_carnival_pq(bool player_is_leader, unsigned char team, std::string player_name)
 {
 	write<short>(send_headers::kMONSTER_CARNIVAL_LEAVE);
-	write<signed char>(0);
+	write<signed char>(player_is_leader ? 6 : 0);
 	write<unsigned char>(team);
 	write<std::string>(player_name);
+}
+
+// cpq_show_game_result
+// 8: You have won the Monster Carnival. Please wait as you'll be transported out of here shortly.
+// 9: Unfortunately, you have lost the Monster Carnival. Please wait as you'll be transported out of here shortly.
+// 10: Despite the Overtime, the carnival ended in a draw. Please wait as you'll be transported out of here shortly.
+// 11: Monster Carnival has ended abruptly due to the opposing team leaving the game too early. Please wait as you'll be transported out of here shortly.
+
+void PacketCreator::cpq_show_game_result(signed char result)
+{
+	write<short>(send_headers::kMONSTER_CARNIVAL_SHOW_GAME_RESULT);
+	write<signed char>(result);
 }
 
 // end of monster carnival party quest packets
 
 // start of other packets
 
+// kSHOW_STATUS_INFO
+// CWvsContext::OnMessage
+// not confirmed yet, but probably correct:
+// 0 = droppickup
+// 1 = questrecord
+// 2 = cashitemexpire
+// 3 = increase exp
+// 4 = increase sp
+// 5 = increase fame
+// 6 = increase money
+// 7 = increase guild points
+// 8 = give buff message
+// 9 = OnGeneralItemExpireMessage
+// 10 = OnSystemMessage
+// 11 = OnQuestRecordExMessage
+// 12 = OnItemProtectExpireMessage
+// 13 = OnItemExpireReplaceMessage
+// 14 = OnSkillExpireMessage
+
 void PacketCreator::GainExp(int exp, bool in_chat, bool white, int party_bonus)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(3); // 3 = exp, 4 = sp, 5 = fame, 6 = mesos, 7 = guild points, 8 = guild contribution (untested)
+	write<signed char>(3); // 3 = increase exp, there are also much other types
 	write<bool>(white); // white or yellow
 	write<int>(exp); // amount of exp
 	write<bool>(in_chat); // in chat or on screen
@@ -119,7 +152,8 @@ void PacketCreator::GainExp(int exp, bool in_chat, bool white, int party_bonus)
 void PacketCreator::GainItem(int itemid, short amount)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<short>(0);
+	write<signed char>(0); // 0 = drop pickup, there are also much other types
+	write<signed char>(0); // 0 = item, 1 = mesos
 	write<int>(itemid);
 	write<int>(amount);
 }
@@ -127,8 +161,8 @@ void PacketCreator::GainItem(int itemid, short amount)
 void PacketCreator::GainMesos(int amount)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(0);
-	write<signed char>(1);
+	write<signed char>(0); // 0 = drop pickup, there are also much other types
+	write<signed char>(1); // 0 = item, 1 = mesos
 	write<int>(amount);
 	write<short>(0);
 }
@@ -221,15 +255,13 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	// end of guild info
 
-	// buff info already?
+	// buff info
 
 	write<int>(0);
 	write<int>(1);
 	write<signed char>(0); // morph
 	write<short>(0);
 	write<unsigned char>(0xF8);
-
-	// start of buff info
 
 	long long buff_mask = 0;
 	signed char buff_value = 0;
@@ -271,11 +303,16 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	int CHAR_MAGIC_SPAWN = 4562313;
 
-	write_null(6);
+	write<int>(0);
+	write<short>(0);
 	write<int>(CHAR_MAGIC_SPAWN);
-	write_null(10);
+	write<int>(0);
+	write<int>(0);
+	write<short>(0);
 	write<int>(CHAR_MAGIC_SPAWN);
-	write_null(10);
+	write<int>(0);
+	write<int>(0);
+	write<short>(0);
 	write<int>(CHAR_MAGIC_SPAWN);
 	write<short>(0);
 
@@ -344,24 +381,26 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	write<int>(1); // level
 	write<int>(0); // exp
-	write<int>(0); // tiredness
+	write<int>(0); // tiredness/fatigue
 
 	// playershop/minigame info
 
 	bool has_minigame = false;
 
-	write<signed char>(has_minigame);
+	write<bool>(has_minigame);
 
 	if (has_minigame)
 	{
 		write<int>(0); // map object id
 		write<std::string>("hello"); // description text
-		write<signed char>(0);
+		write<signed char>(0); // specific if game if private?
 		write<signed char>(10); // type
 		write<signed char>(1); // amount of players that are already inside the minigame
 		write<signed char>(2); // max players inside the minigame
 		write<signed char>(0); // determines wether joinable or not? 1/0? unsure
 	}
+
+	// end of playershop/minigame info
 
 	// chalkboard info
 
@@ -375,15 +414,59 @@ void PacketCreator::ShowPlayer(Player *player)
 		write<std::string>(chalkboard_text);
 	}
 
-	// ring info
+	// end of chalkboard info
 
-	write<signed char>(0); // ring
-	write<signed char>(0); // ring
-	write<signed char>(0); // marriage ring
+	// rings info
 
-	// end of ring info
+	bool has_couple_ring = false;
 
-	write<signed char>(0); // carnival party quest team maybe?
+	write<bool>(has_couple_ring); // couple ring
+
+	if (has_couple_ring)
+	{
+		// to-do
+	}
+
+	bool has_friendship_ring = false;
+
+	write<bool>(has_friendship_ring); // friendship ring
+
+	if (has_friendship_ring)
+	{
+		// to-do
+	}
+
+	bool has_marriage_ring = false;
+
+	write<bool>(has_marriage_ring); // marriage ring
+
+	if (has_marriage_ring)
+	{
+		// to-do
+	}
+
+	// end of rings info
+
+	/*
+	from lithium v111:
+
+			mplew.write(chr.getStat().Berserk ? 1 : 0); // 0x1 = dark force, 0x2 = dragon, 0x4 = swallow (wild hunter?), for (0x8, 0x10 and 0x20, extra int)
+		mplew.writeInt(0);
+		mplew.write(0); // new year cards boolean
+
+		mplew.writeInt(0); //no clue
+		final boolean pvp = chr.inPVP();
+		if (pvp) {
+			mplew.write(Integer.parseInt(chr.getEventInstance().getProperty("type")));
+		}
+		if (chr.getCarnivalParty() != null) {
+			mplew.write(chr.getCarnivalParty().getTeam());
+		} else if (GameConstants.isTeamMap(chr.getMapId())) {
+			mplew.write(chr.getTeam() + (pvp ? 1 : 0)); //is it 0/1 or is it 1/2?
+		}
+		*/
+
+	write<signed char>(0); // carnival party quest team for some fields maybe?
 }
 
 void PacketCreator::RemovePlayer(Player *player)
@@ -473,7 +556,7 @@ void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &atta
 void PacketCreator::ForfeitQuest(short quest_id)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(1);
+	write<signed char>(1); // 1 = quest message, there are also much other types
 	write<short>(quest_id);
 	write<short>(0);
 }
@@ -491,7 +574,7 @@ void PacketCreator::UpdateQuest(Quest *quest, int npc_id)
 void PacketCreator::UpdateQuestInfo(Quest *quest)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(1);
+	write<signed char>(1); // 1 = quest message, there are also much other types
 	write<short>(quest->get_id());
 
 	if (quest->is_completed())
@@ -522,7 +605,7 @@ void PacketCreator::ItemGainChat(int itemid, int amount, signed char items_size)
 void PacketCreator::MesosGainChat(int amount)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(5);
+	write<signed char>(5); // 5 = increase mesos, there are also much other types
 	write<int>(amount);
 	write<short>(0);
 }
@@ -530,7 +613,7 @@ void PacketCreator::MesosGainChat(int amount)
 void PacketCreator::FameGainChat(int amount)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(4);
+	write<signed char>(4); // 4 = increase fame, there are also much other types
 	write<int>(amount);
 }
 
@@ -875,10 +958,39 @@ void PacketCreator::UpdatePlayer(Player *player)
 	write<int>(player->get_id());
 	write<signed char>(1);
 	AddCharLook(player);
-	write<signed char>(0); // crush ring info
-	write<signed char>(0); // ring info
-	write<signed char>(0); // marriage ring info
-	write<int>(0);
+
+	// rings info
+
+	bool has_couple_ring = false;
+
+	write<bool>(has_couple_ring); // couple ring
+
+	if (has_couple_ring)
+	{
+		// to-do
+	}
+
+	bool has_friendship_ring = false;
+
+	write<bool>(has_friendship_ring); // friendship ring
+
+	if (has_friendship_ring)
+	{
+		// to-do
+	}
+
+	bool has_marriage_ring = false;
+
+	write<bool>(has_marriage_ring); // marriage ring
+
+	if (has_marriage_ring)
+	{
+		// to-do
+	}
+
+	// end of rings info
+
+	write<int>(player->get_chair());
 }
 
 void PacketCreator::ShowKeymap(Player *player)
@@ -940,8 +1052,7 @@ void PacketCreator::ShowInfo(Player *player)
 
 	write<std::string>(""); // guild alliance name
 
-	bool is_self = false;
-	write<signed char>(is_self);
+	write<signed char>(0); // medal info/MedalAchievementInfo according to client data
 
 	// pets info
 
@@ -1001,12 +1112,13 @@ void PacketCreator::ShowInfo(Player *player)
 	// wishlist info
 	write<signed char>(0); // size
 
-	// monster book
+	// monster book info
 	write<int>(1);
 	write<int>(0);
 	write<int>(0);
 	write<int>(0);
 	write<int>(0);
+	// end of monster book info
 
 	// equipped medal info
 	Inventory *inventory = player->get_inventory(kInventoryConstantsTypesEquipped);
@@ -1111,6 +1223,6 @@ void PacketCreator::get_inventory_full()
 void PacketCreator::CantGetAnymoreItems()
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(0);
+	write<signed char>(0); // 0 = drop pickup, there are also much other types
 	write<unsigned char>(0xFF); // mode
 }

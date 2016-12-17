@@ -106,6 +106,7 @@ namespace send_headers
 	constexpr short kMONSTER_CARNIVAL_MESSAGE = 0xE6;
 	constexpr short kMONSTER_CARNIVAL_DIED = 0xE7;
 	constexpr short kMONSTER_CARNIVAL_LEAVE = 0xE8;
+	constexpr short kMONSTER_CARNIVAL_SHOW_GAME_RESULT = 0xE9;
 	constexpr short kNPC_TALK = 0xED;
 	constexpr short kOPEN_NPC_SHOP = 0xEE;
 	constexpr short kCONFIRM_SHOP_TRANSACTION = 0xEF;
