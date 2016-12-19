@@ -150,16 +150,27 @@ void PacketCreator::GuildMemberOnline(int guild_id, int player_id, bool online)
 	write<bool>(online);
 }
 
-/*
-public static void addThread(MaplePacketLittleEndianWriter mplew, ResultSet rs) throws SQLException {
-mplew.writeInt(rs.getInt("localthreadid"));
-mplew.writeInt(rs.getInt("postercid"));
-mplew.writeMapleAsciiString(rs.getString("name"));
-mplew.writeLong(MaplePacketCreator.getKoreanTimestamp(rs.getLong("timestamp")));
-mplew.writeInt(rs.getInt("icon"));
-mplew.writeInt(rs.getInt("replycount"));
+void PacketCreator::guild_bbs_add_thread()
+{
+	write<int>(0); // local_thread_id
+	write<int>(0); // poster cid
+	write<std::string>(""); // name
+	write<long long>(0); // timestamp
+	write<int>(0); // icon
+	write<int>(0); // reply count
 }
 
+void PacketCreator::guild_bbs_thread_list(int start_thread)
+{
+
+}
+
+void PacketCreator::guild_bbs_show_thread(int local_thread_id)
+{
+
+}
+
+/*
 public static MaplePacket BBSThreadList(ResultSet rs, int start) throws SQLException {
 MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
