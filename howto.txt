@@ -1,5 +1,12 @@
 
-pre-requirement: Windows 7 or newer, in 64 bit, the source creator currently uses Windows 8.1 64 bit
+required operating system
+
+one of the following:
+
+windows 7 64 bit (untested)
+windows 8 64 bit (untested)
+windows 8.1 64 bit (used and tested by the developer)
+windows 10 64 bit (untested)
 
 required programs, these need to be installed/put in place:
 
