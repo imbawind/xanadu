@@ -121,7 +121,7 @@ public:
 	void GuildMemberOnline(int guild_id, int character_id, bool online = true);
 	// guild bbs
 	void guild_bbs_add_thread();
-	void guild_bbs_thread_list(int start_thread);
+	void guild_bbs_thread_list(int start);
 	void guild_bbs_show_thread(int local_thread_id);
 	// inventory
 	void UpdateSlot(std::shared_ptr<Item> item);

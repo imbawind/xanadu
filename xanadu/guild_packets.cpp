@@ -160,10 +160,10 @@ void PacketCreator::guild_bbs_add_thread()
 	write<int>(0); // reply count
 }
 
-void PacketCreator::guild_bbs_thread_list(int start_thread)
+void PacketCreator::guild_bbs_thread_list(int start)
 {
 	write<short>(send_headers::kGUILD_BBS_OPERATION);
-	write<signed char>(0x06);
+	write<signed char>(0x06); // action - 0x06 = shows threads, 0x07 = show thread
 
 	// if there is no result
 	bool has_entries = false;
@@ -187,64 +187,49 @@ void PacketCreator::guild_bbs_thread_list(int start_thread)
 		thread_count--; // one thread didn't count (because it's a notice)
 	}
 
-	/*if (!rs.absolute(start + 1)) { //seek to the thread before where we start
+	/*
+	// seek to the thread before where we start
+	if (!rs.absolute(start + 1))
+	{
 
 		rs.first(); // we're trying to start at a place past possible
 
 		start = 0;
-	}*/
+	}
+	*/
 
 	write<int>(thread_count);
-	//write<int>(Math.min(10, threadCount - start));
+	int testx = 0; // Math.min(10, threadCount - start)
+	write<int>(testx);
 
-	/*for (int i = 0; i < Math.min(10, threadCount - start); i++)
+	for (int i = 0; i < testx; i++/*++i*/)
 	{
-		addThread(mplew, rs);
-		rs.next();
-	}*/
+		guild_bbs_add_thread();
+		//rs.next();
+	}
 }
 
 void PacketCreator::guild_bbs_show_thread(int local_thread_id)
 {
+	write<short>(send_headers::kGUILD_BBS_OPERATION);
+	write<signed char>(0x07); // action - 0x06 = shows threads, 0x07 = show thread
 
-}
+	write<int>(local_thread_id);
+	write<int>(0); // poster cid
+	write<long long>(0); // timestamp
+	write<std::string>(""); // name
+	write<std::string>(""); // start postt
+	write<int>(0); // icon
 
-/*
-public static MaplePacket showThread(int localthreadid, ResultSet threadRS, ResultSet repliesRS) throws SQLException, RuntimeException {
-MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+	int reply_count = 0;
+	write<int>(reply_count); // reply count
 
-mplew.writeShort(SendPacketOpcode.BBS_OPERATION.getValue());
-mplew.write(0x07);
-mplew.writeInt(localthreadid);
-mplew.writeInt(threadRS.getInt("postercid"));
-mplew.writeLong(getKoreanTimestamp(threadRS.getLong("timestamp")));
-mplew.writeMapleAsciiString(threadRS.getString("name"));
-mplew.writeMapleAsciiString(threadRS.getString("startpost"));
-mplew.writeInt(threadRS.getInt("icon"));
-if (repliesRS != null) {
-int replyCount = threadRS.getInt("replycount");
-mplew.writeInt(replyCount);
-int i;
-for (i = 0; i < replyCount && repliesRS.next(); i++) {
-mplew.writeInt(repliesRS.getInt("replyid"));
-mplew.writeInt(repliesRS.getInt("postercid"));
-mplew.writeLong(getKoreanTimestamp(repliesRS.getLong("timestamp")));
-mplew.writeMapleAsciiString(repliesRS.getString("content"));
+	int i;
+	for (i = 0; i < reply_count/* && repliesRS.next()*/; i++/*++i*/)
+	{
+		write<int>(0); // reply id
+		write<int>(0); // poster cid
+		write<long long>(0); // timestamp // mplew.writeLong(getKoreanTimestamp(repliesRS.getLong("timestamp")));
+		write<std::string>(""); // content
+	}
 }
-if (i != replyCount || repliesRS.next()) {
-//in the unlikely event that we lost count of replyid
-throw new RuntimeException(String.valueOf(threadRS.getInt("threadid")));
-//we need to fix the database and stop the packet sending
-//or else it'll probably error 38 whoever tries to read it
-
-//there is ONE case not checked, and that's when the thread
-//has a replycount of 0 and there is one or more replies to the
-//thread in bbs_replies
-}
-} else {
-mplew.writeInt(0); //0 replies
-
-}
-return mplew.getPacket();
-}
-*/
