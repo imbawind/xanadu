@@ -19,7 +19,7 @@ void PacketCreator::GuildMemberData(GuildMember *member)
 }
 
 void PacketCreator::CreateGuild()
-{	
+{
 	write<short>(send_headers::kGUILD_OPERATION);
 	write<signed char>(1); // action
 }
@@ -165,18 +165,22 @@ void PacketCreator::guild_bbs_thread_list(int start_thread)
 	write<short>(send_headers::kGUILD_BBS_OPERATION);
 	write<signed char>(0x06);
 
-	// if no result
-	// write<signed char>(0);
-	// write<int>(0);
-	// write<int>(0);
-	// return;
+	// if there is no result
+	bool has_entries = false;
+	if (!has_entries)
+	{
+		write<signed char>(0);
+		write<int>(0);
+		write<int>(0);
+		return;
+	}
 
 	int thread_count = 0; // get it from sql or from cache
 
 	int local_thread_id = 0;
 	bool has_notice = (local_thread_id == 0);
 	write<bool>(has_notice);
-	
+
 	if (has_notice)
 	{
 		guild_bbs_add_thread();
@@ -192,7 +196,7 @@ void PacketCreator::guild_bbs_thread_list(int start_thread)
 
 	write<int>(thread_count);
 	//write<int>(Math.min(10, threadCount - start));
-	
+
 	/*for (int i = 0; i < Math.min(10, threadCount - start); i++)
 	{
 		addThread(mplew, rs);
