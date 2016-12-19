@@ -162,7 +162,42 @@ void PacketCreator::guild_bbs_add_thread()
 
 void PacketCreator::guild_bbs_thread_list(int start_thread)
 {
+	write<short>(send_headers::kGUILD_BBS_OPERATION);
+	write<signed char>(0x06);
 
+	// if no result
+	// write<signed char>(0);
+	// write<int>(0);
+	// write<int>(0);
+	// return;
+
+	int thread_count = 0; // get it from sql or from cache
+
+	int local_thread_id = 0;
+	bool has_notice = (local_thread_id == 0);
+	write<bool>(has_notice);
+	
+	if (has_notice)
+	{
+		guild_bbs_add_thread();
+		thread_count--; // one thread didn't count (because it's a notice)
+	}
+
+	/*if (!rs.absolute(start + 1)) { //seek to the thread before where we start
+
+		rs.first(); // we're trying to start at a place past possible
+
+		start = 0;
+	}*/
+
+	write<int>(thread_count);
+	//write<int>(Math.min(10, threadCount - start));
+	
+	/*for (int i = 0; i < Math.min(10, threadCount - start); i++)
+	{
+		addThread(mplew, rs);
+		rs.next();
+	}*/
 }
 
 void PacketCreator::guild_bbs_show_thread(int local_thread_id)
@@ -171,45 +206,6 @@ void PacketCreator::guild_bbs_show_thread(int local_thread_id)
 }
 
 /*
-public static MaplePacket BBSThreadList(ResultSet rs, int start) throws SQLException {
-MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-mplew.writeShort(SendPacketOpcode.BBS_OPERATION.getValue());
-mplew.write(0x06);
-if (!rs.last()) {
-//no result at all
-mplew.write(0);
-mplew.writeInt(0);
-mplew.writeInt(0);
-return mplew.getPacket();
-}
-int threadCount = rs.getRow();
-if (rs.getInt("localthreadid") == 0) { //has a notice
-
-mplew.write(1);
-addThread(mplew, rs);
-threadCount--; //one thread didn't count (because it's a notice)
-
-} else {
-mplew.write(0);
-}
-if (!rs.absolute(start + 1)) { //seek to the thread before where we start
-
-rs.first(); //uh, we're trying to start at a place past possible
-
-start = 0;
-// System.out.println("Attempting to start past threadCount");
-}
-mplew.writeInt(threadCount);
-mplew.writeInt(Math.min(10, threadCount - start));
-for (int i = 0; i < Math.min(10, threadCount - start); i++) {
-addThread(mplew, rs);
-rs.next();
-}
-
-return mplew.getPacket();
-}
-
 public static MaplePacket showThread(int localthreadid, ResultSet threadRS, ResultSet repliesRS) throws SQLException, RuntimeException {
 MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
