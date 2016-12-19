@@ -186,3 +186,81 @@ void Player::handle_guild_action()
 		}
 	}
 }
+
+void Player::handle_guild_bbs_action()
+{
+	signed char action = read<signed char>();
+
+	switch (action)
+	{
+	case 0:
+		break;
+	}
+
+}
+
+
+/*    @Override
+    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+        c.getPlayer().resetAfkTime();
+        if (!MapleGuild.ENABLE_BBS) {
+            c.getSession().write(MaplePacketCreator.serverNotice(1, "Your server administrator has currently disabled Guild BBS."));
+            return;
+        }
+
+        if (c.getPlayer().getGuildId() <= 0) {
+            return;
+        }
+        byte mode = slea.readByte();
+        int localthreadid = 0;
+
+        switch (mode) {
+            case 0:
+                boolean bEdit = slea.readByte() == 1 ? true : false;
+                if (bEdit) {
+                    localthreadid = slea.readInt();
+                }
+                boolean bNotice = slea.readByte() == 1 ? true : false;
+                String title = correctLength(slea.readMapleAsciiString(), 25);
+                String text = correctLength(slea.readMapleAsciiString(), 600);
+                int icon = slea.readInt();
+                if (icon >= 0x64 && icon <= 0x6a) {
+                    if (!c.getPlayer().haveItem(5290000 + icon - 0x64, 1, false, true)) {
+                        return;
+                    }
+                } else if (!(icon >= 0 && icon <= 2)) {
+                    return;
+                }
+                if (!bEdit) {
+                    newBBSThread(c, title, text, icon, bNotice);
+                } else {
+                    editBBSThread(c, title, text, icon, localthreadid);
+                }
+                break;
+            case 1: // Delete a thread.
+                localthreadid = slea.readInt();
+                deleteBBSThread(c, localthreadid);
+                break;
+            case 2: // List threads.
+                int start = slea.readInt();
+                listBBSThreads(c, start * 10);
+                break;
+            case 3: // List thread + reply, followed by id (int).
+                localthreadid = slea.readInt();
+                displayThread(c, localthreadid);
+                break;
+            case 4: // Reply.
+                localthreadid = slea.readInt();
+                text = correctLength(slea.readMapleAsciiString(), 25);
+                newBBSReply(c, localthreadid, text);
+                break;
+            case 5: // Delete reply.
+                localthreadid = slea.readInt();
+                int replyid = slea.readInt();
+                deleteBBSReply(c, replyid);
+                break;
+            default:
+                log.warn("Unhandled BBS mode: " + mode);
+        }
+		}
+		*/

@@ -330,6 +330,7 @@ public:
 	void handle_add_stat();
 	void handle_buddy_list_action();
 	void handle_guild_action();
+	void handle_guild_bbs_action();
 	void handle_party_action();
 	void handle_party_invitation();
 	void handle_use_pet();

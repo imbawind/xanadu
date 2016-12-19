@@ -1,9 +1,7 @@
 
 to-do features:
 
-- maybe guild alliances
-
-- maybe guild bbs
+- maybe implement guild alliances
 
 - maybe implement rings
 

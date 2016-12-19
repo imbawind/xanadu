@@ -1,0 +1,32 @@
+
+--
+-- Definition of table `bbs_replies`
+--
+
+DROP TABLE IF EXISTS `bbs_replies`;
+CREATE TABLE `bbs_replies` (
+  `replyid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `threadid` int(10) unsigned NOT NULL,
+  `postercid` int(10) unsigned NOT NULL,
+  `timestamp` bigint(20) unsigned NOT NULL,
+  `content` varchar(26) NOT NULL DEFAULT '',
+  PRIMARY KEY (`replyid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Definition of table `bbs_threads`
+--
+
+DROP TABLE IF EXISTS `bbs_threads`;
+CREATE TABLE `bbs_threads` (
+  `threadid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `postercid` int(10) unsigned NOT NULL,
+  `name` varchar(26) NOT NULL DEFAULT '',
+  `timestamp` bigint(20) unsigned NOT NULL,
+  `icon` smallint(5) unsigned NOT NULL,
+  `replycount` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `startpost` text NOT NULL,
+  `guildid` int(10) unsigned NOT NULL,
+  `localthreadid` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`threadid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

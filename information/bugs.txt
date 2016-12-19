@@ -99,6 +99,8 @@ need to work out the details of these features first
 
 -------------------- bugs --------------------
 
+- guild bbs needs to be fully implemented
+
 - player summontimer needs to be fixed
 
 - to-do fix cash shop inventory 

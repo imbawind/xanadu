@@ -149,3 +149,91 @@ void PacketCreator::GuildMemberOnline(int guild_id, int player_id, bool online)
 	write<int>(player_id);
 	write<bool>(online);
 }
+
+/*
+public static void addThread(MaplePacketLittleEndianWriter mplew, ResultSet rs) throws SQLException {
+mplew.writeInt(rs.getInt("localthreadid"));
+mplew.writeInt(rs.getInt("postercid"));
+mplew.writeMapleAsciiString(rs.getString("name"));
+mplew.writeLong(MaplePacketCreator.getKoreanTimestamp(rs.getLong("timestamp")));
+mplew.writeInt(rs.getInt("icon"));
+mplew.writeInt(rs.getInt("replycount"));
+}
+
+public static MaplePacket BBSThreadList(ResultSet rs, int start) throws SQLException {
+MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+
+mplew.writeShort(SendPacketOpcode.BBS_OPERATION.getValue());
+mplew.write(0x06);
+if (!rs.last()) {
+//no result at all
+mplew.write(0);
+mplew.writeInt(0);
+mplew.writeInt(0);
+return mplew.getPacket();
+}
+int threadCount = rs.getRow();
+if (rs.getInt("localthreadid") == 0) { //has a notice
+
+mplew.write(1);
+addThread(mplew, rs);
+threadCount--; //one thread didn't count (because it's a notice)
+
+} else {
+mplew.write(0);
+}
+if (!rs.absolute(start + 1)) { //seek to the thread before where we start
+
+rs.first(); //uh, we're trying to start at a place past possible
+
+start = 0;
+// System.out.println("Attempting to start past threadCount");
+}
+mplew.writeInt(threadCount);
+mplew.writeInt(Math.min(10, threadCount - start));
+for (int i = 0; i < Math.min(10, threadCount - start); i++) {
+addThread(mplew, rs);
+rs.next();
+}
+
+return mplew.getPacket();
+}
+
+public static MaplePacket showThread(int localthreadid, ResultSet threadRS, ResultSet repliesRS) throws SQLException, RuntimeException {
+MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+
+mplew.writeShort(SendPacketOpcode.BBS_OPERATION.getValue());
+mplew.write(0x07);
+mplew.writeInt(localthreadid);
+mplew.writeInt(threadRS.getInt("postercid"));
+mplew.writeLong(getKoreanTimestamp(threadRS.getLong("timestamp")));
+mplew.writeMapleAsciiString(threadRS.getString("name"));
+mplew.writeMapleAsciiString(threadRS.getString("startpost"));
+mplew.writeInt(threadRS.getInt("icon"));
+if (repliesRS != null) {
+int replyCount = threadRS.getInt("replycount");
+mplew.writeInt(replyCount);
+int i;
+for (i = 0; i < replyCount && repliesRS.next(); i++) {
+mplew.writeInt(repliesRS.getInt("replyid"));
+mplew.writeInt(repliesRS.getInt("postercid"));
+mplew.writeLong(getKoreanTimestamp(repliesRS.getLong("timestamp")));
+mplew.writeMapleAsciiString(repliesRS.getString("content"));
+}
+if (i != replyCount || repliesRS.next()) {
+//in the unlikely event that we lost count of replyid
+throw new RuntimeException(String.valueOf(threadRS.getInt("threadid")));
+//we need to fix the database and stop the packet sending
+//or else it'll probably error 38 whoever tries to read it
+
+//there is ONE case not checked, and that's when the thread
+//has a replycount of 0 and there is one or more replies to the
+//thread in bbs_replies
+}
+} else {
+mplew.writeInt(0); //0 replies
+
+}
+return mplew.getPacket();
+}
+*/
