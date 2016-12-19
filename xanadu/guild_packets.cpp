@@ -169,9 +169,9 @@ void PacketCreator::guild_bbs_thread_list(int start_thread)
 	bool has_entries = false;
 	if (!has_entries)
 	{
-		write<signed char>(0);
-		write<int>(0);
-		write<int>(0);
+		write<bool>(false); // has no notice
+		write<int>(0); // thread count
+		write<int>(0); // some calculation related to threadcount
 		return;
 	}
 

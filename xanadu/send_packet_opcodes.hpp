@@ -29,7 +29,7 @@ namespace send_headers
 	constexpr short kSHOW_QUEST_COMPLETION = 0x2E;
 	constexpr short kREQUEST_HIRED_MERCHANT = 0x2F;
 	constexpr short kUSE_SKILL_BOOK = 0x30;
-	constexpr short kGUILD_BBS_OPERATION = 0x38; // not verified
+	constexpr short kGUILD_BBS_OPERATION = 0x38;
 	constexpr short kCHAR_INFO = 0x3A;
 	constexpr short kPARTY_OPERATION = 0x3B;
 	constexpr short kBUDDY_LIST = 0x3C;
