@@ -135,7 +135,7 @@ void World::initialize()
 		recordset1.moveNext();
 	}
 
-	// add guild members
+	// load and add guild members
 
 	for (auto &it : guilds_)
 	{
@@ -156,6 +156,10 @@ void World::initialize()
 			recordset2.moveNext();
 		}
 	}
+
+	// load guild bbs
+
+	// to-do
 
 	// reset partys
 
@@ -814,7 +818,7 @@ void World::create_guild(Player *player, std::string guild_name)
 
 	// send a packet
 	PacketCreator packet1;
-	packet1.GuildInfo(guild);
+	packet1.GuildInfo(guild, true);
 	player->send_packet(&packet1);
 }
 
@@ -834,7 +838,7 @@ void World::join_guild(Player *player, int guild_id)
 	{
 		// send a packet
 		PacketCreator packet2;
-		packet2.GuildInfo(guild);
+		packet2.GuildInfo(guild, true);
 		player->send_packet(&packet2);
 
 		// send a packet

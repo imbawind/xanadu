@@ -4,6 +4,7 @@
 
 #include "guild.hpp"
 #include "guild_member.hpp"
+#include "guild_constants.hpp"
 #include "player.hpp"
 #include "send_packet_opcodes.hpp"
 
@@ -21,20 +22,28 @@ void PacketCreator::GuildMemberData(GuildMember *member)
 void PacketCreator::CreateGuild()
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(1); // action
+	write<signed char>(GuildSendPacketActions::kCreate);
 }
 
 void PacketCreator::change_guild_emblem()
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(17); // action
+	write<signed char>(GuildSendPacketActions::kChangeEmblem);
 }
 
-void PacketCreator::GuildInfo(Guild *guild)
+void PacketCreator::GuildInfo(Guild *guild, bool has_guild)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(26); // action
-	write<bool>(true); // 0/false = empty guild window, 1/true = in guild
+	write<signed char>(GuildSendPacketActions::kInfo);
+
+	bool valid_guild = (has_guild && guild ? true : false);
+	write<bool>(valid_guild);
+
+	if (!valid_guild)
+	{
+		return;
+	}
+
 	write<int>(guild->get_id());
 	write<std::string>(guild->get_name());
 	write<std::string>(guild->GetRank1());
@@ -42,6 +51,7 @@ void PacketCreator::GuildInfo(Guild *guild)
 	write<std::string>(guild->GetRank3());
 	write<std::string>(guild->GetRank4());
 	write<std::string>(guild->GetRank5());
+
 	{
 		// guild member data
 		auto members = guild->get_members();
@@ -57,6 +67,7 @@ void PacketCreator::GuildInfo(Guild *guild)
 			GuildMemberData(it.second.get());
 		}
 	}
+
 	write<int>(guild->get_capacity());
 	write<short>(guild->get_logo_background());
 	write<signed char>(guild->get_logo_background_color());
@@ -70,7 +81,7 @@ void PacketCreator::GuildInfo(Guild *guild)
 void PacketCreator::AddGuildPlayer(int guild_id, GuildMember *member)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(39); // action
+	write<signed char>(GuildSendPacketActions::kAddPlayer);
 	write<int>(guild_id);
 	write<int>(member->get_id());
 	GuildMemberData(member);
@@ -79,7 +90,7 @@ void PacketCreator::AddGuildPlayer(int guild_id, GuildMember *member)
 void PacketCreator::GuildPlayerLeave(int guild_id, int player_id, std::string charname, bool expelled)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(expelled ? 47 : 44); // action; expelled = 47, leaving = 44
+	write<signed char>(expelled ? GuildSendPacketActions::kPlayerExpelled : GuildSendPacketActions::kPlayerLeave);
 	write<int>(guild_id);
 	write<int>(player_id);
 	write<std::string>(charname);
@@ -88,7 +99,7 @@ void PacketCreator::GuildPlayerLeave(int guild_id, int player_id, std::string ch
 void PacketCreator::InviteGuild(Player *inviter)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(5); // action
+	write<signed char>(GuildSendPacketActions::kInvite);
 	write<int>(inviter->get_guild()->get_id());
 	write<std::string>(inviter->get_name());
 }
@@ -96,7 +107,7 @@ void PacketCreator::InviteGuild(Player *inviter)
 void PacketCreator::ChangeRank(int guild_id, int player_id, int rank)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(64); // action
+	write<signed char>(GuildSendPacketActions::kChangeRank);
 	write<int>(guild_id);
 	write<int>(player_id);
 	write<signed char>(rank);
@@ -105,7 +116,7 @@ void PacketCreator::ChangeRank(int guild_id, int player_id, int rank)
 void PacketCreator::UpdateGuildRanks(Guild *guild)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(62); // action
+	write<signed char>(GuildSendPacketActions::kUpdateRanks);
 	write<int>(guild->get_id());
 	write<std::string>(guild->GetRank1());
 	write<std::string>(guild->GetRank2());
@@ -117,7 +128,7 @@ void PacketCreator::UpdateGuildRanks(Guild *guild)
 void PacketCreator::UpdateGuildNotice(Guild *guild)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(68); // action
+	write<signed char>(GuildSendPacketActions::kUpdateNotice);
 	write<int>(guild->get_id());
 	write<std::string>(guild->GetNotice());
 }
@@ -125,7 +136,7 @@ void PacketCreator::UpdateGuildNotice(Guild *guild)
 void PacketCreator::DisbandGuild(int guild_id)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(50); // action
+	write<signed char>(GuildSendPacketActions::kDisband);
 	write<int>(guild_id);
 	write<signed char>(1);
 }
@@ -133,7 +144,7 @@ void PacketCreator::DisbandGuild(int guild_id)
 void PacketCreator::ShowGuildEmblem(Guild *guild)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(66); // action
+	write<signed char>(GuildSendPacketActions::kShowEmblem);
 	write<int>(guild->get_id());
 	write<short>(guild->get_logo_background());
 	write<signed char>(guild->get_logo_background_color());
@@ -144,7 +155,7 @@ void PacketCreator::ShowGuildEmblem(Guild *guild)
 void PacketCreator::GuildMemberOnline(int guild_id, int player_id, bool online)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
-	write<signed char>(61); // action
+	write<signed char>(GuildSendPacketActions::kMemberOnline);
 	write<int>(guild_id);
 	write<int>(player_id);
 	write<bool>(online);
@@ -163,7 +174,7 @@ void PacketCreator::guild_bbs_add_thread()
 void PacketCreator::guild_bbs_thread_list(int start)
 {
 	write<short>(send_headers::kGUILD_BBS_OPERATION);
-	write<signed char>(0x06); // action - 0x06 = shows threads, 0x07 = show thread
+	write<signed char>(GuildBBSSendPacketActions::kShowThreads);
 
 	// if there is no result
 	bool has_entries = false;
@@ -212,7 +223,7 @@ void PacketCreator::guild_bbs_thread_list(int start)
 void PacketCreator::guild_bbs_show_thread(int local_thread_id)
 {
 	write<short>(send_headers::kGUILD_BBS_OPERATION);
-	write<signed char>(0x07); // action - 0x06 = shows threads, 0x07 = show thread
+	write<signed char>(GuildBBSSendPacketActions::kShowThread);
 
 	write<int>(local_thread_id);
 	write<int>(0); // poster cid

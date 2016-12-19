@@ -1244,8 +1244,9 @@ void Player::player_connect()
 	{
 		// send a packet
 		PacketCreator packet22;
-		packet22.GuildInfo(guild_);
+		packet22.GuildInfo(guild_, true);
 		send_packet(&packet22);
+
 		// send a packet
 		PacketCreator packet23;
 		packet23.GuildMemberOnline(guild_->get_id(), id_);
@@ -1341,9 +1342,10 @@ void Player::set_level(unsigned char newlevel)
 		if (member)
 		{
 			member->set_level(newlevel);
+
 			// send a packet
 			PacketCreator packet22;
-			packet22.GuildInfo(guild_);
+			packet22.GuildInfo(guild_, true);
 			guild_->send_packet(&packet22);
 		}
 	}
@@ -1405,7 +1407,7 @@ void Player::set_job(short newjob)
 			member->set_job(job_);
 			// send a packet
 			PacketCreator packet30;
-			packet30.GuildInfo(guild_);
+			packet30.GuildInfo(guild_, true);
 			guild_->send_packet(&packet30);
 		}
 	}

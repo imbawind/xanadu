@@ -260,6 +260,7 @@
     <ClInclude Include="drop_constants.hpp" />
     <ClInclude Include="equip_data_provider.hpp" />
     <ClInclude Include="game_constants.hpp" />
+    <ClInclude Include="guild_constants.hpp" />
     <ClInclude Include="item_data_provider.hpp" />
     <ClInclude Include="attackinfo.hpp" />
     <ClInclude Include="buddy.hpp" />

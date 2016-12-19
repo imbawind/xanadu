@@ -108,7 +108,7 @@ public:
 	// guilds
 	void GuildMemberData(GuildMember *member);
 	void CreateGuild();
-	void GuildInfo(Guild *guild);
+	void GuildInfo(Guild *guild, bool has_guild);
 	void AddGuildPlayer(int guild_id, GuildMember *member);
 	void InviteGuild(Player *inviter);
 	void GuildPlayerLeave(int guild_id, int char_id, std::string char_name, bool expelled = false);
