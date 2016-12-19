@@ -31,14 +31,13 @@ void PacketCreator::change_guild_emblem()
 	write<signed char>(GuildSendPacketActions::kChangeEmblem);
 }
 
-void PacketCreator::GuildInfo(Guild *guild, bool has_guild)
+void PacketCreator::GuildInfo(Guild *guild)
 {
 	write<short>(send_headers::kGUILD_OPERATION);
 	write<signed char>(GuildSendPacketActions::kInfo);
 
-	bool valid_guild = (has_guild && guild ? true : false);
+	bool valid_guild = (guild ? true : false);
 	write<bool>(valid_guild);
-
 	if (!valid_guild)
 	{
 		return;

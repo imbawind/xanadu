@@ -818,7 +818,7 @@ void World::create_guild(Player *player, std::string guild_name)
 
 	// send a packet
 	PacketCreator packet1;
-	packet1.GuildInfo(guild, true);
+	packet1.GuildInfo(guild);
 	player->send_packet(&packet1);
 }
 
@@ -838,7 +838,7 @@ void World::join_guild(Player *player, int guild_id)
 	{
 		// send a packet
 		PacketCreator packet2;
-		packet2.GuildInfo(guild, true);
+		packet2.GuildInfo(guild);
 		player->send_packet(&packet2);
 
 		// send a packet
