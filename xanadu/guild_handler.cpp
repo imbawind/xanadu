@@ -250,7 +250,12 @@ void Player::handle_guild_bbs_action()
 	case kListThreads:
 	{
 		int start = read<int>();
-		// listBBSThreads(c, start * 10);
+
+		// to-do get guild bbs data from cache or mysql and use it in the packet
+
+		PacketCreator packet50;
+		packet50.guild_bbs_thread_list(start * 10);
+		send_packet(&packet50);
 		break;
 	}
 	case kListThreadAndReply: // List thread + reply, followed by id (int).
