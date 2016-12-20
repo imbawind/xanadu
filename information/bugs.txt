@@ -101,13 +101,11 @@ need to work out the details of these features first
 
 - guild bbs needs to be fully implemented
 
+- when a player joins/creates or leaves/disbands a guild, the guild name isn't shown/removed to other players in the map
+
+- when a guild emblem is added/changed/removed, the guild emblem name isn't shown/updated/removed to other players in the map
+
 - player summontimer needs to be fixed
-
-- to-do fix cash shop inventory 
-
-- to-do fix pet food
-
-- to-do fix pet fullness
 
 - to-do fix target character doesn't get buddy invite after logging in if someone sent buddy request while he was offline
 

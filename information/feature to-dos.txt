@@ -3,6 +3,12 @@ to-do features:
 
 - implement guild alliances
 
+- maybe implement cash shop inventory 
+
+- maybe implement pet food
+
+- maybe implement pet fullness
+
 - maybe implement rings
 
 - maybe implement marriage
