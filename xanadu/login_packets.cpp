@@ -71,7 +71,7 @@ values for success_or_failure_reason:
 * 4: failure reason: Incorrect password
 * 5: failure reason: Not a registered id
 * 6: failure reason: Connect failed due to system error
-* 7: failure reason: Already logged in
+* 7: ID already logged in or server under inspection popup
 */
 void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user_id, std::string account_name)
 {
@@ -86,7 +86,7 @@ void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user
 	}
 
 	write<int>(user_id);
-	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger with number 10for gender select or pin select? not verified yet
+	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger with number 10 for gender select or pin select? not verified yet
 	write<signed char>(0);
 	write<signed char>(0);
 	write<std::string>(account_name);
@@ -300,10 +300,19 @@ void PacketCreator::ShowCharacter(Character *character)
 	}
 }
 
+// success or error value:
+// 0 = success
+// 1 = no login
+// 2 or 3 = ID has been deleted or blocked from connection
+// 4 = "This is an incorrect password." popup
+// 5 = "This is not a registered ID". popup
+// 6 = "Connection failed due to system error" popup
+// 7 = ID already logged in or server under inspection popup
+
 void PacketCreator::ShowCharacters(std::unordered_map<int, Character *> *characters, int character_slots)
 {
 	write<short>(send_headers_login::kCHARACTER_LIST);
-	write<signed char>(0); // need to check what values above 0 do, if anything
+	write<signed char>(0); // success or error value
 	write<signed char>(static_cast<unsigned char>(characters->size()));
 
 	for (auto &it : *characters)
