@@ -11,9 +11,6 @@ namespace receive_headers_login
 	constexpr short kHANDLE_LOGIN = 0x09;
 	constexpr short kSHOW_WORLD = 0x0b;
 	constexpr short kBACK_TO_WORLD = 0x0c;
-	constexpr short kVIEW_ALL_CHARS_REQUEST = 0x0d;
-	constexpr short kVIEW_ALL_CHARS_CONNECT = 0x0e;
-	constexpr short kVIEW_ALL_CHARS = 0x0f;
 	constexpr short kCHAR_SELECT = 0x13;
 	constexpr short kPLAYER_LOGGEDIN = 0x14;
 	constexpr short kNAME_CHECK = 0x15;
