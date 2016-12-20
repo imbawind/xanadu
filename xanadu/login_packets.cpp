@@ -101,12 +101,11 @@ void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user
 * mode values:
 * 0 - PIN was accepted
 * 1 - Register a new PIN
-
-// these are not verified:
 * 2 - Invalid pin / Reenter
 * 3 - Connection failed due to system error
 * 4 - Enter the pin
 */
+
 void PacketCreator::LoginProcess()
 {
 	write<short>(send_headers_login::kPIN_CHECK_OPERATION);
