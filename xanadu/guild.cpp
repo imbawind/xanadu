@@ -130,7 +130,7 @@ void Guild::SetLogoColor(signed char color_, bool init)
 		// mysql query
 		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
 		Poco::Data::Statement statement(mysql_session);
-		statement << "UPDATE guilds SET logo_color = " << logo_color_
+		statement << "UPDATE guilds SET logo_color = " << static_cast<int>(logo_color_)
 			<< " WHERE guild_id = " << id_;
 		statement.execute();
 	}
@@ -145,7 +145,7 @@ void Guild::SetLogoBackgroundColor(signed char background_color, bool init)
 		// mysql query
 		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
 		Poco::Data::Statement statement(mysql_session);
-		statement << "UPDATE guilds SET logo_bg_color = " << logo_background_color_
+		statement << "UPDATE guilds SET logo_bg_color = " << static_cast<int>(logo_background_color_)
 			<< " WHERE guild_id = " << id_;
 		statement.execute();
 	}
@@ -160,7 +160,7 @@ void Guild::SetLogo(short logo, bool init)
 		// mysql query
 		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
 		Poco::Data::Statement statement(mysql_session);
-		statement << "UPDATE guilds SET logo = " << logo_
+		statement << "UPDATE guilds SET logo = " << static_cast<int>(logo_)
 			<< " WHERE guild_id = " << id_;
 		statement.execute();
 	}
@@ -175,7 +175,7 @@ void Guild::SetLogoBackground(short background, bool init)
 		// mysql query
 		Poco::Data::Session &mysql_session = World::get_instance()->get_mysql_session();
 		Poco::Data::Statement statement(mysql_session);
-		statement << "UPDATE guilds SET logo_bg = " << logo_background_
+		statement << "UPDATE guilds SET logo_bg = " << static_cast<int>(logo_background_)
 			<< " WHERE guild_id = " << id_;
 		statement.execute();
 	}
