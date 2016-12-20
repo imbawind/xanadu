@@ -21,7 +21,7 @@ void PacketCreator::get_handshake(unsigned char *iv_recv, unsigned char *iv_send
 
 void PacketCreator::ConnectToChannel(int player_id)
 {
-	write<short>(send_headers::kSERVER_IP);
+	write<short>(send_headers_login::kSERVER_IP);
 	write<short>(0);
 
 	// ip adress
@@ -51,7 +51,7 @@ void PacketCreator::ConnectToChannel(int player_id)
 
 void PacketCreator::GetAuthSuccessRequest(int user_id, std::string account_name)
 {
-	write<short>(send_headers::kLoginStatus);
+	write<short>(send_headers_login::kLoginStatus);
 	write<short>(0);
 	write<int>(0);
 	write<int>(user_id);
@@ -72,21 +72,21 @@ void PacketCreator::GetAuthSuccessRequest(int user_id, std::string account_name)
 */
 void PacketCreator::GetLoginFailed(signed char reason)
 {
-	write<short>(send_headers::kLoginStatus);
+	write<short>(send_headers_login::kLoginStatus);
 	write<short>(reason);
 	write<int>(0);
 }
 
 void PacketCreator::LoginProcess()
 {
-	write<short>(send_headers::kPIN_OPERATION);
+	write<short>(send_headers_login::kPIN_OPERATION);
 	write<signed char>(0); // pin entered
 }
 
 void PacketCreator::ShowWorld()
 {
 	World *world = World::get_instance();
-	write<short>(send_headers::kSERVER_LIST);
+	write<short>(send_headers_login::kSERVER_LIST);
 	write<signed char>(world->get_id());
 	write<std::string>(world->get_name());
 	write<signed char>(kWorld1Flag);
@@ -123,7 +123,7 @@ void PacketCreator::ShowWorld()
 
 void PacketCreator::EndWorlds()
 {
-	write<short>(send_headers::kSERVER_LIST);
+	write<short>(send_headers_login::kSERVER_LIST);
 	write<signed char>(-1);
 }
 
@@ -136,7 +136,7 @@ Possible values for status:
 
 void PacketCreator::ShowChannels()
 {
-	write<short>(send_headers::kSERVER_STATUS);
+	write<short>(send_headers_login::kSERVER_STATUS);
 	write<short>(0); // status
 }
 
@@ -265,7 +265,7 @@ void PacketCreator::ShowCharacter(Character *character)
 
 void PacketCreator::ShowCharacters(std::unordered_map<int, Character *> *characters, int character_slots)
 {
-	write<short>(send_headers::kCHARACTER_LIST);
+	write<short>(send_headers_login::kCHARACTER_LIST);
 	write<signed char>(0);
 	write<signed char>(static_cast<unsigned char>(characters->size()));
 
@@ -280,14 +280,14 @@ void PacketCreator::ShowCharacters(std::unordered_map<int, Character *> *charact
 
 void PacketCreator::CheckName(std::string name, bool name_used)
 {
-	write<short>(send_headers::kCHECK_CHARACTER_NAME);
+	write<short>(send_headers_login::kCHECK_CHARACTER_NAME);
 	write<std::string>(name);
 	write<bool>(name_used);
 }
 
 void PacketCreator::AddCharacter(Character *character)
 {
-	write<short>(send_headers::kCREATE_NEW_CHARACTER);
+	write<short>(send_headers_login::kCREATE_NEW_CHARACTER);
 	write<signed char>(0);
 	ShowCharacter(character);
 }
@@ -301,13 +301,13 @@ guildmaster state?
 */
 void PacketCreator::RemoveCharacter(int characterid)
 {
-	write<short>(send_headers::kDELETE_CHARACTER);
+	write<short>(send_headers_login::kDELETE_CHARACTER);
 	write<int>(characterid);
 	write<signed char>(0); // state
 }
 
 void PacketCreator::RelogResponse()
 {
-	write<short>(send_headers::kRELOG_RESPONSE);
+	write<short>(send_headers_login::kRELOG_RESPONSE);
 	write<signed char>(1);
 }

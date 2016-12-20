@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace send_headers
+namespace send_headers_login
 {
 	constexpr short kLoginStatus = 0x00;
 	constexpr short kSERVER_STATUS = 0x03;
@@ -19,6 +19,10 @@ namespace send_headers
 	constexpr short kPING = 0x11;
 	constexpr short kCHANNEL_SELECTED = 0x14;
 	constexpr short kRELOG_RESPONSE = 0x16;
+}
+
+namespace send_headers
+{
 	constexpr short kMODIFY_INVENTORY_ITEM = 0x1A;
 	constexpr short kUPDATE_STATS = 0x1C;
 	constexpr short kGIVE_BUFF = 0x1D;

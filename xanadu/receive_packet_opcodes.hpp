@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace receive_headers
+namespace receive_headers_login
 {
 	constexpr short kLoginRequest = 0x01;
 	constexpr short kWORLD_BACK = 0x04;
@@ -20,8 +20,10 @@ namespace receive_headers
 	constexpr short kCREATE_CHARACTER = 0x16;
 	constexpr short kDELETE_CHARACTER = 0x17;
 	constexpr short kLOGIN_BACK = 0x1C;
-	constexpr short kCONNECT = 0x14;
-	constexpr short kPING = 0x18;
+}
+
+namespace receive_headers
+{
 	constexpr short kREQUEST_MAP_CHANGE = 0x23;
 	constexpr short kCHANGE_CHANNEL = 0x24;
 	constexpr short kENTER_CASHSHOP = 0x25;
