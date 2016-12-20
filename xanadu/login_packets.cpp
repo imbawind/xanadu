@@ -63,21 +63,30 @@ void PacketCreator::ConnectToChannel(int player_id)
 }
 
 /*
-* reason values:
-* 3: ID deleted or blocked
-* 4: Incorrect password
-* 5: Not a registered id
-* 7: Already logged in
+values for success_or_failure_reason:
+* 0 means login successfull, otherwise: reason for login failure
+* 1 means login doesn't happen
+* 2: failure reason: "Your account has been blocked... You can login after xx/xx/xxxx xx:xx am/pm"
+* 3: failure reason: ID deleted or blocked
+* 4: failure reason: Incorrect password
+* 5: failure reason: Not a registered id
+* 6: failure reason: Connect failed due to system error
+* 7: failure reason: Already logged in
 */
-void PacketCreator::GetAuthSuccessRequest(int user_id, std::string account_name)
+void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user_id, std::string account_name)
 {
 	write<short>(send_headers_login::kLoginStatus);
-	write<signed char>(0); // 0 means login successfull, otherwise: reason for login failure
+	write<signed char>(success_or_failure_reason);
 	write<signed char>(0);
 	write<int>(0);
 
+	if (success_or_failure_reason != 0)
+	{
+		return;
+	}
+
 	write<int>(user_id);
-	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger for gender select or pin select?
+	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger with number 10for gender select or pin select? not verified yet
 	write<signed char>(0);
 	write<signed char>(0);
 	write<std::string>(account_name);
@@ -86,21 +95,6 @@ void PacketCreator::GetAuthSuccessRequest(int user_id, std::string account_name)
 	write<long long>(0);
 	write<long long>(0);
 	write<int>(8);
-}
-
-/*
-* reason values:
-* 3: ID deleted or blocked
-* 4: Incorrect password
-* 5: Not a registered id
-* 7: Already logged in
-*/
-void PacketCreator::GetLoginFailed(signed char reason)
-{
-	write<short>(send_headers_login::kLoginStatus);
-	write<signed char>(reason);
-	write<signed char>(0);
-	write<int>(0);
 }
 
 /*
@@ -123,7 +117,7 @@ void PacketCreator::ShowWorld()
 {
 	World *world = World::get_instance();
 	write<short>(send_headers_login::kSERVER_LIST);
-	write<signed char>(world->get_id());
+	write<signed char>(world->get_id()); // -1 = no worlds, >= 0 is world id
 	write<std::string>(world->get_name());
 	write<signed char>(kWorld1Flag);
 	write<std::string>(kWorld1EventMessage);
@@ -144,7 +138,7 @@ void PacketCreator::ShowWorld()
 		write<signed char>(0);
 	}
 
-	// login screen balloons (credits to Eric from RageZone, who is also moderator there right now)
+	// login screen balloons (credits to Eric from RageZone)
 
 	//constexpr short balloon_size = 1;
 	write<short>(0); // balloon size
@@ -160,7 +154,7 @@ void PacketCreator::ShowWorld()
 void PacketCreator::EndWorlds()
 {
 	write<short>(send_headers_login::kSERVER_LIST);
-	write<signed char>(-1);
+	write<signed char>(-1); // -1 = no worlds, >= 0 is world id
 }
 
 /*
@@ -291,8 +285,9 @@ void PacketCreator::ShowCharacter(Character *character)
 {
 	AddCharStats(character);
 	AddCharLook(character);
-	write<signed char>(1);
+
 	// rankings
+	write<signed char>(1); // bool to enable to disable ranking? probably, but needs to be verified
 	write<int>(0); // world rank
 	write<int>(0); // world rank move
 	write<int>(0); // job rank
@@ -302,7 +297,7 @@ void PacketCreator::ShowCharacter(Character *character)
 void PacketCreator::ShowCharacters(std::unordered_map<int, Character *> *characters, int character_slots)
 {
 	write<short>(send_headers_login::kCHARACTER_LIST);
-	write<signed char>(0);
+	write<signed char>(0); // need to check what values above 0 do, if anything
 	write<signed char>(static_cast<unsigned char>(characters->size()));
 
 	for (auto &it : *characters)
@@ -324,7 +319,7 @@ void PacketCreator::CheckName(std::string name, bool name_used)
 void PacketCreator::AddCharacter(Character *character)
 {
 	write<short>(send_headers_login::kCREATE_NEW_CHARACTER);
-	write<signed char>(0);
+	write<signed char>(0); // values 10 and 26 seem to do something, needs to be tested
 	ShowCharacter(character);
 }
 
@@ -334,6 +329,8 @@ state can be:
 others?
 12 = invalid birthday?
 guildmaster state?
+
+what are 10, 22, 18, 24, 9, 26, 6?
 */
 void PacketCreator::RemoveCharacter(int characterid)
 {
