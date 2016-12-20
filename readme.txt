@@ -16,10 +16,14 @@ text editor
 
 notepad++
 
-operating systems
+required operating system
 
-windows 8.1 64 bit
-windows server 2012 R2 64 bit
+one of the following:
+
+windows 7 64 bit (untested)
+windows 8 64 bit (untested)
+windows 8.1 64 bit (used and tested by the developer)
+windows 10 64 bit (untested)
 
 file extensions
 

@@ -507,6 +507,9 @@ void Player::handle_packet_in_game()
 		case receive_headers::kGUILD_OPERATION:
 			handle_guild_action();
 			break;
+		case receive_headers::kGUILD_BBS_OPERATION:
+			handle_guild_bbs_action();
+			break;
 		case receive_headers::kENTER_CASHSHOP:
 			handle_cash_shop_enter();
 			break;
@@ -561,38 +564,38 @@ void Player::handle_packet_in_login()
 		short header = read<short>();
 		switch (header)
 		{
-		case receive_headers::kLoginRequest:
+		case receive_headers_login::kLoginRequest:
 			handle_login_request();
 			break;
-		case receive_headers::kHANDLE_LOGIN:
+		case receive_headers_login::kHANDLE_LOGIN:
 			handle_pin_operation();
 			break;
-		case receive_headers::kCHANNEL_SELECT:
+		case receive_headers_login::kCHANNEL_SELECT:
 			handle_channel_selection();
 			break;
-		case receive_headers::kWORLD_SELECT:
+		case receive_headers_login::kWORLD_SELECT:
 			handle_world_selection();
 			break;
-		case receive_headers::kSHOW_WORLD:
-		case receive_headers::kBACK_TO_WORLD:
+		case receive_headers_login::kSHOW_WORLD:
+		case receive_headers_login::kBACK_TO_WORLD:
 			handle_world_list_request();
 			break;
-		case receive_headers::kCHAR_SELECT:
+		case receive_headers_login::kCHAR_SELECT:
 			handle_connect_game();
 			break;
-		case receive_headers::kPLAYER_LOGGEDIN:
+		case receive_headers_login::kPLAYER_LOGGEDIN:
 			player_connect();
 			break;
-		case receive_headers::kNAME_CHECK:
+		case receive_headers_login::kNAME_CHECK:
 			handle_character_creation_name_check();
 			break;
-		case receive_headers::kCREATE_CHARACTER:
+		case receive_headers_login::kCREATE_CHARACTER:
 			handle_create_character();
 			break;
-		case receive_headers::kDELETE_CHARACTER:
+		case receive_headers_login::kDELETE_CHARACTER:
 			handle_delete_character();
 			break;
-		case receive_headers::kLOGIN_BACK:
+		case receive_headers_login::kLOGIN_BACK:
 			handle_relog_request();
 			break;
 		}
@@ -1243,6 +1246,7 @@ void Player::player_connect()
 		PacketCreator packet22;
 		packet22.GuildInfo(guild_);
 		send_packet(&packet22);
+
 		// send a packet
 		PacketCreator packet23;
 		packet23.GuildMemberOnline(guild_->get_id(), id_);
@@ -1338,6 +1342,7 @@ void Player::set_level(unsigned char newlevel)
 		if (member)
 		{
 			member->set_level(newlevel);
+
 			// send a packet
 			PacketCreator packet22;
 			packet22.GuildInfo(guild_);

@@ -102,7 +102,8 @@ void PacketCreator::PartyCreated(int party_id)
 	write<int>(party_id);
 	write<int>(kNoMap);
 	write<int>(kNoMap);
-	write<int>(0);
+	write<short>(0);
+	write<short>(0);
 }
 
 void PacketCreator::LeaveParty(Party *party, int player_id, bool leave, std::string &player_name, bool expel)
@@ -118,10 +119,6 @@ void PacketCreator::LeaveParty(Party *party, int player_id, bool leave, std::str
 		write<bool>(expel);
 		write<std::string>(player_name);
 		PartyInfo(party);
-	}
-	else
-	{
-		write<int>(party->get_leader());
 	}
 }
 

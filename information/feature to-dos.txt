@@ -1,9 +1,13 @@
 
 to-do features:
 
-- maybe guild alliances
+- implement guild alliances
 
-- maybe guild bbs
+- maybe implement cash shop inventory 
+
+- maybe implement pet food
+
+- maybe implement pet fullness
 
 - maybe implement rings
 

@@ -21,8 +21,21 @@ void PacketCreator::get_handshake(unsigned char *iv_recv, unsigned char *iv_send
 
 void PacketCreator::ConnectToChannel(int player_id)
 {
-	write<short>(send_headers::kSERVER_IP);
-	write<short>(0);
+	write<short>(send_headers_login::kSERVER_IP);
+
+	// 6 = "Connection failed due to system error Please try again later." popup and login not happening
+	// 12 = popup when used in combination with the next byte
+	// 14 or 17 = "You have either selected the wrong gateway, or you have yet to change your personal information." popup and login not happening
+	// 15 = "We're still processing your request at this time, so you don't have access to this game for now. ..." popup and login not happening
+	// 16 or 21 = "Please verify your account via email in order to play the game." popup and login not happening
+	write<signed char>(0);
+
+	// in combination with 12 from the byte before this one:
+	// 0 and higher than 3 = "Connection failed due to system error Please try again later." popup and login not happening
+	// 1 = "You have entered incorrect an LOGIN ID. Please try again" popup and throws client back to login screen
+	// 2 = "You have entered an incorrect form of ID, or your account info hasn't been changed yet. Please try again." popup and throws client back to login screen
+	// 3 = "Unverified account will be blocked after 7 days from the date of registration. To verify your account immediately, press OK" popup and throws client back to login screen
+	write<signed char>(0);
 
 	// ip adress
 	World *world = World::get_instance();
@@ -45,49 +58,66 @@ void PacketCreator::ConnectToChannel(int player_id)
 
 	write<unsigned short>(kServerPort);
 	write<int>(player_id);
-	write<int>(0);
 	write<signed char>(0);
+	write<int>(0);
 }
 
-void PacketCreator::GetAuthSuccessRequest(int user_id, std::string account_name)
+/*
+values for success_or_failure_reason:
+* 0 means login successfull, otherwise: reason for login failure
+* 1 means login doesn't happen
+* 2: failure reason: "Your account has been blocked... You can login after xx/xx/xxxx xx:xx am/pm"
+* 3: failure reason: ID deleted or blocked
+* 4: failure reason: Incorrect password
+* 5: failure reason: Not a registered id
+* 6: failure reason: Connect failed due to system error
+* 7: ID already logged in or server under inspection popup
+*/
+void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user_id, std::string account_name)
 {
-	write<short>(send_headers::kLoginStatus);
-	write<short>(0);
+	write<short>(send_headers_login::kLoginStatus);
+	write<signed char>(success_or_failure_reason);
+	write<signed char>(0);
 	write<int>(0);
+
+	if (success_or_failure_reason != 0)
+	{
+		return;
+	}
+
 	write<int>(user_id);
-	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger for gender select or pin select
-	write<short>(0);
+	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger with number 10 for gender select or pin select? not verified yet
+	write<signed char>(0);
+	write<signed char>(0);
 	write<std::string>(account_name);
-	write<short>(0);
+	write<signed char>(0);
+	write<signed char>(0);
 	write<long long>(0);
 	write<long long>(0);
 	write<int>(8);
 }
 
 /*
-* 3: ID deleted or blocked
-* 4: Incorrect password
-* 5: Not a registered id
-* 7: Already logged in
-*/
-void PacketCreator::GetLoginFailed(signed char reason)
-{
-	write<short>(send_headers::kLoginStatus);
-	write<short>(reason);
-	write<int>(0);
-}
+* mode values:
+* 0 - PIN was accepted
+* 1 - Register a new PIN
 
+// these are not verified:
+* 2 - Invalid pin / Reenter
+* 3 - Connection failed due to system error
+* 4 - Enter the pin
+*/
 void PacketCreator::LoginProcess()
 {
-	write<short>(send_headers::kPIN_OPERATION);
-	write<signed char>(0); // pin entered
+	write<short>(send_headers_login::kPIN_CHECK_OPERATION);
+	write<signed char>(0); // mode
 }
 
 void PacketCreator::ShowWorld()
 {
 	World *world = World::get_instance();
-	write<short>(send_headers::kSERVER_LIST);
-	write<signed char>(world->get_id());
+	write<short>(send_headers_login::kSERVER_LIST);
+	write<signed char>(world->get_id()); // -1 = no worlds, >= 0 is world id
 	write<std::string>(world->get_name());
 	write<signed char>(kWorld1Flag);
 	write<std::string>(kWorld1EventMessage);
@@ -108,7 +138,7 @@ void PacketCreator::ShowWorld()
 		write<signed char>(0);
 	}
 
-	// login screen balloons (credits to Eric from RageZone, who is also moderator there right now)
+	// login screen balloons (credits to Eric from RageZone)
 
 	//constexpr short balloon_size = 1;
 	write<short>(0); // balloon size
@@ -123,8 +153,8 @@ void PacketCreator::ShowWorld()
 
 void PacketCreator::EndWorlds()
 {
-	write<short>(send_headers::kSERVER_LIST);
-	write<signed char>(-1);
+	write<short>(send_headers_login::kSERVER_LIST);
+	write<signed char>(-1); // -1 = no worlds, >= 0 is world id
 }
 
 /*
@@ -136,7 +166,7 @@ Possible values for status:
 
 void PacketCreator::ShowChannels()
 {
-	write<short>(send_headers::kSERVER_STATUS);
+	write<short>(send_headers_login::kSERVER_STATUS);
 	write<short>(0); // status
 }
 
@@ -255,18 +285,34 @@ void PacketCreator::ShowCharacter(Character *character)
 {
 	AddCharStats(character);
 	AddCharLook(character);
-	write<signed char>(1);
+
 	// rankings
-	write<int>(0); // world rank
-	write<int>(0); // world rank move
-	write<int>(0); // job rank
-	write<int>(0); // job rank move
+
+	bool enable_rankings = false;
+	write<bool>(enable_rankings);
+
+	if (enable_rankings)
+	{
+		write<int>(0); // world rank
+		write<int>(0); // world rank move
+		write<int>(0); // job rank
+		write<int>(0); // job rank move
+	}
 }
+
+// success or error value:
+// 0 = success
+// 1 = no login
+// 2 or 3 = ID has been deleted or blocked from connection
+// 4 = "This is an incorrect password." popup
+// 5 = "This is not a registered ID". popup
+// 6 = "Connection failed due to system error" popup
+// 7 = ID already logged in or server under inspection popup
 
 void PacketCreator::ShowCharacters(std::unordered_map<int, Character *> *characters, int character_slots)
 {
-	write<short>(send_headers::kCHARACTER_LIST);
-	write<signed char>(0);
+	write<short>(send_headers_login::kCHARACTER_LIST);
+	write<signed char>(0); // success or error value
 	write<signed char>(static_cast<unsigned char>(characters->size()));
 
 	for (auto &it : *characters)
@@ -280,15 +326,20 @@ void PacketCreator::ShowCharacters(std::unordered_map<int, Character *> *charact
 
 void PacketCreator::CheckName(std::string name, bool name_used)
 {
-	write<short>(send_headers::kCHECK_CHARACTER_NAME);
+	write<short>(send_headers_login::kCHECK_CHARACTER_NAME);
 	write<std::string>(name);
 	write<bool>(name_used);
 }
 
+// possible error values
+// 0 = success
+// 10 = too many connections, could not process
+// 26 = "You cannot create a new character under that account that has requested for a transfer."
+
 void PacketCreator::AddCharacter(Character *character)
 {
-	write<short>(send_headers::kCREATE_NEW_CHARACTER);
-	write<signed char>(0);
+	write<short>(send_headers_login::kCREATE_NEW_CHARACTER);
+	write<signed char>(0); // succes or error value
 	ShowCharacter(character);
 }
 
@@ -298,16 +349,18 @@ state can be:
 others?
 12 = invalid birthday?
 guildmaster state?
+
+what are 10, 22, 18, 24, 9, 26, 6?
 */
 void PacketCreator::RemoveCharacter(int characterid)
 {
-	write<short>(send_headers::kDELETE_CHARACTER);
+	write<short>(send_headers_login::kDELETE_CHARACTER);
 	write<int>(characterid);
 	write<signed char>(0); // state
 }
 
 void PacketCreator::RelogResponse()
 {
-	write<short>(send_headers::kRELOG_RESPONSE);
+	write<short>(send_headers_login::kRELOG_RESPONSE);
 	write<signed char>(1);
 }

@@ -735,5 +735,8 @@
     <ClInclude Include="pq_constants.hpp">
       <Filter>constants</Filter>
     </ClInclude>
+    <ClInclude Include="guild_constants.hpp">
+      <Filter>constants</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace receive_headers
+namespace receive_headers_login
 {
 	constexpr short kLoginRequest = 0x01;
 	constexpr short kWORLD_BACK = 0x04;
@@ -11,17 +11,16 @@ namespace receive_headers
 	constexpr short kHANDLE_LOGIN = 0x09;
 	constexpr short kSHOW_WORLD = 0x0b;
 	constexpr short kBACK_TO_WORLD = 0x0c;
-	constexpr short kVIEW_ALL_CHARS_REQUEST = 0x0d;
-	constexpr short kVIEW_ALL_CHARS_CONNECT = 0x0e;
-	constexpr short kVIEW_ALL_CHARS = 0x0f;
 	constexpr short kCHAR_SELECT = 0x13;
 	constexpr short kPLAYER_LOGGEDIN = 0x14;
 	constexpr short kNAME_CHECK = 0x15;
 	constexpr short kCREATE_CHARACTER = 0x16;
 	constexpr short kDELETE_CHARACTER = 0x17;
 	constexpr short kLOGIN_BACK = 0x1C;
-	constexpr short kCONNECT = 0x14;
-	constexpr short kPING = 0x18;
+}
+
+namespace receive_headers
+{
 	constexpr short kREQUEST_MAP_CHANGE = 0x23;
 	constexpr short kCHANGE_CHANNEL = 0x24;
 	constexpr short kENTER_CASHSHOP = 0x25;
@@ -83,6 +82,7 @@ namespace receive_headers
 	constexpr short kSUMMON_DAMAGE = 0x96;
 	constexpr short kUSE_DOOR = 0x79;
 	constexpr short kCHANGE_KEYMAP = 0x7B;
+	constexpr short kGUILD_BBS_OPERATION = 0x86;
 	constexpr short kENTER_MTS = 0x87;
 	constexpr short kMOVE_LIFE = 0x9D;
 	constexpr short kHIT_BY_MOB = 0xA1;

@@ -6,7 +6,7 @@ void Player::handle_heracle_guild_creator_npc()
 {
 	if (get_state() == 0)
 	{
-		send_simple("\r\n\t#b#L0#Create a Guild (25,000,000 mesos)#l \r\n\t#L1#Disband your Guild #l");
+		send_simple("\r\n\t#b#L0#Create a Guild (2,000,000 mesos)#l \r\n\t#L1#Disband your Guild #l");
 	}
 
 	else if (get_state() == 1)
@@ -19,13 +19,13 @@ void Player::handle_heracle_guild_creator_npc()
 			}
 			else
 			{
-				if (mesos_ < 25000000)
+				if (mesos_ < 2000000)
 				{
 					send_ok("You don't have enough mesos to create a guild.");
 				}
 				else
 				{
-					add_mesos(-25000000);
+					add_mesos(-2000000);
 					create_guild();
 				}
 			}

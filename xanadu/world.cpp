@@ -135,7 +135,7 @@ void World::initialize()
 		recordset1.moveNext();
 	}
 
-	// add guild members
+	// load and add guild members
 
 	for (auto &it : guilds_)
 	{
@@ -156,6 +156,10 @@ void World::initialize()
 			recordset2.moveNext();
 		}
 	}
+
+	// load guild bbs
+
+	// to-do
 
 	// reset partys
 

@@ -40,7 +40,7 @@ void Player::handle_login_request()
 	{
 		// send a packet
 		PacketCreator packet1;
-		packet1.GetLoginFailed(5);
+		packet1.LoginRequest(5, 0, "");
 		send_packet(&packet1);
 		return;
 	}
@@ -52,7 +52,7 @@ void Player::handle_login_request()
 	{
 		// send a packet
 		PacketCreator packet2;
-		packet2.GetLoginFailed(4);
+		packet2.LoginRequest(4, 0, "");
 		send_packet(&packet2);
 		return;
 	}
@@ -67,7 +67,7 @@ void Player::handle_login_request()
 	{
 		// send a packet
 		PacketCreator packet3;
-		packet3.GetLoginFailed(3);
+		packet3.LoginRequest(3, 0, "");
 		send_packet(&packet3);
 		return;
 	}
@@ -77,7 +77,7 @@ void Player::handle_login_request()
 	{
 		// send a packet
 		PacketCreator packet4;
-		packet4.GetLoginFailed(7);
+		packet4.LoginRequest(7, 0, "");
 		send_packet(&packet4);
 		return;
 	}
@@ -139,7 +139,7 @@ void Player::handle_login_request()
 
 	// send a packet
 	PacketCreator packet5;
-	packet5.GetAuthSuccessRequest(user_id_, user_name_);
+	packet5.LoginRequest(0, user_id_, user_name_);
 	send_packet(&packet5);
 }
 

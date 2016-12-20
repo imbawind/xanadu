@@ -60,8 +60,7 @@ public:
 	void get_handshake(unsigned char *iv_recv, unsigned char *iv_send);
 	void ConnectToChannel(int player_id);
 	void ShowCharacter(Character *character);
-	void GetAuthSuccessRequest(int user_id, std::string account_name);
-	void GetLoginFailed(signed char reason);
+	void LoginRequest(signed char success_or_failure_reason, int user_id, std::string account_name);
 	void LoginProcess();
 	void ShowWorld();
 	void EndWorlds();
@@ -119,6 +118,10 @@ public:
 	void UpdateGuildRanks(Guild *guild);
 	void UpdateGuildNotice(Guild *guild);
 	void GuildMemberOnline(int guild_id, int character_id, bool online = true);
+	// guild bbs
+	void guild_bbs_add_thread();
+	void guild_bbs_thread_list(int start);
+	void guild_bbs_show_thread(int local_thread_id);
 	// inventory
 	void UpdateSlot(std::shared_ptr<Item> item);
 	void MoveItem(signed char inventory_id, short source_slot, short destination_slot);
