@@ -22,7 +22,8 @@ void PacketCreator::get_handshake(unsigned char *iv_recv, unsigned char *iv_send
 void PacketCreator::ConnectToChannel(int player_id)
 {
 	write<short>(send_headers_login::kSERVER_IP);
-	write<short>(0);
+	write<signed char>(0);
+	write<signed char>(0);
 
 	// ip adress
 	World *world = World::get_instance();
@@ -45,8 +46,8 @@ void PacketCreator::ConnectToChannel(int player_id)
 
 	write<unsigned short>(kServerPort);
 	write<int>(player_id);
-	write<int>(0);
 	write<signed char>(0);
+	write<int>(0);
 }
 
 void PacketCreator::GetAuthSuccessRequest(int user_id, std::string account_name)
