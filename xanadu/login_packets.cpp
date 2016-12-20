@@ -287,11 +287,17 @@ void PacketCreator::ShowCharacter(Character *character)
 	AddCharLook(character);
 
 	// rankings
-	write<signed char>(1); // bool to enable to disable ranking? probably, but needs to be verified
-	write<int>(0); // world rank
-	write<int>(0); // world rank move
-	write<int>(0); // job rank
-	write<int>(0); // job rank move
+
+	bool enable_rankings = false;
+	write<bool>(enable_rankings);
+
+	if (enable_rankings)
+	{
+		write<int>(0); // world rank
+		write<int>(0); // world rank move
+		write<int>(0); // job rank
+		write<int>(0); // job rank move
+	}
 }
 
 void PacketCreator::ShowCharacters(std::unordered_map<int, Character *> *characters, int character_slots)
