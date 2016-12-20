@@ -167,7 +167,8 @@ Possible values for status:
 void PacketCreator::ShowChannels()
 {
 	write<short>(send_headers_login::kSERVER_STATUS);
-	write<short>(0); // status
+	write<signed char>(0); // status
+	write<signed char>(0);
 }
 
 void PacketCreator::AddCharStats(Character *character)
