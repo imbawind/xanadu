@@ -345,11 +345,13 @@ void PacketCreator::AddCharacter(Character *character)
 
 // success or error value:
 // 0 = success
-// others?
-// 12 = invalid birthday?
-// guildmaster state?
-//
-// what are 10, 22, 18, 24, 9, 26, 6?
+// 6 = connection failed due to system error
+// 9 = failed due to unknown reason
+// 10 = too many connections, could not process
+// 18 = incorrect birthday code was entered
+// 22 = cannot delete guild master character
+// 24 = wedding character cannot be deleted
+// 26 = cannot delete character which is being transfered currently
 
 void PacketCreator::RemoveCharacter(int characterid)
 {
