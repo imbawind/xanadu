@@ -22,7 +22,19 @@ void PacketCreator::get_handshake(unsigned char *iv_recv, unsigned char *iv_send
 void PacketCreator::ConnectToChannel(int player_id)
 {
 	write<short>(send_headers_login::kSERVER_IP);
+
+	// 6 = "Connection failed due to system error Please try again later." popup and login not happening
+	// 12 = popup when used in combination with the next byte
+	// 14 or 17 = "You have either selected the wrong gateway, or you have yet to change your personal information." popup and login not happening
+	// 15 = "We're still processing your request at this time, so you don't have access to this game for now. ..." popup and login not happening
+	// 16 or 21 = "Please verify your account via email in order to play the game." popup and login not happening
 	write<signed char>(0);
+
+	// in combination with 12 from the byte before this one:
+	// 0 and higher than 3 = "Connection failed due to system error Please try again later." popup and login not happening
+	// 1 = "You have entered incorrect an LOGIN ID. Please try again" popup and throws client back to login screen
+	// 2 = "You have entered an incorrect form of ID, or your account info hasn't been changed yet. Please try again." popup and throws client back to login screen
+	// 3 = "Unverified account will be blocked after 7 days from the date of registration. To verify your account immediately, press OK" popup and throws client back to login screen
 	write<signed char>(0);
 
 	// ip adress
