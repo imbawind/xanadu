@@ -137,7 +137,6 @@ void PacketCreator::DisbandGuild(int guild_id)
 	write<short>(send_headers::kGUILD_OPERATION);
 	write<signed char>(GuildSendPacketActions::kDisband);
 	write<int>(guild_id);
-	write<signed char>(1);
 }
 
 void PacketCreator::ShowGuildEmblem(Guild *guild)
