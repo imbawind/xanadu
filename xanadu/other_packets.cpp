@@ -657,6 +657,44 @@ void PacketCreator::writeCharacterData(Player *player)
 	AddSkillInfo(player);
 	AddCoolDownInfo(player);
 	AddQuestInfo(player);
+
+	// minigame data?
+	// not sure if this one belongs to rings, and it might be size for something
+	// extract from client:
+	/*
+	v64 = (unsigned __int16)CInPacket::Decode2(a2);
+	if ( (signed int)(unsigned __int16)v64 > 0 )
+	{
+	v65 = v64;
+	do
+	{
+	v134 = 0;
+	LOBYTE(v142) = 14;
+	sub_4B8B70(&v133);
+	v66 = v134;
+	*v66 = CInPacket::Decode4(a2);
+	v67 = (int)v134;
+	*(_DWORD *)(v67 + 4) = CInPacket::Decode4(a2);
+	v68 = (int)v134;
+	*(_DWORD *)(v68 + 8) = CInPacket::Decode4(a2);
+	v69 = (int)v134;
+	*(_DWORD *)(v69 + 12) = CInPacket::Decode4(a2);
+	v70 = (int)v134;
+	*(_DWORD *)(v70 + 16) = CInPacket::Decode4(a2);
+	sub_4B93C8(v134, &v133);
+	LOBYTE(v142) = 1;
+	if ( v134 )
+	{
+	sub_4B8BD2(0);
+	v134 = 0;
+	}
+	--v65;
+	}
+	while ( v65 );
+	}
+	*/
+	write<short>(0); // amount?
+
 	AddRingInfo();
 	AddTeleportRockInfo();
 	write<int>(0);
@@ -764,6 +802,15 @@ void PacketCreator::AddSkillInfo(Player *player)
 		write<int>(skill_id);
 		write<int>(skill.level_);
 
+		/*
+		// extract from client
+		// v137 = skill_id
+		if ( v137 / 10000 % 100 && v137 / 10000 % 10 == 2 )
+        {
+          v138 = CInPacket::Decode4(a2);
+          sub_4B8F75(&v137, &v138);
+        }
+		*/
 		if (tools::is_fourth_job(skill_id))
 		{
 			write<int>(skill.master_level_);
@@ -773,7 +820,10 @@ void PacketCreator::AddSkillInfo(Player *player)
 
 void PacketCreator::AddCoolDownInfo(Player *player)
 {
-	write<short>(0); // size (followed by skillid (int) and time (short))
+	write<short>(0); // size
+	
+	// (followed 1. by skillid (int)
+	// and 2. time (short))
 }
 
 void PacketCreator::AddQuestInfo(Player *player)
@@ -807,13 +857,20 @@ void PacketCreator::AddQuestInfo(Player *player)
 
 void PacketCreator::AddRingInfo()
 {
-	write<short>(0);
 	// crush rings
-	write<short>(0);
+	write<short>(0); // amount
+
+	// to-do crush rings info
+
 	// friendship rings
-	write<short>(0);
+	write<short>(0); // amount
+
+	// to-do friendship rings info
+
 	// marriage rings
-	write<short>(0);
+	write<short>(0); // amount
+
+	// to-do marriage rings info
 }
 
 void PacketCreator::AddTeleportRockInfo()

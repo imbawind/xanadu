@@ -86,7 +86,7 @@ void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user
 	}
 
 	write<int>(user_id);
-	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger with number 10 for gender select or pin select? not verified yet
+	write<signed char>(kGenderConstantsMale); // gender byte 0 = male, 1 = female, number 10/0x0A triggers gender select
 	write<signed char>(0);
 	write<signed char>(0);
 	write<std::string>(account_name);
@@ -101,12 +101,11 @@ void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user
 * mode values:
 * 0 - PIN was accepted
 * 1 - Register a new PIN
-
-// these are not verified:
 * 2 - Invalid pin / Reenter
 * 3 - Connection failed due to system error
 * 4 - Enter the pin
 */
+
 void PacketCreator::LoginProcess()
 {
 	write<short>(send_headers_login::kPIN_CHECK_OPERATION);
@@ -167,7 +166,8 @@ Possible values for status:
 void PacketCreator::ShowChannels()
 {
 	write<short>(send_headers_login::kSERVER_STATUS);
-	write<short>(0); // status
+	write<signed char>(0); // status
+	write<signed char>(0);
 }
 
 void PacketCreator::AddCharStats(Character *character)
@@ -331,7 +331,7 @@ void PacketCreator::CheckName(std::string name, bool name_used)
 	write<bool>(name_used);
 }
 
-// possible error values
+// success or error value:
 // 0 = success
 // 10 = too many connections, could not process
 // 26 = "You cannot create a new character under that account that has requested for a transfer."
@@ -339,24 +339,25 @@ void PacketCreator::CheckName(std::string name, bool name_used)
 void PacketCreator::AddCharacter(Character *character)
 {
 	write<short>(send_headers_login::kCREATE_NEW_CHARACTER);
-	write<signed char>(0); // succes or error value
+	write<signed char>(0); // success or error value
 	ShowCharacter(character);
 }
 
-/*
-state can be:
-0 = ok
-others?
-12 = invalid birthday?
-guildmaster state?
+// success or error value:
+// 0 = success
+// 6 = connection failed due to system error
+// 9 = failed due to unknown reason
+// 10 = too many connections, could not process
+// 18 = incorrect birthday code was entered
+// 22 = cannot delete guild master character
+// 24 = wedding character cannot be deleted
+// 26 = cannot delete character which is being transfered currently
 
-what are 10, 22, 18, 24, 9, 26, 6?
-*/
 void PacketCreator::RemoveCharacter(int characterid)
 {
 	write<short>(send_headers_login::kDELETE_CHARACTER);
 	write<int>(characterid);
-	write<signed char>(0); // state
+	write<signed char>(0); // success or error value
 }
 
 void PacketCreator::RelogResponse()
