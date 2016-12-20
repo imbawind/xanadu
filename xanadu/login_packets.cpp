@@ -62,22 +62,34 @@ void PacketCreator::ConnectToChannel(int player_id)
 	write<int>(0);
 }
 
+/*
+* reason values:
+* 3: ID deleted or blocked
+* 4: Incorrect password
+* 5: Not a registered id
+* 7: Already logged in
+*/
 void PacketCreator::GetAuthSuccessRequest(int user_id, std::string account_name)
 {
 	write<short>(send_headers_login::kLoginStatus);
-	write<short>(0);
+	write<signed char>(0); // 0 means login successfull, otherwise: reason for login failure
+	write<signed char>(0);
 	write<int>(0);
+
 	write<int>(user_id);
-	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger for gender select or pin select
-	write<short>(0);
+	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger for gender select or pin select?
+	write<signed char>(0);
+	write<signed char>(0);
 	write<std::string>(account_name);
-	write<short>(0);
+	write<signed char>(0);
+	write<signed char>(0);
 	write<long long>(0);
 	write<long long>(0);
 	write<int>(8);
 }
 
 /*
+* reason values:
 * 3: ID deleted or blocked
 * 4: Incorrect password
 * 5: Not a registered id
@@ -86,14 +98,25 @@ void PacketCreator::GetAuthSuccessRequest(int user_id, std::string account_name)
 void PacketCreator::GetLoginFailed(signed char reason)
 {
 	write<short>(send_headers_login::kLoginStatus);
-	write<short>(reason);
+	write<signed char>(reason);
+	write<signed char>(0);
 	write<int>(0);
 }
 
+/*
+* mode values:
+* 0 - PIN was accepted
+* 1 - Register a new PIN
+
+// these are not verified:
+* 2 - Invalid pin / Reenter
+* 3 - Connection failed due to system error
+* 4 - Enter the pin
+*/
 void PacketCreator::LoginProcess()
 {
-	write<short>(send_headers_login::kPIN_OPERATION);
-	write<signed char>(0); // pin entered
+	write<short>(send_headers_login::kPIN_CHECK_OPERATION);
+	write<signed char>(0); // mode
 }
 
 void PacketCreator::ShowWorld()

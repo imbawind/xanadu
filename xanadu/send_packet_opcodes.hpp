@@ -6,9 +6,7 @@ namespace send_headers_login
 {
 	constexpr short kLoginStatus = 0x00;
 	constexpr short kSERVER_STATUS = 0x03;
-	constexpr short kGENDER_DONE = 0x04;
-	constexpr short kPIN_OPERATION = 0x06;
-	constexpr short kVIEW_ALL_CHARS = 0x08;
+	constexpr short kPIN_CHECK_OPERATION = 0x06;
 	constexpr short kSERVER_LIST = 0x0a;
 	constexpr short kCHARACTER_LIST = 0x0b;
 	constexpr short kSERVER_IP = 0x0c;
@@ -16,7 +14,6 @@ namespace send_headers_login
 	constexpr short kCREATE_NEW_CHARACTER = 0x0e;
 	constexpr short kDELETE_CHARACTER = 0x0f;
 	constexpr short kCHANGE_CHANNEL = 0x10;
-	constexpr short kPING = 0x11;
 	constexpr short kCHANNEL_SELECTED = 0x14;
 	constexpr short kRELOG_RESPONSE = 0x16;
 }
