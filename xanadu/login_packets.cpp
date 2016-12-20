@@ -322,10 +322,15 @@ void PacketCreator::CheckName(std::string name, bool name_used)
 	write<bool>(name_used);
 }
 
+// possible error values
+// 0 = success
+// 10 = too many connections, could not process
+// 26 = "You cannot create a new character under that account that has requested for a transfer."
+
 void PacketCreator::AddCharacter(Character *character)
 {
 	write<short>(send_headers_login::kCREATE_NEW_CHARACTER);
-	write<signed char>(0); // values 10 and 26 seem to do something, needs to be tested
+	write<signed char>(0); // succes or error value
 	ShowCharacter(character);
 }
 
