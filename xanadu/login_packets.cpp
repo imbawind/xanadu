@@ -86,7 +86,7 @@ void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user
 	}
 
 	write<int>(user_id);
-	write<signed char>(kGenderConstantsMale); // gender byte, is also used as trigger with number 10 for gender select or pin select? not verified yet
+	write<signed char>(kGenderConstantsMale); // gender byte 0 = male, 1 = female, number 10/0x0A triggers gender select
 	write<signed char>(0);
 	write<signed char>(0);
 	write<std::string>(account_name);
@@ -331,7 +331,7 @@ void PacketCreator::CheckName(std::string name, bool name_used)
 	write<bool>(name_used);
 }
 
-// possible error values
+// success or error value:
 // 0 = success
 // 10 = too many connections, could not process
 // 26 = "You cannot create a new character under that account that has requested for a transfer."
@@ -339,24 +339,23 @@ void PacketCreator::CheckName(std::string name, bool name_used)
 void PacketCreator::AddCharacter(Character *character)
 {
 	write<short>(send_headers_login::kCREATE_NEW_CHARACTER);
-	write<signed char>(0); // succes or error value
+	write<signed char>(0); // success or error value
 	ShowCharacter(character);
 }
 
-/*
-state can be:
-0 = ok
-others?
-12 = invalid birthday?
-guildmaster state?
+// success or error value:
+// 0 = success
+// others?
+// 12 = invalid birthday?
+// guildmaster state?
+//
+// what are 10, 22, 18, 24, 9, 26, 6?
 
-what are 10, 22, 18, 24, 9, 26, 6?
-*/
 void PacketCreator::RemoveCharacter(int characterid)
 {
 	write<short>(send_headers_login::kDELETE_CHARACTER);
 	write<int>(characterid);
-	write<signed char>(0); // state
+	write<signed char>(0); // success or error value
 }
 
 void PacketCreator::RelogResponse()
