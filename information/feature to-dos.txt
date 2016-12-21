@@ -23,6 +23,8 @@ to-do features:
 
 - maybe implement cooldown saving on logout-login
 
+- maybe implement MTS
+
 - ping/pong functionality? maybe needs to be implemented
 
 - maybe implement party quests

@@ -5,6 +5,34 @@
 #include "player.hpp"
 #include "send_packet_opcodes.hpp"
 
+/*
+MTS enter packet probably like this:
+
+opcode
+writeCharacterData(player);
+write<std::string>("test"); // ID name
+write<int>(0); // m_nRegisterFeeMeso
+write<int>(0); // m_nCommissionRate
+write<int>(0); // m_nCommissionBase
+write<int>(0); // m_nAuctionDurationMin
+write<int>(0); // m_nAuctionDurationMax
+write<long long>(0); // time
+
+v2->m_nRegisterFeeMeso = CInPacket::Decode4(v3);
+v2->m_nCommissionRate = CInPacket::Decode4(v3);
+v2->m_nCommissionBase = CInPacket::Decode4(v3);
+v2->m_nAuctionDurationMin = CInPacket::Decode4(v3);
+v2->m_nAuctionDurationMax = CInPacket::Decode4(v3);
+v757BDB98(&st);
+SystemTimeToFileTime(&st, (_FILETIME *)((char *)&ftSecond + 4));
+CInPacket::DecodeBuffer(v3, &ftServer, 8u);
+v12.dwHighDateTime = ftServer;
+v12.dwLowDateTime = (unsigned int)&ftFirst;
+v13 = CITC::FileTimeAddition(v2, v12, ftSecond, bSubtract);
+v2->m_ftRel.dwLowDateTime = *(_DWORD *)v13.dwLowDateTime;
+v2->m_ftRel.dwHighDateTime = *(_DWORD *)(v13.dwLowDateTime + 4);
+*/
+
 void PacketCreator::EnterCashShop(Player *player)
 {
 	write<short>(send_headers::kOPEN_CASHSHOP);
@@ -181,11 +209,12 @@ void PacketCreator::EnterCashShop(Player *player)
   CCashShop::DecodeLimitGoods(v53, v54);
   */
 
-	//unsigned int size = 0x438;
-	//write_null(size);
+	/*unsigned int size = 0x438;
+	write_null(size);*/
 
-	// not sure if this one is in the right place
+	// this is in the right place
 	// 240 bytes
+	// "best item" 5 items
 	for (int i = 1; i <= 8; i++)
 	{
 		for (int j = 0; j < 2; j++)
