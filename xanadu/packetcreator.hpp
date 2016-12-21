@@ -250,9 +250,8 @@ public:
 	void UpdateStatInt(int stat, int value);
 	void PetStatUpdate(Player *player);
 	// quests
-	void ForfeitQuest(short quest_id);
 	void UpdateQuest(Quest *quest, int npc_id);
-	void UpdateQuestInfo(Quest *quest);
+	void UpdateQuestInfo(signed char mode, Quest *quest);
 	void ItemGainChat(int item_id, int amount, signed char items_size = 1);
 	void MesosGainChat(int amount);
 	void FameGainChat(int amount);

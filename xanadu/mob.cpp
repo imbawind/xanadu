@@ -66,9 +66,16 @@ void Mob::take_damage(Player *player, int damage)
 			{
 				if (quest->add_killed_mob(monster_id_, 1))
 				{
+					// mode values:
+					// 0 = forfeit, 1 = update, 2 = completed
+					signed char mode = 1;
+					if (quest->is_completed())
+					{
+						mode = 2;
+					}
 					// packet
 					PacketCreator packet10;
-					packet10.UpdateQuestInfo(quest);
+					packet10.UpdateQuestInfo(mode, quest);
 					player->send_packet(&packet10);
 				}
 			}

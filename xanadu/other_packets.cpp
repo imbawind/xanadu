@@ -553,14 +553,6 @@ void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &atta
 	}
 }
 
-void PacketCreator::ForfeitQuest(short quest_id)
-{
-	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(1); // 1 = quest message, there are also much other types
-	write<short>(quest_id);
-	write<short>(0);
-}
-
 void PacketCreator::UpdateQuest(Quest *quest, int npc_id)
 {
 	write<short>(send_headers::kUPDATE_QUEST_INFO);
@@ -571,28 +563,31 @@ void PacketCreator::UpdateQuest(Quest *quest, int npc_id)
 	write<signed char>(0);
 }
 
-void PacketCreator::UpdateQuestInfo(Quest *quest)
+void PacketCreator::UpdateQuestInfo(signed char mode, Quest *quest)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
 	write<signed char>(1); // 1 = quest message, there are also much other types
 	write<short>(quest->get_id());
+	write<signed char>(mode); // 0 = forfeit, 1 = update, 2 = completed
 
-	if (quest->is_completed())
+	switch (mode)
 	{
-		write<signed char>(2);
-		write<long long>(quest->get_completion_time());
-	}
-	else
-	{
-		write<signed char>(1);
+	case 0:
+		write<signed char>(0);
+		break;
+	case 1:
 		write<std::string>(quest->get_killed_mobs1());
+		break;
+	case 2:
+		write<long long>(quest->get_completion_time());
+		break;
 	}
 }
 
 void PacketCreator::ItemGainChat(int itemid, int amount, signed char items_size)
 {
 	write<short>(send_headers::kSHOW_ITEM_GAIN_INCHAT);
-	write<signed char>(3);
+	write<signed char>(3); // 3 = gain item, there are also much other types
 	write<signed char>(items_size);
 
 	for (signed char i = 0; i < items_size; ++i)
