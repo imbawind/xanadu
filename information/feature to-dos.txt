@@ -3,6 +3,8 @@ to-do features:
 
 - implement guild alliances
 
+- maybe implement view all characters on login
+
 - maybe implement cash shop inventory 
 
 - maybe implement pet food
@@ -17,11 +19,13 @@ to-do features:
 
 - maybe implement npc interactions
 
-- maybe implement skill macros
+- maybe implement skill macros (saving on logout-login)
+
+- maybe implement cooldown saving on logout-login
 
 - ping/pong functionality? maybe needs to be implemented
 
-- party quests
+- maybe implement party quests
 
 * carnival pq
 
@@ -31,5 +35,4 @@ to-do features:
 
 * and maybe others
 
-* autoban for obvious stuff like very high damage, better warning system
-
+* maybe implement autoban for obvious stuff like very high damage, better warning system
