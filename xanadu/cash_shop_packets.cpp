@@ -10,7 +10,7 @@ void PacketCreator::EnterCashShop(Player *player)
 	write<short>(send_headers::kOPEN_CASHSHOP);
 	writeCharacterData(player);
 	write<signed char>(1);
-	write<std::string>("test"); // username?
+	write<std::string>("test"); // ID name
 
 	/*
 	some info for the following write<int>
@@ -174,7 +174,16 @@ void PacketCreator::EnterCashShop(Player *player)
 	{
 		write<long long>(0);
 	}
-	
+
+	/*
+	  CInPacket::DecodeBuffer(iPacket, l->m_aBest, 0x438u);
+  CCashShop::DecodeStock(v53, v54);
+  CCashShop::DecodeLimitGoods(v53, v54);
+  */
+
+	//unsigned int size = 0x438;
+	//write_null(size);
+
 	// not sure if this one is in the right place
 	// 240 bytes
 	for (int i = 1; i <= 8; i++)
@@ -203,11 +212,107 @@ void PacketCreator::EnterCashShop(Player *player)
 		}
 	}
 
+	/*
+	from v0.95 GMS
+
+	int __thiscall CCashShop::DecodeStock(CCashShop *this, CInPacket *iPacket)
+{
+  CInPacket *v2; // ebx@1
+  CCashShop *v3; // edi@1
+  signed int v4; // esi@1
+  int result; // eax@2
+  ZArray<CS_STOCK> *v6; // edi@3
+
+  v2 = iPacket;
+  v3 = this;
+  v4 = CInPacket::Decode2(iPacket);
+  if ( v4 > 0 )
+  {
+    v6 = &v3->m_aStock;
+    ZArray<CS_STOCK>::_Realloc(v6, v4, 1, (ZAllocHelper *)&iPacket);
+    CInPacket::DecodeBuffer(v2, v6->a, 8 * v4);
+    result = 1;
+  }
+  else
+  {
+    result = 0;
+  }
+  return result;
+}
+*/
+
 	write<short>(0); // probably CCashShop::DecodeStock size
+
+	/*
+	from v0.95 GMS
+
+	int __thiscall CCashShop::DecodeLimitGoods(CCashShop *this, CInPacket *iPacket)
+{
+  CInPacket *v2; // ebx@1
+  CCashShop *v3; // edi@1
+  signed int v4; // esi@1
+  int result; // eax@2
+  ZArray<CS_LIMITGOODS> *v6; // edi@3
+
+  v2 = iPacket;
+  v3 = this;
+  v4 = CInPacket::Decode2(iPacket);
+  if ( v4 > 0 )
+  {
+    v6 = &v3->m_aLimitGoods;
+    ZArray<CS_LIMITGOODS>::_Realloc(v6, v4, 1, (ZAllocHelper *)&iPacket);
+    CInPacket::DecodeBuffer(v2, v6->a, 104 * v4);
+    result = 1;
+  }
+  else
+  {
+    result = 0;
+  }
+  return result;
+}*/
 
 	write<short>(0); // probably CCashShop::DecodeLimitGoods size
 
+	// -------------------------------------------------------------------------------
+
+	/*
+					 from v0.95 GMS
+
+					 CCashShop::DecodeZeroGoods(v53, v54);
+					 v79 = -1;
+					 if ( pBase.m_pInterface )
+					 pBase.m_pInterface->vfptr->Release((IUnknown *)pBase.m_pInterface);
+					 }
+
+					 int __thiscall CCashShop::DecodeZeroGoods(CCashShop *this, CInPacket *iPacket)
+					 {
+					 CInPacket *v2; // ebx@1
+					 CCashShop *v3; // edi@1
+					 signed int v4; // esi@1
+					 int result; // eax@2
+					 ZArray<CS_ZEROGOODS> *v6; // edi@3
+
+					 v2 = iPacket;
+					 v3 = this;
+					 v4 = CInPacket::Decode2(iPacket);
+					 if ( v4 > 0 )
+					 {
+					 v6 = &v3->m_aZeroGoods;
+					 ZArray<CS_ZEROGOODS>::_Realloc(v6, v4, 1, (ZAllocHelper *)&iPacket);
+					 CInPacket::DecodeBuffer(v2, v6->a, 68 * v4);
+					 result = 1;
+					 }
+					 else
+					 {
+					 result = 0;
+					 }
+					 return result;
+					 }
+					 */
+
 	write<short>(0); // probably DecodeZeroGoods size
+
+	// -------------------------------------------------------------------------------
 
 	write<signed char>(0); // probably m_bEventOn
 	write<int>(75); // probably m_nHighestCharacterLevelInThisAccount
@@ -215,42 +320,10 @@ void PacketCreator::EnterCashShop(Player *player)
 	/*
 	from v0.95 GMS
 	at the end of the cashshop enter packet:
+
 	CCashShop::LoadData(v2, iPacket);
 	v2->m_bEventOn = (unsigned __int8)CInPacket::Decode1(v6);
 	v2->m_nHighestCharacterLevelInThisAccount = CInPacket::Decode4(v6);
-
-	from at the end of cashshop loaddata:
-
-	CCashShop::DecodeZeroGoods(v53, v54);
-	v79 = -1;
-	if ( pBase.m_pInterface )
-	pBase.m_pInterface->vfptr->Release((IUnknown *)pBase.m_pInterface);
-	}
-
-	int __thiscall CCashShop::DecodeZeroGoods(CCashShop *this, CInPacket *iPacket)
-	{
-	CInPacket *v2; // ebx@1
-	CCashShop *v3; // edi@1
-	signed int v4; // esi@1
-	int result; // eax@2
-	ZArray<CS_ZEROGOODS> *v6; // edi@3
-
-	v2 = iPacket;
-	v3 = this;
-	v4 = CInPacket::Decode2(iPacket);
-	if ( v4 > 0 )
-	{
-	v6 = &v3->m_aZeroGoods;
-	ZArray<CS_ZEROGOODS>::_Realloc(v6, v4, 1, (ZAllocHelper *)&iPacket);
-	CInPacket::DecodeBuffer(v2, v6->a, 68 * v4);
-	result = 1;
-	}
-	else
-	{
-	result = 0;
-	}
-	return result;
-	}
 	*/
 }
 
