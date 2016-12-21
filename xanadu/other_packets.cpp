@@ -802,16 +802,7 @@ void PacketCreator::AddSkillInfo(Player *player)
 		write<int>(skill_id);
 		write<int>(skill.level_);
 
-		/*
-		// extract from client
-		// v137 = skill_id
-		if ( v137 / 10000 % 100 && v137 / 10000 % 10 == 2 )
-        {
-          v138 = CInPacket::Decode4(a2);
-          sub_4B8F75(&v137, &v138);
-        }
-		*/
-		if (tools::is_fourth_job(skill_id))
+		if (tools::is_fourth_job_skill(skill_id))
 		{
 			write<int>(skill.master_level_);
 		}

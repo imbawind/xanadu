@@ -40,6 +40,8 @@ namespace tools
 		return (item_id / 1000000);
 	}
 
+	// skill related functions
+
 	bool is_monster_riding(int item_id)
 	{
 		return (item_id == 1004);
@@ -70,7 +72,7 @@ namespace tools
 		}
 	}
 
-	bool is_puppet(int skill_id)
+	bool skill_is_puppet(int skill_id)
 	{
 		switch (skill_id)
 		{
@@ -105,9 +107,11 @@ namespace tools
 		return (skill_id / 10000);
 	}
 
-	bool is_fourth_job(int skill_id)
+	bool is_fourth_job_skill(int skill_id)
 	{
-		return ((skill_id / 10000) % 10) == 2;
+		if (skill_id / 10000 % 100 && skill_id / 10000 % 10 == 2)
+			return true;
+		return false;
 	}
 
 }
