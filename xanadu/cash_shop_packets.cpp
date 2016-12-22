@@ -432,7 +432,7 @@ void PacketCreator::GetCashShopInventory(short storage_slots, short character_sl
 void PacketCreator::TakeOutFromCashShopInventory(Item *item, short position)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
-	write<unsigned char>(0x68); // action
+	write<unsigned char>(74); // action NOT VERIFIED YET
 	write<short>(position);
 	ItemInfo(item, false);
 }
@@ -440,7 +440,7 @@ void PacketCreator::TakeOutFromCashShopInventory(Item *item, short position)
 void PacketCreator::TransferToCashShopInventory(int account_id, int serial_number, int item_id, short amount)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
-	write<unsigned char>(0x6A); // action
+	write<unsigned char>(76); // action NOT VERIFIED YET
 	CashShopAddCashItemData(account_id, serial_number, item_id, amount);
 }
 

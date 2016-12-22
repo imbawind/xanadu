@@ -13,7 +13,7 @@
 
 // constructor
 
-Inventory::Inventory(Player* player, signed char id, signed char slots) :
+Inventory::Inventory(Player *player, signed char id, signed char slots) :
 id_(id),
 slots_(slots),
 player_(player)
@@ -48,10 +48,12 @@ bool Inventory::add_item_find_slot(std::shared_ptr<Item> item)
 			item->set_slot(i);
 			items_[i] = item;
 
-			// packet
-			PacketCreator packet3;
-			packet3.NewItem(item, true);
-			player_->send_packet(&packet3);
+			{
+				// packet
+				PacketCreator packet;
+				packet.NewItem(item, true);
+				player_->send_packet(&packet);
+			}
 
 			return true;
 		}
@@ -65,10 +67,12 @@ bool Inventory::add_item_find_slot(std::shared_ptr<Item> item)
 				{
 					items_[i]->set_amount(items_[i]->get_amount() + item->get_amount());
 
-					// packet
-					PacketCreator packet8;
-					packet8.UpdateSlot(items_[i]);
-					player_->send_packet(&packet8);
+					{
+						// packet
+						PacketCreator packet;
+						packet.UpdateSlot(items_[i]);
+						player_->send_packet(&packet);
+					}
 
 					return true;
 				}
@@ -78,10 +82,12 @@ bool Inventory::add_item_find_slot(std::shared_ptr<Item> item)
 					item->set_amount(item->get_amount() - change);
 					items_[i]->set_amount(max_per_slot);
 
-					// packet
-					PacketCreator packet10;
-					packet10.UpdateSlot(items_[i]);
-					player_->send_packet(&packet10);
+					{
+						// packet
+						PacketCreator packet;
+						packet.UpdateSlot(items_[i]);
+						player_->send_packet(&packet);
+					}
 				}
 			}
 		}
@@ -125,20 +131,24 @@ bool Inventory::add_item_no_find_slot(std::shared_ptr<Item> item, bool send)
 
 		if (send)
 		{
-			// packet
-			PacketCreator packet14;
-			packet14.UpdateSlot(item);
-			player_->send_packet(&packet14);
+			{
+				// packet
+				PacketCreator packet;
+				packet.UpdateSlot(item);
+				player_->send_packet(&packet);
+			}
 		}
 	}
 	else
 	{
 		if (send)
 		{
-			// packet
-			PacketCreator packet20;
-			packet20.NewItem(item, false);
-			player_->send_packet(&packet20);
+			{
+				// packet
+				PacketCreator packet;
+				packet.NewItem(item, false);
+				player_->send_packet(&packet);
+			}
 		}
 	}
 
@@ -191,7 +201,7 @@ bool Inventory::give_item(int item_id, int amount)
 	return true;
 }
 
-std::shared_ptr<Item> Inventory::give_item_special(bool &success, int item_id)
+/*std::shared_ptr<Item> Inventory::give_item_special(bool &success, int item_id)
 {
 	std::shared_ptr<Item> equip(new Item(item_id, false));
 
@@ -205,7 +215,7 @@ std::shared_ptr<Item> Inventory::give_item_special(bool &success, int item_id)
 	success = true;
 
 	return equip;
-}
+}*/
 
 void Inventory::remove_item(signed char slot, bool drop, bool send)
 {
@@ -217,10 +227,12 @@ void Inventory::remove_item(signed char slot, bool drop, bool send)
 
 	if (send)
 	{
-		// packet
-		PacketCreator packet1;
-		packet1.remove_item(id_, slot, drop);
-		player_->send_packet(&packet1);
+		{
+			// packet
+			PacketCreator packet;
+			packet.remove_item(id_, slot, drop);
+			player_->send_packet(&packet);
+		}
 	}
 
 	items_.erase(slot);
@@ -278,10 +290,12 @@ void Inventory::remove_item(int item_id, short amount)
 			{
 				item->set_amount(item->get_amount() - amount);
 
-				// packet
-				PacketCreator packet1;
-				packet1.UpdateSlot(item);
-				player_->send_packet(&packet1);
+				{
+					// packet
+					PacketCreator packet;
+					packet.UpdateSlot(item);
+					player_->send_packet(&packet);
+				}
 
 				break;
 			}
@@ -315,10 +329,12 @@ void Inventory::remove_item_by_slot(signed char slot, short amount, bool send, b
 		}
 	}
 
-	// packet
-	PacketCreator packet1;
-	packet1.UpdateSlot(item);
-	player_->send_packet(&packet1);
+	{
+		// packet
+		PacketCreator packet;
+		packet.UpdateSlot(item);
+		player_->send_packet(&packet);
+	}
 }
 
 void Inventory::add_slots(signed char amount)

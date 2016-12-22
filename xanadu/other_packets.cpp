@@ -1155,6 +1155,8 @@ void PacketCreator::ShowInfo(Player *player)
 	// wishlist info
 	write<signed char>(0); // size
 
+	// to-do write wishlist data here
+
 	// monster book info
 	write<int>(1);
 	write<int>(0);
@@ -1177,6 +1179,8 @@ void PacketCreator::ShowInfo(Player *player)
 
 	// collected medals info
 	write<short>(0); // size
+
+	// to-do write collected medals info here
 }
 
 void PacketCreator::SendFame(std::string name, signed char type)

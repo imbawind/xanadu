@@ -13,7 +13,7 @@ class Inventory
 public:
 
 	// constructor
-	Inventory(Player* player, signed char id, signed char slots);
+	Inventory(Player *player, signed char id, signed char slots);
 
 	// default constructor
 	Inventory() = delete;
@@ -36,7 +36,7 @@ public:
 	bool add_item_find_slot(std::shared_ptr<Item> item);
 	bool add_item_no_find_slot(std::shared_ptr<Item> item, bool send);
 	bool give_item(int item_id, int amount);
-	std::shared_ptr<Item> give_item_special(bool &success, int item_id);
+	//std::shared_ptr<Item> give_item_special(bool &success, int item_id);
 	signed char get_slots();
 	signed char get_free_slots();
 	short get_item_amount(int item_id);

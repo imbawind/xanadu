@@ -160,10 +160,13 @@ Player::~Player()
 						inventory->add_item_find_slot(item);
 					}
 				}
-				// send a packet
-				PacketCreator packet5;
-				packet5.TradeError(0, 3);
-				trade_partner_->send_packet(&packet5);
+
+				{
+					// send a packet
+					PacketCreator packet;
+					packet.TradeError(0, 3);
+					trade_partner_->send_packet(&packet);
+				}
 			}
 		}
 
@@ -180,20 +183,24 @@ Player::~Player()
 		{
 			party_->remove_member(id_);
 
-			// send a packet
-			PacketCreator packet20;
-			packet20.UpdateParty(party_);
-			party_->send_packet(&packet20);
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.UpdateParty(party_);
+				party_->send_packet(&packet);
+			}
 		}
 
 		if (guild_)
 		{
 			guild_->RemoveMember(id_);
 
-			// send a packet
-			PacketCreator packet21;
-			packet21.GuildMemberOnline(guild_->get_id(), id_, false);
-			guild_->send_packet(&packet21);
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.GuildMemberOnline(guild_->get_id(), id_, false);
+				guild_->send_packet(&packet);
+			}
 		}
 
 		if (messenger_)
@@ -206,10 +213,12 @@ Player::~Player()
 			{
 				messenger_->delete_member(id_);
 
-				// send a packet
-				PacketCreator packet22;
-				packet22.MessengerRemovePlayer(messenger_position_);
-				messenger_->send_packet(&packet22);
+				{
+					// send a packet
+					PacketCreator packet;
+					packet.MessengerRemovePlayer(messenger_position_);
+					messenger_->send_packet(&packet);
+				}
 			}
 		}
 
@@ -797,12 +806,13 @@ void Player::player_connect()
 	merchant_storage_mesos_ = rs1["merchant_storage_mesos"];
 
 	// initialize inventories
-	inventories_[0] = new Inventory(this, 0, 48); // Equipped
-	inventories_[1] = new Inventory(this, 1, equip_slots); // Equip
-	inventories_[2] = new Inventory(this, 2, use_slots); // Use
-	inventories_[3] = new Inventory(this, 3, setup_slots); // Setup
-	inventories_[4] = new Inventory(this, 4, etc_slots); // Etc
-	inventories_[5] = new Inventory(this, 5, 36); // Cash
+
+	inventories_[kInventoryConstantsTypesEquipped] = new Inventory(this, kInventoryConstantsTypesEquipped, 48);
+	inventories_[kInventoryConstantsTypesEquip] = new Inventory(this, kInventoryConstantsTypesEquip, equip_slots);
+	inventories_[kInventoryConstantsTypesUse] = new Inventory(this, kInventoryConstantsTypesUse, use_slots);
+	inventories_[kInventoryConstantsTypesSetup] = new Inventory(this, kInventoryConstantsTypesSetup, setup_slots);
+	inventories_[kInventoryConstantsTypesEtc] = new Inventory(this, kInventoryConstantsTypesEtc, etc_slots);
+	inventories_[kInventoryConstantsTypesCash] = new Inventory(this, kInventoryConstantsTypesCash, 36);
 
 	// account data
 	Poco::Data::Statement statement4(mysql_session);
@@ -1234,45 +1244,57 @@ void Player::player_connect()
 
 	in_game_ = true;
 
-	// send the connection data
-	PacketCreator packet1;
-	packet1.change_map(this, true);
-	send_packet(&packet1);
+	{
+		// send the connection data
+		PacketCreator packet;
+		packet.change_map(this, true);
+		send_packet(&packet);
+	}
 
 	// guild
 	if (guild_)
 	{
-		// send a packet
-		PacketCreator packet22;
-		packet22.GuildInfo(guild_);
-		send_packet(&packet22);
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.GuildInfo(guild_);
+			send_packet(&packet);
+		}
 
-		// send a packet
-		PacketCreator packet23;
-		packet23.GuildMemberOnline(guild_->get_id(), id_);
-		guild_->send_packet(&packet23, this);
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.GuildMemberOnline(guild_->get_id(), id_);
+			guild_->send_packet(&packet, this);
+		}
 	}
 
 	// add the player to the map
 	map_->add_player(this);
 
-	// display keymap
-	// send a packet
-	PacketCreator packet11;
-	packet11.ShowKeymap(this);
-	send_packet(&packet11);
+	{
+		// display keymap
+		// send a packet
+		PacketCreator packet;
+		packet.ShowKeymap(this);
+		send_packet(&packet);
+	}
 
-	// display buddylist
-	// send a packet
-	PacketCreator packet12;
-	packet12.BuddyList(this);
-	send_packet(&packet12);
+	{
+		// display buddylist
+		// send a packet
+		PacketCreator packet;
+		packet.BuddyList(this);
+		send_packet(&packet);
+	}
 
-	// display header message
-	// send a packet
-	PacketCreator packet13;
-	packet13.ShowMessage(world->get_header_message(), 4);
-	send_packet(&packet13);
+	{
+		// display header message
+		// send a packet
+		PacketCreator packet;
+		packet.ShowMessage(world->get_header_message(), 4);
+		send_packet(&packet);
+	}
 }
 
 bool Player::add_mesos(int amount)

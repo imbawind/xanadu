@@ -233,7 +233,14 @@ void Player::handle_cash_shop_action()
 		int test = 1;
 		//long long unique_id = read_int64();
 
-		//send_packet(PacketCreator().take_out_from_cash_shop_inventory(nullptr, 0));
+		// TO-DO
+
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.TakeOutFromCashShopInventory(nullptr, 0);
+			send_packet(&packet);
+		}
 
 		break;
 	}
