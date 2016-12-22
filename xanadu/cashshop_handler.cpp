@@ -16,39 +16,50 @@ void Player::handle_cash_shop_enter()
 	in_cash_shop_ = true;
 	map_->remove_player(this);
 
-	// send a packet
-	PacketCreator packet1;
-	packet1.EnterCashShop(this);
-	send_packet(&packet1);
+	{
+		// send a packet
+		PacketCreator packet;
+		packet.EnterCashShop(this);
+		send_packet(&packet);
+	}
 
-	// send a packet
-	PacketCreator packet2;
-	packet2.GetCashShopInventory(storage_slots_, character_slots_);
-	send_packet(&packet2);
+	{
+		// send a packet
+		PacketCreator packet;
+		packet.GetCashShopInventory(storage_slots_, character_slots_);
+		send_packet(&packet);
+	}
 
-	// send a packet
-	PacketCreator packet3;
-	packet3.ShowCashPoints(nx_cash_credit_);
-	send_packet(&packet3);
+	{
+		// send a packet
+		PacketCreator packet;
+		packet.ShowCashPoints(nx_cash_credit_);
+		send_packet(&packet);
+	}
 }
 
 void Player::handle_leave_cash_shop()
 {
 	in_cash_shop_ = false;
 
-	// send a packet
-	PacketCreator packet;
-	packet.change_map(this, true);
-	send_packet(&packet);
+	{
+		// send a packet
+		PacketCreator packet;
+		packet.change_map(this, true);
+		send_packet(&packet);
+	}
 
 	map_->add_player(this);
 }
 
 void Player::handle_update_cash_shop()
 {
-	PacketCreator packet;
-	packet.ShowCashPoints(nx_cash_credit_);
-	send_packet(&packet);
+	{
+		// send a packet
+		PacketCreator packet;
+		packet.ShowCashPoints(nx_cash_credit_);
+		send_packet(&packet);
+	}
 }
 
 void Player::handle_cash_shop_action()
@@ -58,113 +69,152 @@ void Player::handle_cash_shop_action()
 	switch (action)
 	{
 	case CashShopReceivePacketActions::kBuyCashItem:
+	{
+		skip_bytes(1);
+		skip_bytes(4); // type of cash used
+		int serial_number = read<int>();
+
+		CashItemData *cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(serial_number);
+		if (!cash_item)
 		{
-			skip_bytes(1);
-			skip_bytes(4); // type of cash used
-			int serial_number = read<int>();
+			return;
+		}
 
-			CashItemData *cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(serial_number);
-			if (!cash_item)
-			{
-				return;
-			}
+		int price = cash_item->price;
 
-			int price = cash_item->price;
+		if (nx_cash_credit_ < price)
+		{
+			return;
+		}
 
-			if (nx_cash_credit_ < price)
-			{
-				return;
-			}
+		int item_id = cash_item->item_id;
+		short amount = static_cast<short>(cash_item->count);
 
-			int item_id = cash_item->item_id;
-			int amount = cash_item->count;
+		if (!give_item(item_id, amount))
+		{
+			// to-do send the cashshop error packet instead of those packets down there
 
-			if (!give_item(item_id, amount))
 			{
 				// send a packet
-				PacketCreator packet1;
-				packet1.ShowCashPoints(nx_cash_credit_);
-				send_packet(&packet1);
-				
+				PacketCreator packet;
+				packet.ShowCashPoints(nx_cash_credit_);
+				send_packet(&packet);
+			}
+
+			{
 				// send a packet
-				PacketCreator packet2;
-				packet2.EnableAction();
-				send_packet(&packet2);
-
-				return;
+				PacketCreator packet;
+				packet.EnableAction();
+				send_packet(&packet);
 			}
 
-			nx_cash_credit_ -= price;
-
-			// send a packet
-			PacketCreator packet10;
-			packet10.ShowBoughtCashItem(user_id_, serial_number, item_id, amount);
-			send_packet(&packet10);
-
-			// send a packet
-			PacketCreator packet11;
-			packet11.ShowCashPoints(nx_cash_credit_);
-			send_packet(&packet11);
-
-			break;
+			return;
 		}
-	/*case CashShopReceivePacketActions::kBuyInventorySlots:
+
+		nx_cash_credit_ -= price;
+
 		{
-			skip_bytes(2);
-			signed char inventory_id = read<signed char>();
-			Inventory * inventory = get_inventory(inventory_id);
-
-			if (!inventory)
-			{
-				return;
-			}
-
-			if (inventory->getSlots() > 92)
-			{
-				return;
-			}
-
-			if (nx_cash_credit_ < 4000)
-			{
-				return;
-			}
-
-			nx_cash_credit_ -= 4000;
-			inventory->addSlots(4);
-			send_packet(PacketCreator().increase_inventory_slots(inventory_id, inventory->getSlots()));
-
-			break;
+			// send a packet
+			PacketCreator packet;
+			packet.ShowBoughtCashItem(user_id_, serial_number, item_id, amount);
+			send_packet(&packet);
 		}
+
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.ShowCashPoints(nx_cash_credit_);
+			send_packet(&packet);
+		}
+
+		break;
+	}
+	case CashShopReceivePacketActions::kBuyInventorySlots:
+	{
+		skip_bytes(1);
+		skip_bytes(4); // type of cash used
+		skip_bytes(1);
+		signed char inventory_id = read<signed char>();
+		Inventory *inventory = get_inventory(inventory_id);
+
+		if (!inventory)
+		{
+			return;
+		}
+
+		if (inventory->get_slots() > 48)
+		{
+			return;
+		}
+
+		if (nx_cash_credit_ < 4000)
+		{
+			return;
+		}
+
+		nx_cash_credit_ -= 4000;
+		inventory->add_slots(4);
+
+		// send a packet
+		{
+			PacketCreator packet;
+			packet.IncreaseInventorySlots(inventory_id, inventory->get_slots());
+			send_packet(&packet);
+		}
+
+		break;
+	}
 	case CashShopReceivePacketActions::kBuyStorageSlots:
+	{
+		skip_bytes(1);
+		skip_bytes(4); // type of cash used
+		skip_bytes(1);
+
+		if (storage_slots_ > 48)
 		{
-			if (storage_slots_ > 92)
-			{
-				return;
-			}
-
-			if (nx_cash_credit_ < 4000)
-			{
-				return;
-			}
-
-			nx_cash_credit_ -= 4000;
-			storage_slots_ += 4;
-			send_packet(PacketCreator().increase_storage_slots(storage_slots_));
-
-			break;
+			return;
 		}
+
+		if (nx_cash_credit_ < 4000)
+		{
+			return;
+		}
+
+		nx_cash_credit_ -= 4000;
+		storage_slots_ += 4;
+
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.IncreaseStorageSlots(storage_slots_);
+			send_packet(&packet);
+		}
+
+		break;
+	}
 	case CashShopReceivePacketActions::kBuyCharacterSlot:
-		{
-			if (character_slots_ < 21 && nx_cash_credit_ > 6700)
-			{
-				nx_cash_credit_ -= 6700;
-				character_slots_ += 1;
-				send_packet(PacketCreator().showMessage("1 slot has been added to your account character slots.", 1));
-			}
+	{
+		skip_bytes(1);
+		skip_bytes(4); // type of cash used
+		int cash_sn = read<int>(); // ? sn of the character slot item maybe?
 
-			break;
+		if (character_slots_ < 21 && nx_cash_credit_ > 6700)
+		{
+			nx_cash_credit_ -= 6700;
+			character_slots_ += 1;
+
+			// to-do use original packet for it?
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.ShowMessage("1 slot has been added to your account character slots.", 1);
+				send_packet(&packet);
+			}
 		}
-	case CashShopReceivePacketActions::kRetrieveCashItem:
+
+		break;
+	}
+	/*case CashShopReceivePacketActions::kRetrieveCashItem:
 		{
 			//long long unique_id = read_int64();
 
@@ -181,62 +231,70 @@ void Player::handle_cash_shop_action()
 			break;
 		}*/
 	case CashShopReceivePacketActions::kBuyPackage:
+	{
+		skip_bytes(1);
+		skip_bytes(4); // type of cash used
+		int package_serial_number = read<int>();
+		CashItemData *package_cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(package_serial_number);
+		if (!package_cash_item)
 		{
-			skip_bytes(1);
-			skip_bytes(4); // type of cash used
-			int package_serial_number = read<int>();
-			CashItemData *package_cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(package_serial_number);
-			if (!package_cash_item)
+			return;
+		}
+
+		int package_id = package_cash_item->item_id;
+		std::vector<int> serial_numbers = CashShopPackageDataProvider::get_instance()->get_serial_numbers_in_cash_package(package_id);
+
+		for (int serial_number : serial_numbers)
+		{
+			CashItemData *cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(serial_number);
+			if (!cash_item)
 			{
 				return;
 			}
-			
-			int package_id = package_cash_item->item_id;
-			std::vector<int> serial_numbers = CashShopPackageDataProvider::get_instance()->get_serial_numbers_in_cash_package(package_id);
-			
-			for (int serial_number : serial_numbers)
+			int price = cash_item->price;
+			if (nx_cash_credit_ < price)
 			{
-				CashItemData *cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(serial_number);
-				if (!cash_item)
-				{
-					return;
-				}
-				int price = cash_item->price;
-				if (nx_cash_credit_ < price)
-				{
-					return;
-				}
-				int item_id = cash_item->item_id;
-				int amount = cash_item->count;
-				if (!give_item(item_id, amount))
-				{
-					// send a packet
-					PacketCreator packet15;
-					packet15.ShowCashPoints(nx_cash_credit_);
-					send_packet(&packet15);
-					
-					// send a packet
-					PacketCreator packet16;
-					packet16.EnableAction();
-					send_packet(&packet16);
-
-					return;
-				}
-				nx_cash_credit_ -= price;
-				
-				// send a packet
-				PacketCreator packet17;
-				packet17.ShowBoughtCashItem(user_id_, serial_number, item_id, amount);
-				send_packet(&packet17);
+				return;
 			}
+			int item_id = cash_item->item_id;
+			short amount = static_cast<short>(cash_item->count);
+			if (!give_item(item_id, amount))
+			{
+				{
+					// send a packet
+					PacketCreator packet;
+					packet.ShowCashPoints(nx_cash_credit_);
+					send_packet(&packet);
+				}
 
-			break;
+				{
+					// send a packet
+					PacketCreator packet;
+					packet.EnableAction();
+					send_packet(&packet);
+				}
+
+				return;
+			}
+			nx_cash_credit_ -= price;
+
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.ShowBoughtCashItem(user_id_, serial_number, item_id, amount);
+				send_packet(&packet);
+			}
 		}
+
+		break;
 	}
-	
+	}
+
 	// update nx cash for client
-	// send a packet
-	PacketCreator packet20;
-	packet20.ShowCashPoints(nx_cash_credit_);
-	send_packet(&packet20);
+	{
+		// send a packet
+		PacketCreator packet;
+		packet.ShowCashPoints(nx_cash_credit_);
+		send_packet(&packet);
+	}
 }

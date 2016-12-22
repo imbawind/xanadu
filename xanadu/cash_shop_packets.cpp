@@ -392,27 +392,17 @@ void PacketCreator::ShowCashPoints(int nx_credit)
 	write<int>(0); // prepaid
 }
 
-void PacketCreator::ShowBoughtCashItem(int account_id, int serial_number, int item_id, int amount)
+void PacketCreator::ShowBoughtCashItem(int account_id, int serial_number, int item_id, short amount)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
 	write<unsigned char>(0x3B); // action
-
-	write<long long>(1); // cash unique id
-	write<int>(account_id);
-	write<int>(0); // character id? dwCharacterID
-	write<int>(item_id);
-	write<int>(serial_number);
-	write<short>(static_cast<short>(amount));
-	write_string("", 13); // character name (who made the gift?)
-	write<long long>(0); // expiration time
-	write<int>(0); // nPaybackRate
-	write<int>(0); // nDiscountRate
+	CashShopAddCashItemData(account_id, serial_number, item_id, amount);
 }
 
 void PacketCreator::IncreaseInventorySlots(signed char inventory_id, signed char slots)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
-	write<signed char>(127); // action
+	write<signed char>(0x44); // action
 	write<signed char>(inventory_id);
 	write<short>(slots);
 }
@@ -420,7 +410,7 @@ void PacketCreator::IncreaseInventorySlots(signed char inventory_id, signed char
 void PacketCreator::IncreaseStorageSlots(signed char slots)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
-	write<unsigned char>(129); // action
+	write<unsigned char>(0x46); // action
 	write<short>(slots);
 }
 
@@ -428,25 +418,12 @@ void PacketCreator::GetCashShopInventory(short storage_slots, short character_sl
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
 	write<signed char>(0x2F); // action
+    // TODO: write items here that are in the cashshop inventory
 	short size = 0;
 	write<short>(size); // cashshop inventory size
-	// TODO: write items here that are in the cashshop inventory
 	for (int i = 0; i < size; ++i)
 	{
-		// todo: write all info
-
-		// to-do need a addcashiteminfo function
-
-		/*write<long long>(1); // cash unique id (SN?)
-		write<int>(account_id);
-		write<int>(0); // character id? dwCharacterID
-		write<int>(item_id);
-		write<int>(serial_number);
-		write<short>(static_cast<short>(amount));
-		write_string("", 13); // character name (who made the gift?)
-		write<long long>(0); // expiration date
-		write<int>(0); // nPaybackRate
-		write<int>(0); // nDiscountRate*/
+		//CashShopAddCashItemData(account_id, serial_number, item_id, amount);
 	}
 	write<short>(storage_slots);
 	write<short>(character_slots);
@@ -458,6 +435,13 @@ void PacketCreator::TakeOutFromCashShopInventory(Item *item, short position)
 	write<unsigned char>(0x68); // action
 	write<short>(position);
 	ItemInfo(item, false);
+}
+
+void PacketCreator::TransferToCashShopInventory(int account_id, int serial_number, int item_id, short amount)
+{
+	write<short>(send_headers::kCASHSHOP_OPERATION);
+	write<unsigned char>(0x6A); // action
+	CashShopAddCashItemData(account_id, serial_number, item_id, amount);
 }
 
 /*
@@ -507,17 +491,14 @@ _LARGE_INTEGER = struct of long and unsigned long = 4 + 4 bytes = 8 bytes
 00000037
 */
 
-void PacketCreator::TransferToCashShopInventory(int account_id, int serial_number, int item_id, int amount)
+void PacketCreator::CashShopAddCashItemData(int account_id, int serial_number, int item_id, short amount)
 {
-	write<short>(send_headers::kCASHSHOP_OPERATION);
-	write<unsigned char>(0x6A); // action
-
 	write<long long>(1); // cash unique id (SN?)
 	write<int>(account_id);
 	write<int>(0); // character id? dwCharacterID
 	write<int>(item_id);
 	write<int>(serial_number);
-	write<short>(static_cast<short>(amount));
+	write<short>(amount);
 	write_string("", 13); // character name (who made the gift?)
 	write<long long>(0); // expiration date
 	write<int>(0); // nPaybackRate

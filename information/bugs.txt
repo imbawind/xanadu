@@ -99,6 +99,8 @@ need to work out the details of these features first
 
 -------------------- bugs --------------------
 
+- when buying a cashitem fails, it should send the packet for that case
+
 - storage slots need to be saved to and loaded from sql
 
 - cashshop buying slots needs to be fixed
