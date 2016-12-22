@@ -8,6 +8,8 @@
 /*
 MTS enter packet probably like this:
 
+got it from v0.95 GMS, but verified that it's very likely the same for v0.62 GMS
+
 opcode
 writeCharacterData(player);
 write<std::string>("test"); // ID name
@@ -52,7 +54,7 @@ void PacketCreator::EnterCashShop(Player *player)
 	CInPacket::DecodeBuffer(iPacket, (void *)i, 4 * v13);
   }
   */
-	write<int>(0); // probably: size for something in CWvsContext::SetSaleInfo
+	write<int>(0); // size for something in CWvsContext::SetSaleInfo (nNotSaleCount?)
 
 
 	// -------------------------------------------------------------------------------
@@ -173,7 +175,7 @@ void PacketCreator::EnterCashShop(Player *player)
 	  unless these were added later this way
 
 	  */
-	write<short>(0); // probably: size for something in CWvsContext::SetSaleInfo
+	write<short>(0); // size for something in CWvsContext::SetSaleInfo
 
 	// -------------------------------------------------------------------------------
 
@@ -192,36 +194,79 @@ void PacketCreator::EnterCashShop(Player *player)
 	while ( v51 );
   }
   */
-	write<signed char>(0); // probably: size for something in CWvsContext::SetSaleInfo
+	write<signed char>(0); // size for something in CWvsContext::SetSaleInfo
 
 	// -------------------------------------------------------------------------------
 
-	// not sure if this one is in the right place
+	// best items
+
 	// 120 bytes
-	for (int i = 0; i < 15; i++)
+	/*for (int i = 0; i < 15; i++)
 	{
 		write<long long>(0);
-	}
+	}*/
 
 	/*
+	00000054 m_aBest         CS_BEST 90 dup(?)
+
+	00000000 CS_BEST         struc ; (sizeof=0xC, align=0x4, copyof_3068)
+	00000000                                         ; XREF: CCashShop/r struc_1/r
+	00000000 nCategory       dd ?
+	00000004 nGender         dd ?
+	00000008 nCommoditySN    dd ?
+	0000000C CS_BEST         ends
+
+	from some old packet sniffing, it seems that if there is no item to show, gender is -1/FF FF FF FF and commoditysn 0F 00 00 00
+
+	or -1/FF FF FF FF for gender = both genders?
+
 	  CInPacket::DecodeBuffer(iPacket, l->m_aBest, 0x438u);
   CCashShop::DecodeStock(v53, v54);
   CCashShop::DecodeLimitGoods(v53, v54);
   */
 
-	/*unsigned int size = 0x438;
-	write_null(size);*/
-
-	// this is in the right place
-	// 240 bytes
-	// "best item" 5 items
-	for (int i = 1; i <= 8; i++)
+	/*for (int i = 1; i <= 36; i++)
 	{
+		// for both genders
 		for (int j = 0; j < 2; j++)
 		{
-			write<int>(i);
-			write<int>(j);
-			write<int>(50200004);
+			write<int>(i); // nCategory
+			write<int>(j); // nGender
+			write<int>(50200004); // nCommoditySN
+
+			write<int>(i); // nCategory
+			write<int>(j); // nGender
+			write<int>(50200069); // nCommoditySN
+
+			write<int>(i); // nCategory
+			write<int>(j); // nGender
+			write<int>(50200117); // nCommoditySN
+
+			write<int>(i); // nCategory
+			write<int>(j); // nGender
+			write<int>(50100008); // nCommoditySN
+
+			write<int>(i); // nCategory
+			write<int>(j); // nGender
+			write<int>(50000047); // nCommoditySN
+		}
+	}*/
+
+	// 1080 bytes (-120) = 960 bytes, (-120 + -240) = 720 bytes
+	unsigned int size = 0x438;
+	write_null(size);
+
+	// 240 bytes
+	// "best item" 5 items
+	// for eight categories?
+	/*for (int i = 1; i <= 8; i++)
+	{
+		// for both genders
+		for (int j = 0; j < 2; j++)
+		{
+			write<int>(i); // nCategory
+			write<int>(j); // nGender
+			write<int>(50200004); // nCommoditySN
 			//
 			write<int>(i);
 			write<int>(j);
@@ -239,7 +284,10 @@ void PacketCreator::EnterCashShop(Player *player)
 			write<int>(j);
 			write<int>(50000047);
 		}
-	}
+	}*/
+
+	// -------------------------------------------------------------------------------
+	// -------------------------------------------------------------------------------
 
 	/*
 	from v0.95 GMS
@@ -268,9 +316,14 @@ void PacketCreator::EnterCashShop(Player *player)
   }
   return result;
 }
+
+00000000 CS_STOCK        struc ; (sizeof=0x8, align=0x4, copyof_3066)
+00000000 nSN             dd ?
+00000004 nStockState     dd ?
+00000008 CS_STOCK        ends
 */
 
-	write<short>(0); // probably CCashShop::DecodeStock size
+	write<short>(0); // CCashShop::DecodeStock size
 
 	/*
 	from v0.95 GMS
@@ -298,53 +351,28 @@ void PacketCreator::EnterCashShop(Player *player)
     result = 0;
   }
   return result;
-}*/
+}
 
-	write<short>(0); // probably CCashShop::DecodeLimitGoods size
+00000000 CS_LIMITGOODS   struc ; (sizeof=0x68, align=0x4, copyof_1408)
+00000000 nItemID         dd ?
+00000004 nSN             dd 10 dup(?)
+0000002C nState          dd ?
+00000030 nOriginCount    dd ?
+00000034 nRemainCount    dd ?
+00000038 dwConditionFlag dd ?
+0000003C nDateStart      dd ?
+00000040 nDateEnd        dd ?
+00000044 nHourStart      dd ?
+00000048 nHourEnd        dd ?
+0000004C abWeek          dd 7 dup(?)
+00000068 CS_LIMITGOODS   ends
 
-	// -------------------------------------------------------------------------------
+*/
 
-	/*
-					 from v0.95 GMS
+	write<short>(0); // CCashShop::DecodeLimitGoods size
 
-					 CCashShop::DecodeZeroGoods(v53, v54);
-					 v79 = -1;
-					 if ( pBase.m_pInterface )
-					 pBase.m_pInterface->vfptr->Release((IUnknown *)pBase.m_pInterface);
-					 }
-
-					 int __thiscall CCashShop::DecodeZeroGoods(CCashShop *this, CInPacket *iPacket)
-					 {
-					 CInPacket *v2; // ebx@1
-					 CCashShop *v3; // edi@1
-					 signed int v4; // esi@1
-					 int result; // eax@2
-					 ZArray<CS_ZEROGOODS> *v6; // edi@3
-
-					 v2 = iPacket;
-					 v3 = this;
-					 v4 = CInPacket::Decode2(iPacket);
-					 if ( v4 > 0 )
-					 {
-					 v6 = &v3->m_aZeroGoods;
-					 ZArray<CS_ZEROGOODS>::_Realloc(v6, v4, 1, (ZAllocHelper *)&iPacket);
-					 CInPacket::DecodeBuffer(v2, v6->a, 68 * v4);
-					 result = 1;
-					 }
-					 else
-					 {
-					 result = 0;
-					 }
-					 return result;
-					 }
-					 */
-
-	write<short>(0); // probably DecodeZeroGoods size
-
-	// -------------------------------------------------------------------------------
-
-	write<signed char>(0); // probably m_bEventOn
-	write<int>(75); // probably m_nHighestCharacterLevelInThisAccount
+	write<bool>(false); // m_bEventOn
+	write<int>(75); // m_nHighestCharacterLevelInThisAccount
 
 	/*
 	from v0.95 GMS
@@ -359,25 +387,26 @@ void PacketCreator::EnterCashShop(Player *player)
 void PacketCreator::ShowCashPoints(int nx_credit)
 {
 	write<short>(send_headers::kSHOW_CASH);
-	write<int>(nx_credit); // nx cash (credit)
+	write<int>(nx_credit); // nx cash
 	write<int>(0); // maple point
-	write<int>(0); // nx cash (others)
+	write<int>(0); // prepaid
 }
 
 void PacketCreator::ShowBoughtCashItem(int account_id, int serial_number, int item_id, int amount)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
-	write<unsigned char>(0xFE); // action
-	write<short>(0);
+	write<unsigned char>(0x3B); // action
+
 	write<long long>(1); // cash unique id
 	write<int>(account_id);
-	write<int>(0);
+	write<int>(0); // character id? dwCharacterID
 	write<int>(item_id);
 	write<int>(serial_number);
 	write<short>(static_cast<short>(amount));
-	write_string("", 13);
+	write_string("", 13); // character name (who made the gift?)
 	write<long long>(0); // expiration time
-	write<long long>(0);
+	write<int>(0); // nPaybackRate
+	write<int>(0); // nDiscountRate
 }
 
 void PacketCreator::IncreaseInventorySlots(signed char inventory_id, signed char slots)
@@ -385,29 +414,39 @@ void PacketCreator::IncreaseInventorySlots(signed char inventory_id, signed char
 	write<short>(send_headers::kCASHSHOP_OPERATION);
 	write<signed char>(127); // action
 	write<signed char>(inventory_id);
-	write<signed char>(slots);
-	write<signed char>(0);
+	write<short>(slots);
 }
 
 void PacketCreator::IncreaseStorageSlots(signed char slots)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
 	write<unsigned char>(129); // action
-	write<signed char>(slots);
-	write<signed char>(0);
+	write<short>(slots);
 }
 
 void PacketCreator::GetCashShopInventory(short storage_slots, short character_slots)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
-	write<signed char>(0x4B); // action
+	write<signed char>(0x2F); // action
 	short size = 0;
 	write<short>(size); // cashshop inventory size
 	// TODO: write items here that are in the cashshop inventory
-	if (size > 0)
+	for (int i = 0; i < size; ++i)
 	{
-		write<int>(0);
 		// todo: write all info
+
+		// to-do need a addcashiteminfo function
+
+		/*write<long long>(1); // cash unique id (SN?)
+		write<int>(account_id);
+		write<int>(0); // character id? dwCharacterID
+		write<int>(item_id);
+		write<int>(serial_number);
+		write<short>(static_cast<short>(amount));
+		write_string("", 13); // character name (who made the gift?)
+		write<long long>(0); // expiration date
+		write<int>(0); // nPaybackRate
+		write<int>(0); // nDiscountRate*/
 	}
 	write<short>(storage_slots);
 	write<short>(character_slots);
@@ -416,21 +455,71 @@ void PacketCreator::GetCashShopInventory(short storage_slots, short character_sl
 void PacketCreator::TakeOutFromCashShopInventory(Item *item, short position)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
-	write<unsigned char>(0x83); // action
+	write<unsigned char>(0x68); // action
 	write<short>(position);
 	ItemInfo(item, false);
-	write<int>(0);
 }
+
+/*
+
+When declairing global variables, you can do the following
+
+labelname db 0 ; define byte
+labelname dw 0 ; define word
+labelname dd 0  ; define double word
+labelname dq 0 ; define quad word
+
+from GMS v0.95 data:
+
+CInPacket::DecodeBuffer(iPacket, v6, 0x37u);
+
+0x37 = 55
+
+void __thiscall CCashShop::OnCashItemResMoveStoLDone(CCashShop *this, CInPacket *iPacket)
+
+DD = DWORD? DWORD = unsinged long = 4 bytes
+DW = WORD? = unsigned short
+_LARGE_INTEGER = struct of long and unsigned long = 4 + 4 bytes = 8 bytes
+
+8
+4
+4
+4
+4
+2
+13
+8
+4
+4
+
+00000000 GW_CashItemInfo struc ; (sizeof=0x37, copyof_3069)
+00000000 liSN            _LARGE_INTEGER ?
+00000008 dwAccountID     dd ?
+0000000C dwCharacterID   dd ?
+00000010 nItemID         dd ?
+00000014 nCommodityID    dd ?
+00000018 nNumber         dw ?
+0000001A sBuyCharacterID db 13 dup(?)
+00000027 dateExpire      _FILETIME ?
+0000002F nPaybackRate    dd ?
+00000033 nDiscountRate   dd ?
+00000037 GW_CashItemInfo ends
+00000037
+*/
 
 void PacketCreator::TransferToCashShopInventory(int account_id, int serial_number, int item_id, int amount)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
-	write<unsigned char>(0x85); // action
-	write<long long>(1); // cash unique id
+	write<unsigned char>(0x6A); // action
+
+	write<long long>(1); // cash unique id (SN?)
 	write<int>(account_id);
-	write<int>(0);
+	write<int>(0); // character id? dwCharacterID
 	write<int>(item_id);
 	write<int>(serial_number);
 	write<short>(static_cast<short>(amount));
-	write_bytes("000000000000000000000000007016AFFF60BCCE010000000000000000D28C8E010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+	write_string("", 13); // character name (who made the gift?)
+	write<long long>(0); // expiration date
+	write<int>(0); // nPaybackRate
+	write<int>(0); // nDiscountRate
 }

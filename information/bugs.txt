@@ -99,6 +99,10 @@ need to work out the details of these features first
 
 -------------------- bugs --------------------
 
+- storage slots need to be saved to and loaded from sql
+
+- cashshop buying slots needs to be fixed
+
 - guild bbs needs to be fully implemented (need to check and fix sql tables draft, add bbs class, use it, make handlers and packets finished, then code mysql data saving and data loading)
 
 - when a player joins/creates or leaves/disbands a guild, the guild name isn't shown/removed to other players in the map

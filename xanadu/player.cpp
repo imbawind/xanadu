@@ -802,7 +802,7 @@ void Player::player_connect()
 	inventories_[2] = new Inventory(this, 2, use_slots); // Use
 	inventories_[3] = new Inventory(this, 3, setup_slots); // Setup
 	inventories_[4] = new Inventory(this, 4, etc_slots); // Etc
-	inventories_[5] = new Inventory(this, 5, 48); // Cash
+	inventories_[5] = new Inventory(this, 5, 36); // Cash
 
 	// account data
 	Poco::Data::Statement statement4(mysql_session);
@@ -816,7 +816,7 @@ void Player::player_connect()
 	donation_points_ = rs2["donation_points"];
 	storage_mesos_ = rs2["storage_mesos"];
 	nx_cash_credit_ = rs2["nxcash_credit"];
-	storage_slots_ = 48;
+	storage_slots_ = 36;
 
 	// storage equips
 	Poco::Data::Statement statement5(mysql_session);

@@ -21,8 +21,10 @@ void Player::handle_cash_shop_enter()
 	packet1.EnterCashShop(this);
 	send_packet(&packet1);
 
-	// TO-DO needs to be fixed
-	//send_packet(PacketCreator().get_cashshop_inventory(storage_slots_, character_slots_));
+	// send a packet
+	PacketCreator packet2;
+	packet2.GetCashShopInventory(storage_slots_, character_slots_);
+	send_packet(&packet2);
 
 	// send a packet
 	PacketCreator packet3;
@@ -83,11 +85,12 @@ void Player::handle_cash_shop_action()
 				PacketCreator packet1;
 				packet1.ShowCashPoints(nx_cash_credit_);
 				send_packet(&packet1);
+				
 				// send a packet
 				PacketCreator packet2;
 				packet2.EnableAction();
 				send_packet(&packet2);
-				//
+
 				return;
 			}
 

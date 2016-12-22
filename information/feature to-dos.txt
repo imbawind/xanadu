@@ -1,7 +1,11 @@
 
 to-do features:
 
+- implement cashshop inventory
+
 - implement guild alliances
+
+- maybe implement cashshop wishlist
 
 - maybe implement view all characters on login
 
