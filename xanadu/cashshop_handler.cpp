@@ -62,6 +62,8 @@ void Player::handle_update_cash_shop()
 	}
 }
 
+// int test_item_id = 0;
+
 void Player::handle_cash_shop_action()
 {
 	signed char action = read<signed char>();
@@ -89,7 +91,7 @@ void Player::handle_cash_shop_action()
 
 		int item_id = cash_item->item_id;
 		short amount = static_cast<short>(cash_item->count);
-
+		//test_item_id = item_id;
 		if (!give_item(item_id, amount))
 		{
 			// to-do send the cashshop error packet instead of those packets down there
@@ -230,17 +232,30 @@ void Player::handle_cash_shop_action()
 	}
 	case CashShopReceivePacketActions::kRetrieveCashItem:
 	{
-		int test = 1;
 		//long long unique_id = read_int64();
 
 		// TO-DO
 
+		/*auto items = get_inventory(5)->get_items();
+
+		for (auto it : *items)
+		{
+			if (it.second->get_item_id() == test_item_id)
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.TakeOutFromCashShopInventory(it.second.get(), 1);
+				send_packet(&packet);
+			}
+		}
+
+		// might not be needed
 		{
 			// send a packet
 			PacketCreator packet;
-			packet.TakeOutFromCashShopInventory(nullptr, 0);
+			packet.GetCashShopInventory(storage_slots_, character_slots_);
 			send_packet(&packet);
-		}
+		}*/
 
 		break;
 	}
