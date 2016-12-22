@@ -493,11 +493,11 @@ _LARGE_INTEGER = struct of long and unsigned long = 4 + 4 bytes = 8 bytes
 
 void PacketCreator::CashShopAddCashItemData(int account_id, int serial_number, int item_id, short amount)
 {
-	write<long long>(1); // cash unique id (SN?)
+	write<long long>(1); // cash unique id (SN or unique ID?)
 	write<int>(account_id);
 	write<int>(0); // character id? dwCharacterID
 	write<int>(item_id);
-	write<int>(serial_number);
+	write<int>(serial_number); // SN or unique ID?
 	write<short>(amount);
 	write_string("", 13); // character name (who made the gift?)
 	write<long long>(0); // expiration date

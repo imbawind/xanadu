@@ -116,14 +116,14 @@ void Player::handle_cash_shop_action()
 		{
 			// send a packet
 			PacketCreator packet;
-			packet.ShowBoughtCashItem(user_id_, serial_number, item_id, amount);
+			packet.ShowCashPoints(nx_cash_credit_);
 			send_packet(&packet);
 		}
 
 		{
 			// send a packet
 			PacketCreator packet;
-			packet.ShowCashPoints(nx_cash_credit_);
+			packet.ShowBoughtCashItem(user_id_, serial_number, item_id, amount);
 			send_packet(&packet);
 		}
 
@@ -154,6 +154,13 @@ void Player::handle_cash_shop_action()
 
 		nx_cash_credit_ -= 4000;
 		inventory->add_slots(4);
+
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.ShowCashPoints(nx_cash_credit_);
+			send_packet(&packet);
+		}
 
 		// send a packet
 		{
@@ -186,6 +193,13 @@ void Player::handle_cash_shop_action()
 		{
 			// send a packet
 			PacketCreator packet;
+			packet.ShowCashPoints(nx_cash_credit_);
+			send_packet(&packet);
+		}
+
+		{
+			// send a packet
+			PacketCreator packet;
 			packet.IncreaseStorageSlots(storage_slots_);
 			send_packet(&packet);
 		}
@@ -214,15 +228,16 @@ void Player::handle_cash_shop_action()
 
 		break;
 	}
-	/*case CashShopReceivePacketActions::kRetrieveCashItem:
-		{
-			//long long unique_id = read_int64();
+	case CashShopReceivePacketActions::kRetrieveCashItem:
+	{
+		int test = 1;
+		//long long unique_id = read_int64();
 
-			//send_packet(PacketCreator().take_out_from_cash_shop_inventory(nullptr, 0));
+		//send_packet(PacketCreator().take_out_from_cash_shop_inventory(nullptr, 0));
 
-			break;
-		}
-	case CashShopReceivePacketActions::kStoreCashItem:
+		break;
+	}
+	/*case CashShopReceivePacketActions::kStoreCashItem:
 		{
 			//long long unique_id = read_int64();
 
@@ -288,13 +303,5 @@ void Player::handle_cash_shop_action()
 
 		break;
 	}
-	}
-
-	// update nx cash for client
-	{
-		// send a packet
-		PacketCreator packet;
-		packet.ShowCashPoints(nx_cash_credit_);
-		send_packet(&packet);
 	}
 }
