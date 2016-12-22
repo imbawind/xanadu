@@ -9,8 +9,6 @@ to-do features:
 
 - maybe implement view all characters on login
 
-- maybe implement cash shop inventory 
-
 - maybe implement pet food
 
 - maybe implement pet fullness
@@ -18,6 +16,8 @@ to-do features:
 - maybe implement rings
 
 - maybe implement marriage
+
+- maybe implement minigames
 
 - maybe implement skillbooks
 
@@ -33,7 +33,7 @@ to-do features:
 
 - maybe implement party quests
 
-* carnival pq
+* monster carnival pq
 
 * ludibrium pq
 
