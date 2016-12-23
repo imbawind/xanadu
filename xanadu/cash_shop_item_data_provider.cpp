@@ -44,9 +44,9 @@ void CashShopItemDataProvider::load_data()
 
 	WZNode node1 = wz_reader->base_["Etc"]["Commodity"];
 
-	for (auto it : node1)
+	for (auto it1 : node1)
 	{
-		std::string valuename = it.name();
+		std::string valuename = it1.name();
 
 		WZNode node2 = wz_reader->base_["Etc"]["Commodity"][valuename.c_str()];
 
@@ -59,7 +59,7 @@ void CashShopItemDataProvider::load_data()
 
 			if (propertyname == "Count")
 			{
-				item->count = it2.get_int_value();
+				item->count = static_cast<short>(it2.get_int_value());
 			}
 
 			else if (propertyname == "SN")

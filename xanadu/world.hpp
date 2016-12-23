@@ -56,6 +56,7 @@ public:
 	int get_party_id();
 	int get_guild_id();
 	int get_pet_id();
+	int get_cash_item_unique_sn_id();
 
 	// properties
 	std::string get_name();
@@ -135,6 +136,7 @@ private:
 	int party_ids_;
 	int guild_ids_;
 	int pet_ids_;
+	int cash_item_unique_sn_ids_;
 	int exp_rate_;
 	std::string header_message_;
 	std::string name_;

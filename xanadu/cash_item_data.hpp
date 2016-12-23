@@ -8,6 +8,6 @@ struct CashItemData
 {
 	int id;
 	int item_id;
-	int count;
 	int price;
+	short count;
 };

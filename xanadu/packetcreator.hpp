@@ -78,13 +78,13 @@ public:
 	// cash
 	void EnterCashShop(Player *player);
 	void ShowCashPoints(int nx_credit);
-	void ShowBoughtCashItem(int account_id, int serial_number, int item_id, short amount);
+	void ShowBoughtCashItem(const std::shared_ptr<Item> &item, int account_id);
 	void IncreaseInventorySlots(signed char inventory, signed char slots);
 	void IncreaseStorageSlots(signed char slots);
-	void GetCashShopInventory(short storage_slots, short character_slots);
+	void GetCashShopInventory(std::vector<std::shared_ptr<Item>> items, int account_id, short storage_slots, short character_slots);
 	void TakeOutFromCashShopInventory(Item *item, short position);
-	void TransferToCashShopInventory(int account_id, int serial_number, int item_id, short amount);
-	void CashShopAddCashItemData(int account_id, int serial_number, int item_id, short amount);
+	void TransferToCashShopInventory(const std::shared_ptr<Item> &item, int account_id);
+	void CashShopAddCashItemData(const std::shared_ptr<Item> &item, int account_id);
 	// chat
 	void ShowChatMessage(Player *player, const std::string &message, bool bubble_only);
 	void ShowMessage(const std::string &message, unsigned char type, unsigned char channel_id = 0, unsigned char whisper = 0, std::shared_ptr<Item> item = nullptr);

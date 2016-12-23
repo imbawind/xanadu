@@ -26,7 +26,7 @@ void Player::handle_cash_shop_enter()
 	{
 		// send a packet
 		PacketCreator packet;
-		packet.GetCashShopInventory(storage_slots_, character_slots_);
+		packet.GetCashShopInventory(cashshop_storage_items_, user_id_, storage_slots_, character_slots_);
 		send_packet(&packet);
 	}
 
@@ -62,8 +62,6 @@ void Player::handle_update_cash_shop()
 	}
 }
 
-// int test_item_id = 0;
-
 void Player::handle_cash_shop_action()
 {
 	signed char action = read<signed char>();
@@ -90,9 +88,17 @@ void Player::handle_cash_shop_action()
 		}
 
 		int item_id = cash_item->item_id;
-		short amount = static_cast<short>(cash_item->count);
-		//test_item_id = item_id;
-		if (!give_item(item_id, amount))
+		short amount = cash_item->count;
+
+		auto item = std::shared_ptr<Item>(new Item(item_id));
+		item->set_amount(amount);
+		item->set_commodity_id_sn(serial_number);
+
+		cashshop_storage_items_.push_back(item);
+
+		// to-do check if cashshop storage still has space
+
+		/*if (!give_item(item_id, amount))
 		{
 			// to-do send the cashshop error packet instead of those packets down there
 
@@ -111,7 +117,7 @@ void Player::handle_cash_shop_action()
 			}
 
 			return;
-		}
+		}*/
 
 		nx_cash_credit_ -= price;
 
@@ -125,7 +131,7 @@ void Player::handle_cash_shop_action()
 		{
 			// send a packet
 			PacketCreator packet;
-			packet.ShowBoughtCashItem(user_id_, serial_number, item_id, amount);
+			packet.ShowBoughtCashItem(item, user_id_);
 			send_packet(&packet);
 		}
 
@@ -232,36 +238,63 @@ void Player::handle_cash_shop_action()
 	}
 	case CashShopReceivePacketActions::kRetrieveCashItem:
 	{
-		//long long unique_id = read_int64();
+		int cash_item_unique_id_sn = read<int>();
 
-		// TO-DO
-
-		/*auto items = get_inventory(5)->get_items();
-
-		for (auto it : *items)
+		for (auto it : cashshop_storage_items_)
 		{
-			if (it.second->get_item_id() == test_item_id)
+			if (it->get_unique_id() == cash_item_unique_id_sn)
 			{
+
+				Inventory *inventory = get_inventory(it->get_inventory_id());
+
+				if (!inventory)
+				{
+					continue;
+				}
+
+				if (!inventory->add_item_find_slot(it))
+				{
+					// to-do send the cashshop error packet instead of those packets down there
+
+					{
+						// send a packet
+						PacketCreator packet;
+						packet.ShowCashPoints(nx_cash_credit_);
+						send_packet(&packet);
+					}
+
+					{
+						// send a packet
+						PacketCreator packet;
+						packet.EnableAction();
+						send_packet(&packet);
+					}
+
+					continue;
+				}
+
 				// send a packet
 				PacketCreator packet;
-				packet.TakeOutFromCashShopInventory(it.second.get(), 1);
+				packet.TakeOutFromCashShopInventory(it.get(), 1);
 				send_packet(&packet);
 			}
 		}
+
+		cashshop_storage_items_.clear();
 
 		// might not be needed
 		{
 			// send a packet
 			PacketCreator packet;
-			packet.GetCashShopInventory(storage_slots_, character_slots_);
+			packet.GetCashShopInventory(cashshop_storage_items_, user_id_, storage_slots_, character_slots_);
 			send_packet(&packet);
-		}*/
+		}
 
 		break;
 	}
 	/*case CashShopReceivePacketActions::kStoreCashItem:
 		{
-			//long long unique_id = read_int64();
+			//int cash_sn = read<int>();
 
 			//send_packet(PacketCreator().transfer_to_cash_shop_inventory(user_id_, 0, 0, 0));
 
@@ -294,8 +327,15 @@ void Player::handle_cash_shop_action()
 				return;
 			}
 			int item_id = cash_item->item_id;
-			short amount = static_cast<short>(cash_item->count);
-			if (!give_item(item_id, amount))
+			short amount = cash_item->count;
+
+			auto item = std::shared_ptr<Item>(new Item(item_id));
+			item->set_amount(amount);
+			item->set_commodity_id_sn(serial_number);
+
+			cashshop_storage_items_.push_back(item);
+
+			/*if (!give_item(item_id, amount))
 			{
 				{
 					// send a packet
@@ -318,9 +358,9 @@ void Player::handle_cash_shop_action()
 			{
 				// send a packet
 				PacketCreator packet;
-				packet.ShowBoughtCashItem(user_id_, serial_number, item_id, amount);
+				packet.ShowBoughtCashItem(item, user_id_);
 				send_packet(&packet);
-			}
+			}*/
 		}
 
 		break;

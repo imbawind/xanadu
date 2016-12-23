@@ -878,9 +878,9 @@ void PacketCreator::change_map(Player *player, bool is_connect_packet)
 {
 	write<short>(send_headers::kWARP_TO_MAP);
 	write<int>(player->get_channel_id());
-	write<signed char>(1); // portal count (probably starts with 1 upon login, increases each when entering portal)
+	write<signed char>(1); // portal count? (probably starts with 1 upon login, increases each when entering portal)
 	write<bool>(is_connect_packet);
-	write<short>(0); // amount for some kind of message on the screen
+	write<short>(0); // amount for some kind of message on the screen?
 
 	if (is_connect_packet)
 	{

@@ -36,8 +36,10 @@ Item::Item(int item_id, bool random_equip_stats):
 	flag_(kItemConstantsFlagsNone),
 	amount_(1),
 	item_id_(item_id),
-	unique_id_(1),
 	name_(""),
+	// cash specific
+	commodity_id_sn_(0),
+	unique_id_(0),
 	// pet specific
 	stance_(0),
 	pet_level_(1),
@@ -121,6 +123,12 @@ Item::Item(int item_id, bool random_equip_stats):
 			speed_ = data->speed;
 		}
 	}
+
+	// item data check if is cash
+	// then get unique id
+
+	World *world = World::get_instance();
+	int commodity_id_sn_ = world->get_cash_item_unique_sn_id();
 }
 
 bool Item::is_star()
@@ -165,11 +173,6 @@ int Item::get_item_id()
 	return item_id_;
 }
 
-int Item::get_unique_id()
-{
-	return unique_id_;
-}
-
 long long Item::get_expiration_time()
 {
 	return (is_pet() ? kPermanentTime : kNoExpirationTime);
@@ -203,6 +206,23 @@ std::string Item::get_name()
 std::string Item::get_owner_name()
 {
 	return name_;
+}
+
+// cash specific
+
+int Item::get_commodity_id_sn()
+{
+	return commodity_id_sn_;
+}
+
+void Item::set_commodity_id_sn(int commodity_id_sn)
+{
+	commodity_id_sn_ = commodity_id_sn;
+}
+
+int Item::get_unique_id()
+{
+	return unique_id_;
 }
 
 // pet specific
@@ -260,21 +280,27 @@ void Item::set_closeness(short closeness, Player *player)
 	{
 		++pet_level_;
 		
-		// packet
-		PacketCreator packet1;
-		packet1.ShowOwnPetLevelUp(pet_slot_);
-		player->send_packet(&packet1);
+		{
+			// packet
+			PacketCreator packet;
+			packet.ShowOwnPetLevelUp(pet_slot_);
+			player->send_packet(&packet);
+		}
 
-		// packet
-		PacketCreator packet2;
-		packet2.ShowPetLevelUp(player->get_id(), pet_slot_);
-		player->get_map()->send_packet(&packet2, player);
+		{
+			// packet
+			PacketCreator packet;
+			packet.ShowPetLevelUp(player->get_id(), pet_slot_);
+			player->get_map()->send_packet(&packet, player);
+		}
 	}
 
-	// packet
-	PacketCreator packet3;
-	packet3.UpdatePet(this);
-	player->send_packet(&packet3);
+	{
+		// packet
+		PacketCreator packet;
+		packet.UpdatePet(this);
+		player->send_packet(&packet);
+	}
 }
 
 void Item::set_closeness(short closeness)

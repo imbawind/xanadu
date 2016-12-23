@@ -99,6 +99,10 @@ need to work out the details of these features first
 
 -------------------- bugs --------------------
 
+- moving cash items into the cashshop storage/inventory doesn't work yet
+
+- cashshop storage/inventory isn't saved to sql or loaded from it
+
 - when buying a cashitem fails, it should send the packet for that case
 
 - storage slots need to be saved to and loaded from sql

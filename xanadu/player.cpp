@@ -85,7 +85,6 @@ Player::Player(Session *session) :
 	face_(0),
 	fame_(0),
 	character_slots_(0),
-	selected_equip_slot_(0),
 	donation_points_(0),
 	hp_(0),
 	max_hp_(0),
