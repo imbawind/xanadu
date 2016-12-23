@@ -59,6 +59,7 @@ public:
 
 	void player_connect();
 	std::string get_name();
+	std::string get_user_name();
 	bool is_married();
 	signed char get_equip_slots();
 	signed char get_use_slots();

@@ -318,6 +318,8 @@ void Player::handle_cash_shop_action()
 				send_packet(&packet);
 			}
 
+			// to-do maybe package has it's own packet?
+
 			{
 				// send a packet
 				PacketCreator packet;

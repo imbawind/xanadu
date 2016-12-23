@@ -77,7 +77,18 @@ void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user
 {
 	write<short>(send_headers_login::kLoginStatus);
 	write<signed char>(success_or_failure_reason);
+
+	/*
+	info for the following 1 byte:
+
+	// sMsg._m_pStr[500] = CInPacket::Decode1(iPacket);
+	
+	; XREF: CAdminShopDlg::DrawNPCItem
+	apparently used for the admin shop
+	maybe number/id for a specific message?
+	*/
 	write<signed char>(0);
+
 	write<int>(0);
 
 	if (success_or_failure_reason != 0)
@@ -87,14 +98,48 @@ void PacketCreator::LoginRequest(signed char success_or_failure_reason, int user
 
 	write<int>(user_id);
 	write<signed char>(kGenderConstantsMale); // gender byte 0 = male, 1 = female, number 10/0x0A triggers gender select
+
+	/*
+	from v0.95 GMS
+	 LOBYTE(nGradeCode) = CInPacket::Decode1(iPacket);
+      v41 = CInPacket::Decode2(iPacket); // used for nSubGradeCode and bTesterAccount, maybe for testserver?
+      LOBYTE(nCountryID) = CInPacket::Decode1(iPacket);
+
+	  has to-do with these, 2 bytes were added in later versions
+
+	  in v0.62
+	  this part is:
+
+	  LOBYTE(v104) = CInPacket::Decode1(v41);
+	  LOBYTE(v103) = CInPacket::Decode1(v41);
+	  CInPacket::DecodeStr(&v99);
+
+	  in v0.83
+	  this part is:
+
+	  LOBYTE(v102) = CInPacket::Decode1(v39);
+	  LOBYTE(v105) = CInPacket::Decode1(v39);
+	  LOBYTE(v101) = CInPacket::Decode1(v39);
+	  CinPacket::DecodeStr(v39, (int)&v100);
+
+	  from v0.83 moopledev:
+
+	  mplew.writeBool(c.gmLevel() > 0); //admin byte
+	  short toWrite = (short) (c.gmLevel() * 32);
+	  //toWrite = toWrite |= 0x100; only in higher versions
+	  mplew.write(toWrite > 0x80 ? 0x80 : toWrite);//0x80 is admin, 0x20 and 0x40 = subgm
+	  mplew.writeBool(c.gmLevel() > 0);
+	  //mplew.writeShort(toWrite > 0x80 ? 0x80 : toWrite); only in higher versions...
+	  */
 	write<signed char>(0);
 	write<signed char>(0);
+
 	write<std::string>(account_name);
-	write<signed char>(0);
-	write<signed char>(0);
-	write<long long>(0);
-	write<long long>(0);
-	write<int>(8);
+	write<signed char>(0); // LOBYTE(nPurchaseExp) = CInPacket::Decode1(iPacket); ?
+	write<signed char>(0); // quiet ban/chat block) reason
+	write<long long>(0); // quiet ban/chat block time/date
+	write<long long>(0); // register date
+	write<int>(8); // nNumOfCharacter
 }
 
 /*

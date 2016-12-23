@@ -40,7 +40,7 @@ void PacketCreator::EnterCashShop(Player *player)
 	write<short>(send_headers::kOPEN_CASHSHOP);
 	writeCharacterData(player);
 	write<signed char>(1);
-	write<std::string>("test"); // ID name
+	write<std::string>(player->get_user_name());
 
 	/*
 	some info for the following write<int>

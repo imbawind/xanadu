@@ -2705,6 +2705,11 @@ std::string Player::get_name()
 	return name_;
 }
 
+std::string Player::get_user_name()
+{
+	return user_name_;
+}
+
 bool Player::is_married()
 {
 	return false;
