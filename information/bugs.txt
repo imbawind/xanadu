@@ -103,9 +103,7 @@ need to work out the details of these features first
 
 - buying character slot needs to be fixed
 
-- when buying cash item or package with cash items, it needs to be checked first if the cash storage still has space
-
-- moving cash items into the cashshop storage/inventory doesn't work yet
+- when buying cash item or package or storing or retrieving cash items, it needs to be checked first if the cash storage/item inventory has space for it
 
 - cashshop storage/inventory isn't saved to sql or loaded from it
 
