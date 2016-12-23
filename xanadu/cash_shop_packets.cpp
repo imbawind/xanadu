@@ -225,34 +225,34 @@ void PacketCreator::EnterCashShop(Player *player)
   CCashShop::DecodeLimitGoods(v53, v54);
   */
 
-	/*for (int i = 1; i <= 8; i++)
-	{
-		// for both genders
-		for (int j = 0; j < 2; j++)
-		{
-			write<int>(i); // nCategory
-			write<int>(j); // nGender
-			write<int>(50200004); // nCommoditySN
+  /*for (int i = 1; i <= 8; i++)
+  {
+	  // for both genders
+	  for (int j = 0; j < 2; j++)
+	  {
+		  write<int>(i); // nCategory
+		  write<int>(j); // nGender
+		  write<int>(50200004); // nCommoditySN
 
-			write<int>(i); // nCategory
-			write<int>(j); // nGender
-			write<int>(50200069); // nCommoditySN
+		  write<int>(i); // nCategory
+		  write<int>(j); // nGender
+		  write<int>(50200069); // nCommoditySN
 
-			write<int>(i); // nCategory
-			write<int>(j); // nGender
-			write<int>(50200117); // nCommoditySN
+		  write<int>(i); // nCategory
+		  write<int>(j); // nGender
+		  write<int>(50200004); // nCommoditySN
 
-			write<int>(i); // nCategory
-			write<int>(j); // nGender
-			write<int>(50100008); // nCommoditySN
+		  write<int>(i); // nCategory
+		  write<int>(j); // nGender
+		  write<int>(50100008); // nCommoditySN
 
-			write<int>(i); // nCategory
-			write<int>(j); // nGender
-			write<int>(50000047); // nCommoditySN
-		}
-	}*/
+		  write<int>(i); // nCategory
+		  write<int>(j); // nGender
+		  write<int>(50000047); // nCommoditySN
+	  }
+  }*/
 
-	// 1080 bytes (-120) = 960 bytes, (-120 + -240) = 720 bytes
+  // 1080 bytes (-120) = 960 bytes, (-120 + -240) = 720 bytes
 	unsigned int size = 0x438;
 	write_null(size);
 
@@ -305,14 +305,14 @@ void PacketCreator::EnterCashShop(Player *player)
   v4 = CInPacket::Decode2(iPacket);
   if ( v4 > 0 )
   {
-    v6 = &v3->m_aStock;
-    ZArray<CS_STOCK>::_Realloc(v6, v4, 1, (ZAllocHelper *)&iPacket);
-    CInPacket::DecodeBuffer(v2, v6->a, 8 * v4);
-    result = 1;
+	v6 = &v3->m_aStock;
+	ZArray<CS_STOCK>::_Realloc(v6, v4, 1, (ZAllocHelper *)&iPacket);
+	CInPacket::DecodeBuffer(v2, v6->a, 8 * v4);
+	result = 1;
   }
   else
   {
-    result = 0;
+	result = 0;
   }
   return result;
 }
@@ -341,14 +341,14 @@ void PacketCreator::EnterCashShop(Player *player)
   v4 = CInPacket::Decode2(iPacket);
   if ( v4 > 0 )
   {
-    v6 = &v3->m_aLimitGoods;
-    ZArray<CS_LIMITGOODS>::_Realloc(v6, v4, 1, (ZAllocHelper *)&iPacket);
-    CInPacket::DecodeBuffer(v2, v6->a, 104 * v4);
-    result = 1;
+	v6 = &v3->m_aLimitGoods;
+	ZArray<CS_LIMITGOODS>::_Realloc(v6, v4, 1, (ZAllocHelper *)&iPacket);
+	CInPacket::DecodeBuffer(v2, v6->a, 104 * v4);
+	result = 1;
   }
   else
   {
-    result = 0;
+	result = 0;
   }
   return result;
 }
@@ -372,7 +372,7 @@ void PacketCreator::EnterCashShop(Player *player)
 	write<short>(0); // CCashShop::DecodeLimitGoods size
 
 	write<bool>(false); // m_bEventOn
-	write<int>(75); // m_nHighestCharacterLevelInThisAccount
+	write<int>(150); // m_nHighestCharacterLevelInThisAccount
 
 	/*
 	from v0.95 GMS
@@ -432,13 +432,17 @@ void PacketCreator::CashShopShowGifts()
 	write<short>(send_headers::kCASHSHOP_OPERATION);
 	write<signed char>(0x31); // action
 	write<short>(0); // size
+	// for each size write a little modified version of CashShopAddCashItemData
 }
 
 void PacketCreator::CashShopShowWishlist()
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);
 	write<signed char>(0x33); // action
-	write_null(40);
+	for (int i = 0; i < 10; ++i)
+	{
+		write<int>(0); // item commodity SN
+	}
 }
 
 void PacketCreator::TakeOutFromCashShopInventory(Item *item, short position)
