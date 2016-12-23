@@ -29,7 +29,17 @@ void MobDataProvider::load_data()
 	for (auto it : node1)
 	{
 		std::string valuename = it.name();
-		int mob_id = std::stoi(valuename);
+		int mob_id = -1;
+
+		try
+		{
+			mob_id = std::stoi(valuename);
+		}
+
+		catch (...)
+		{
+			continue;
+		}
 
 		MobData *mob = new MobData();
 
