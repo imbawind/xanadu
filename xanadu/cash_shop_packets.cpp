@@ -240,11 +240,11 @@ void PacketCreator::EnterCashShop(Player *player)
 
 		  write<int>(i); // nCategory
 		  write<int>(j); // nGender
-		  write<int>(50200004); // nCommoditySN
+		  write<int>(50200008); // nCommoditySN
 
 		  write<int>(i); // nCategory
 		  write<int>(j); // nGender
-		  write<int>(50100008); // nCommoditySN
+		  write<int>(50100009); // nCommoditySN
 
 		  write<int>(i); // nCategory
 		  write<int>(j); // nGender
