@@ -99,6 +99,22 @@ need to work out the details of these features first
 
 -------------------- bugs --------------------
 
+- probably need to merge pet unique id and cash unique id
+
+- buying character slot needs to be fixed
+
+- when buying cash item or package with cash items, it needs to be checked first if the cash storage still has space
+
+- moving cash items into the cashshop storage/inventory doesn't work yet
+
+- cashshop storage/inventory isn't saved to sql or loaded from it
+
+- when buying a cashitem fails, it should send the packet for that case
+
+- storage slots need to be saved to and loaded from sql
+
+- cashshop buying slots needs to be fixed
+
 - guild bbs needs to be fully implemented (need to check and fix sql tables draft, add bbs class, use it, make handlers and packets finished, then code mysql data saving and data loading)
 
 - when a player joins/creates or leaves/disbands a guild, the guild name isn't shown/removed to other players in the map

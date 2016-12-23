@@ -59,6 +59,7 @@ public:
 
 	void player_connect();
 	std::string get_name();
+	std::string get_user_name();
 	bool is_married();
 	signed char get_equip_slots();
 	signed char get_use_slots();
@@ -455,7 +456,6 @@ private:
 	short max_mp_;
 	short hyperbody_max_mp_;
 	int id_;
-	int selected_equip_slot_;
 	int donation_points_;
 	int energy_bar_;
 	int mount_skill_id_;
@@ -495,7 +495,7 @@ private:
 	std::vector<std::shared_ptr<Item>> trade_items_;
 	std::vector<std::shared_ptr<Item>> pets_;
 	std::vector<std::shared_ptr<Item>> storage_items_;
-	std::unordered_map<int, std::shared_ptr<Item>> mark_slot_;
+	std::vector<std::shared_ptr<Item>> cashshop_storage_items_;
 	std::unordered_map<int, std::shared_ptr<Item>> equip_slot_;
 	std::unordered_map<int, Character *> characters_;
 	std::unordered_map<int, Skill> skills_;

@@ -34,11 +34,12 @@ void Player::handle_player_drop_mesos()
 	std::shared_ptr<Drop> drop(new Drop(map_->get_drop_object_id(), kDropPacketConstantsPickupTypesFreeForAll, position_x_, player_position_y, dropped_mesos, 0, nullptr));
 	map_->add_drop(drop);
 
-	// send the packet to display the drop on the map
-
-	PacketCreator packet;
-	packet.ShowDrop(kDropPacketConstantsAnimationTypesDropAnimation, drop, position_x_, position_y_);
-	map_->send_packet(&packet);
+	{
+		// send the packet to display the drop on the map
+		PacketCreator packet;
+		packet.ShowDrop(kDropPacketConstantsAnimationTypesDropAnimation, drop, position_x_, position_y_);
+		map_->send_packet(&packet);
+	}
 }
 
 void Player::handle_player_loot_drop()

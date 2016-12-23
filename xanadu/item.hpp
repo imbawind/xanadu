@@ -39,7 +39,6 @@ public:
 	short get_flag();
 	short get_amount();
 	int get_item_id();
-	int get_unique_id();
 	long long get_expiration_time();
 	std::string get_name();
 	std::string get_owner_name();
@@ -47,6 +46,10 @@ public:
 	void set_amount(short value);
 	void set_flag(short value);
 	void set_item_id(int value);
+	// cash specific
+	int get_commodity_id_sn();
+	void set_commodity_id_sn(int commodity_id_sn);
+	int get_unique_id();
 	// pet specific
 	signed char get_stance();
 	signed char get_pet_level();
@@ -103,8 +106,10 @@ private:
 	short flag_;
 	short amount_;
 	int item_id_;
-	int unique_id_;
 	std::string name_;
+	// cash specific
+	int commodity_id_sn_;
+	int unique_id_;
 	// pet specific
 	signed char stance_;
 	signed char pet_level_;

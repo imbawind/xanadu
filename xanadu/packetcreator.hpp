@@ -78,12 +78,15 @@ public:
 	// cash
 	void EnterCashShop(Player *player);
 	void ShowCashPoints(int nx_credit);
-	void ShowBoughtCashItem(int account_id, int serial_number, int item_id, int amount);
+	void ShowBoughtCashItem(const std::shared_ptr<Item> &item, int account_id);
 	void IncreaseInventorySlots(signed char inventory, signed char slots);
 	void IncreaseStorageSlots(signed char slots);
-	void GetCashShopInventory(short storage_slots, short character_slots);
+	void GetCashShopInventory(std::vector<std::shared_ptr<Item>> items, int account_id, short storage_slots, short character_slots);
+	void CashShopShowGifts();
+	void CashShopShowWishlist();
 	void TakeOutFromCashShopInventory(Item *item, short position);
-	void TransferToCashShopInventory(int account_id, int serial_number, int item_id, int amount);
+	void TransferToCashShopInventory(const std::shared_ptr<Item> &item, int account_id);
+	void CashShopAddCashItemData(const std::shared_ptr<Item> &item, int account_id);
 	// chat
 	void ShowChatMessage(Player *player, const std::string &message, bool bubble_only);
 	void ShowMessage(const std::string &message, unsigned char type, unsigned char channel_id = 0, unsigned char whisper = 0, std::shared_ptr<Item> item = nullptr);
@@ -250,9 +253,8 @@ public:
 	void UpdateStatInt(int stat, int value);
 	void PetStatUpdate(Player *player);
 	// quests
-	void ForfeitQuest(short quest_id);
 	void UpdateQuest(Quest *quest, int npc_id);
-	void UpdateQuestInfo(Quest *quest);
+	void UpdateQuestInfo(signed char mode, Quest *quest);
 	void ItemGainChat(int item_id, int amount, signed char items_size = 1);
 	void MesosGainChat(int amount);
 	void FameGainChat(int amount);

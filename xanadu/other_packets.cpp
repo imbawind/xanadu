@@ -553,14 +553,6 @@ void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &atta
 	}
 }
 
-void PacketCreator::ForfeitQuest(short quest_id)
-{
-	write<short>(send_headers::kSHOW_STATUS_INFO);
-	write<signed char>(1); // 1 = quest message, there are also much other types
-	write<short>(quest_id);
-	write<short>(0);
-}
-
 void PacketCreator::UpdateQuest(Quest *quest, int npc_id)
 {
 	write<short>(send_headers::kUPDATE_QUEST_INFO);
@@ -571,28 +563,31 @@ void PacketCreator::UpdateQuest(Quest *quest, int npc_id)
 	write<signed char>(0);
 }
 
-void PacketCreator::UpdateQuestInfo(Quest *quest)
+void PacketCreator::UpdateQuestInfo(signed char mode, Quest *quest)
 {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
 	write<signed char>(1); // 1 = quest message, there are also much other types
 	write<short>(quest->get_id());
+	write<signed char>(mode); // 0 = forfeit, 1 = update, 2 = completed
 
-	if (quest->is_completed())
+	switch (mode)
 	{
-		write<signed char>(2);
-		write<long long>(quest->get_completion_time());
-	}
-	else
-	{
-		write<signed char>(1);
+	case 0:
+		write<signed char>(0);
+		break;
+	case 1:
 		write<std::string>(quest->get_killed_mobs1());
+		break;
+	case 2:
+		write<long long>(quest->get_completion_time());
+		break;
 	}
 }
 
 void PacketCreator::ItemGainChat(int itemid, int amount, signed char items_size)
 {
 	write<short>(send_headers::kSHOW_ITEM_GAIN_INCHAT);
-	write<signed char>(3);
+	write<signed char>(3); // 3 = gain item, there are also much other types
 	write<signed char>(items_size);
 
 	for (signed char i = 0; i < items_size; ++i)
@@ -812,7 +807,7 @@ void PacketCreator::AddSkillInfo(Player *player)
 void PacketCreator::AddCoolDownInfo(Player *player)
 {
 	write<short>(0); // size
-	
+
 	// (followed 1. by skillid (int)
 	// and 2. time (short))
 }
@@ -883,9 +878,55 @@ void PacketCreator::change_map(Player *player, bool is_connect_packet)
 {
 	write<short>(send_headers::kWARP_TO_MAP);
 	write<int>(player->get_channel_id());
-	write<signed char>(1); // portal count (probably starts with 1 upon login, increases each when entering portal)
+	write<signed char>(1);
 	write<bool>(is_connect_packet);
-	write<short>(0); // amount for some kind of message on the screen
+
+	// messages on the screen that disappears after some seconds
+
+	write<short>(0); // 0 = nothing, more than 0 = amount of message lines
+
+	// if more than 0:
+
+	// write string title
+
+	// and for each message line: write string message
+
+	// extract follows
+
+	/*
+	for the 2 bytes above this comment (v96):
+
+	  v96 = (unsigned __int16)CInPacket::Decode2(v2);
+  Src = 0;
+  sub_414EDD(&Str2, 0xFFFFFFFF);
+  v103 = 0;
+  v89 = 0;
+  LOBYTE(v103) = 1;
+  if ( v96 )
+  {
+    v3 = CInPacket::DecodeStr(&v102);
+    LOBYTE(v103) = 2;
+    ZXString_char_::operator_(v3);
+    LOBYTE(v103) = 1;
+    if ( v102 )
+      sub_434E38((volatile LONG *)(v102 - 12));
+    if ( v96 > 0 )
+    {
+      v101 = v96;
+      do
+      {
+        CInPacket::DecodeStr(&v102);
+        LOBYTE(v103) = 3;
+        sub_4655D4(-1);
+        ZXString_char_::operator_(&v102);
+        LOBYTE(v103) = 1;
+        if ( v102 )
+          sub_434E38((volatile LONG *)(v102 - 12));
+        --v101;
+      }
+      while ( v101 );
+    }
+  }*/
 
 	if (is_connect_packet)
 	{
@@ -1078,12 +1119,7 @@ void PacketCreator::ShowInfo(Player *player)
 	write<signed char>(player->get_level());
 	write<short>(player->get_job());
 	write<short>(player->get_fame());
-
-	// marriage info
-
-	bool is_maried = player->is_married();
-
-	write<bool>(is_maried);
+	write<bool>(player->is_married());
 
 	// guild info
 
@@ -1100,7 +1136,9 @@ void PacketCreator::ShowInfo(Player *player)
 
 	write<std::string>(""); // guild alliance name
 
-	write<signed char>(0); // medal info/MedalAchievementInfo according to client data
+	// end of guild info
+
+	write<signed char>(0);
 
 	// pets info
 
@@ -1147,6 +1185,8 @@ void PacketCreator::ShowInfo(Player *player)
 
 	write<signed char>(EndPetInfo);
 
+	// end of pets info
+
 	// mount info
 	bool has_tamed_mob = (player->get_mount_item_id() != 0);
 	write<bool>(has_tamed_mob);
@@ -1156,32 +1196,22 @@ void PacketCreator::ShowInfo(Player *player)
 		write<int>(0); // exp
 		write<int>(0); // tiredness
 	}
+	// end of mount info
 
 	// wishlist info
 	write<signed char>(0); // size
 
+	// to-do write wishlist data here
+
+	// end of wishlist info
+
 	// monster book info
-	write<int>(1);
-	write<int>(0);
-	write<int>(0);
-	write<int>(0);
-	write<int>(0);
+	write<int>(1); // book level?
+	write<int>(0); // normal card?
+	write<int>(0); // special card?
+	write<int>(0); // total cards?
+	write<int>(0); // monster book cover?
 	// end of monster book info
-
-	// equipped medal info
-	Inventory *inventory = player->get_inventory(kInventoryConstantsTypesEquipped);
-	if (!inventory)
-	{
-		write<int>(0);
-	}
-	else
-	{
-		auto medal = inventory->get_item_by_slot(kItemConstantsEquippedSlotsMedal);
-		write<int>(medal ? medal->get_item_id() : 0);
-	}
-
-	// collected medals info
-	write<short>(0); // size
 }
 
 void PacketCreator::SendFame(std::string name, signed char type)

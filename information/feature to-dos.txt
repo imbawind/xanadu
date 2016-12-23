@@ -3,9 +3,9 @@ to-do features:
 
 - implement guild alliances
 
-- maybe implement view all characters on login
+- maybe implement cashshop wishlist
 
-- maybe implement cash shop inventory 
+- maybe implement view all characters on login
 
 - maybe implement pet food
 
@@ -15,6 +15,8 @@ to-do features:
 
 - maybe implement marriage
 
+- maybe implement minigames
+
 - maybe implement skillbooks
 
 - maybe implement npc interactions
@@ -23,11 +25,13 @@ to-do features:
 
 - maybe implement cooldown saving on logout-login
 
+- maybe implement MTS
+
 - ping/pong functionality? maybe needs to be implemented
 
 - maybe implement party quests
 
-* carnival pq
+* monster carnival pq
 
 * ludibrium pq
 

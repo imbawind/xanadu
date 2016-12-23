@@ -10,7 +10,7 @@ namespace CashShopReceivePacketActions
 		kBuyInventorySlots = 6,
 		kBuyStorageSlots = 7,
 		kBuyCharacterSlot = 8,
-		//kRetrieveCashItem = 13, // needs to be confirmed
+		kRetrieveCashItem = 12,
 		//kStoreCashItem = 14, // needs to be confirmed
 		kBuyPackage = 28
 	};

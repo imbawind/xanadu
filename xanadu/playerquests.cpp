@@ -29,9 +29,16 @@ void Player::give_quest(int quest_id)
 	std::shared_ptr<Quest> quest(new Quest(quest_id, false));
 	quests_in_progress_[quest_id] = quest;
 
+	// mode values:
+	// 0 = forfeit, 1 = update, 2 = completed
+	signed char mode = 1;
+	if (quest->is_completed())
+	{
+		mode = 2;
+	}
 	// packet
 	PacketCreator packet1;
-	packet1.UpdateQuestInfo(quest.get());
+	packet1.UpdateQuestInfo(mode, quest.get());
 	send_packet(&packet1);
 
 	rewards_data(quest_id, true);
@@ -87,9 +94,16 @@ void Player::complete_quest(int quest_id, int npc_id)
 	quests_in_progress_.erase(quest_id);
 	quest->set_completed();
 
+	// mode values:
+	// 0 = forfeit, 1 = update, 2 = completed
+	signed char mode = 1;
+	if (quest->is_completed())
+	{
+		mode = 2;
+	}
 	// send a packet
 	PacketCreator packet8;
-	packet8.UpdateQuestInfo(quest.get());
+	packet8.UpdateQuestInfo(mode, quest.get());
 	send_packet(&packet8);
 
 	// send a packet
@@ -102,16 +116,20 @@ void Player::complete_quest(int quest_id, int npc_id)
 
 void Player::remove_quest(int quest_id)
 {
-	if (quests_in_progress_.find(quest_id) == quests_in_progress_.end())
+	auto iterator = quests_in_progress_.find(quest_id);
+	if (iterator == quests_in_progress_.end())
 	{
 		return;
 	}
-	quests_in_progress_.erase(quest_id);
 
+	// mode values:
+	// 0 = forfeit, 1 = update, 2 = completed
 	// packet
 	PacketCreator packet1;
-	packet1.ForfeitQuest(quest_id);
+	packet1.UpdateQuestInfo(0, iterator->second.get());
 	send_packet(&packet1);
+
+	quests_in_progress_.erase(quest_id);
 }
 
 void Player::initialize_player_quests(int quest_id, bool is_completed, int mob_id, int amount)

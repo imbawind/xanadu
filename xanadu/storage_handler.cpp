@@ -49,10 +49,12 @@ void Player::handle_storage_reqest()
 		auto iter = (storage_items_.begin() + slot);
 		storage_items_.erase(iter);
 
-		// packet
-		PacketCreator packet10;
-		packet10.TakeOutStorage(storage_slots_, inventory_id, storage_items_);
-		send_packet(&packet10);
+		{
+			// packet
+			PacketCreator packet;
+			packet.TakeOutStorage(storage_slots_, inventory_id, storage_items_);
+			send_packet(&packet);
+		}
 
 		break;
 	}
@@ -64,7 +66,7 @@ void Player::handle_storage_reqest()
 		signed char inventory_id = tools::get_inventory_id_from_item_id(item_id);
 
 		// check if the target inventory is valid
-		Inventory * inventory = get_inventory(inventory_id);
+		Inventory *inventory = get_inventory(inventory_id);
 		if (!inventory)
 		{
 			return;
@@ -98,11 +100,13 @@ void Player::handle_storage_reqest()
 		}
 		storage_items_.insert(storage_items_.begin() + i, copy);
 
-		// display item in storage
-		// packet
-		PacketCreator packet18;
-		packet18.StoreStorage(storage_slots_, inventory_id, storage_items_);
-		send_packet(&packet18);
+		{
+			// display item in storage
+			// packet
+			PacketCreator packet;
+			packet.StoreStorage(storage_slots_, inventory_id, storage_items_);
+			send_packet(&packet);
+		}
 
 		// remove the original item amount from the inventory
 		inventory->remove_item_by_slot(item_slot, item_amount, true);
@@ -122,10 +126,12 @@ void Player::handle_storage_reqest()
 		storage_mesos_ -= meso_value;
 		add_mesos(meso_value);
 
-		// packet
-		PacketCreator packet19;
-		packet19.MesoStorage(storage_slots_, storage_mesos_);
-		send_packet(&packet19);
+		{
+			// packet
+			PacketCreator packet;
+			packet.MesoStorage(storage_slots_, storage_mesos_);
+			send_packet(&packet);
+		}
 
 		break;
 	}
@@ -149,10 +155,12 @@ void Player::handle_merchant_storage_request()
 	{
 		if (!add_mesos(merchant_storage_mesos_))
 		{
-			// packet
-			PacketCreator packet1;
-			packet1.FredrickMessage(31);
-			send_packet(&packet1);
+			{
+				// packet
+				PacketCreator packet;
+				packet.FredrickMessage(31);
+				send_packet(&packet);
+			}
 
 			return;
 		}
@@ -188,10 +196,12 @@ void Player::handle_merchant_storage_request()
 
 		if (free_equip_slots < 0 || free_etc_slots < 0 || free_use_slots < 0 || free_setup_slots < 0)
 		{
-			// packet
-			PacketCreator packet5;
-			packet5.FredrickMessage(34);
-			send_packet(&packet5);
+			{
+				// packet
+				PacketCreator packet;
+				packet.FredrickMessage(34);
+				send_packet(&packet);
+			}
 
 			return;
 		}
@@ -210,10 +220,12 @@ void Player::handle_merchant_storage_request()
 
 			if (!inventory->add_item_find_slot(item))
 			{
-				// packet
-				PacketCreator packet10;
-				packet10.FredrickMessage(34);
-				send_packet(&packet10);
+				{
+					// packet
+					PacketCreator packet;
+					packet.FredrickMessage(34);
+					send_packet(&packet);
+				}
 
 				return;
 			}
@@ -221,10 +233,12 @@ void Player::handle_merchant_storage_request()
 
 		merchant_storage_items_.clear();
 
-		// packet
-		PacketCreator packet11;
-		packet11.FredrickMessage(30);
-		send_packet(&packet11);
+		{
+			// packet
+			PacketCreator packet;
+			packet.FredrickMessage(30);
+			send_packet(&packet);
+		}
 
 		break;
 	}
