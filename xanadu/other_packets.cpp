@@ -1095,7 +1095,7 @@ void PacketCreator::ShowInfo(Player *player)
 
 	write<std::string>(""); // guild alliance name
 
-	write<signed char>(0); // medal info/MedalAchievementInfo according to client data
+	write<signed char>(0);
 
 	// pets info
 
@@ -1142,6 +1142,8 @@ void PacketCreator::ShowInfo(Player *player)
 
 	write<signed char>(EndPetInfo);
 
+	// end of pets info
+
 	// mount info
 	bool has_tamed_mob = (player->get_mount_item_id() != 0);
 	write<bool>(has_tamed_mob);
@@ -1151,11 +1153,14 @@ void PacketCreator::ShowInfo(Player *player)
 		write<int>(0); // exp
 		write<int>(0); // tiredness
 	}
+	// end of mount info
 
 	// wishlist info
 	write<signed char>(0); // size
 
 	// to-do write wishlist data here
+
+	// end of wishlist info
 
 	// monster book info
 	write<int>(1);
@@ -1164,23 +1169,6 @@ void PacketCreator::ShowInfo(Player *player)
 	write<int>(0);
 	write<int>(0);
 	// end of monster book info
-
-	// equipped medal info
-	Inventory *inventory = player->get_inventory(kInventoryConstantsTypesEquipped);
-	if (!inventory)
-	{
-		write<int>(0);
-	}
-	else
-	{
-		auto medal = inventory->get_item_by_slot(kItemConstantsEquippedSlotsMedal);
-		write<int>(medal ? medal->get_item_id() : 0);
-	}
-
-	// collected medals info
-	write<short>(0); // size
-
-	// to-do write collected medals info here
 }
 
 void PacketCreator::SendFame(std::string name, signed char type)
