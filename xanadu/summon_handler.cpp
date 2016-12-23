@@ -25,11 +25,13 @@ void Player::handle_summon_movement()
 	// only send if there are other players in the map
 	if (map_->get_players()->size() > 1)
 	{
-		// exclude header
-		// send a packet
-		PacketCreator packet25;
-		packet25.MoveSummon(id_, session_->get_receive_buffer() + 2, recv_length_ - 2);
-		map_->send_packet(&packet25, this);
+		{
+			// exclude header
+			// send a packet
+			PacketCreator packet;
+			packet.MoveSummon(id_, session_->get_receive_buffer() + 2, recv_length_ - 2);
+			map_->send_packet(&packet, this);
+		}
 	}
 }
 
@@ -60,9 +62,11 @@ void Player::handle_damage_mob_summon()
 
 	if (map_->get_players()->size() > 1)
 	{
-		PacketCreator packet3;
-		packet3.DamageMobSummon(this, summon_object_id, 4, damages);
-		map_->send_packet(&packet3, this);
+		{
+			PacketCreator packet;
+			packet.DamageMobSummon(this, summon_object_id, 4, damages);
+			map_->send_packet(&packet, this);
+		}
 	}
 
 	for (auto &it : damages)

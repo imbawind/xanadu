@@ -30,10 +30,12 @@ void Player::handle_chat_command()
 	{
 		if (!receiver_player || receiver_player->get_is_gm() && !get_is_gm())
 		{
-			// packet
-			PacketCreator packet10;
-			packet10.FindPlayerReply(name, false);
-			send_packet(&packet10);
+			{
+				// packet
+				PacketCreator packet;
+				packet.FindPlayerReply(name, false);
+				send_packet(&packet);
+			}
 
 			return;
 		}
@@ -41,25 +43,31 @@ void Player::handle_chat_command()
 		{
 			if (receiver_player->get_is_in_cash_shop())
 			{
-				// packet
-				PacketCreator packet11;
-				packet11.FindPlayerCashShop(receiver_player->get_name());
-				send_packet(&packet11);
+				{
+					// packet
+					PacketCreator packet;
+					packet.FindPlayerCashShop(receiver_player->get_name());
+					send_packet(&packet);
+				}
 			}
 			else
 			{
-				// packet
-				PacketCreator packet12;
-				packet12.FindPlayerMap(receiver_player->get_name(), receiver_player->get_map()->get_id());
-				send_packet(&packet12);
+				{
+					// packet
+					PacketCreator packet;
+					packet.FindPlayerMap(receiver_player->get_name(), receiver_player->get_map()->get_id());
+					send_packet(&packet);
+				}
 			}
 		}
 		else
 		{
-			// packet
-			PacketCreator packet13;
-			packet13.FindPlayerChannel(receiver_player->get_name(), receiver_player->get_channel_id());
-			send_packet(&packet13);
+			{
+				// packet
+				PacketCreator packet;
+				packet.FindPlayerChannel(receiver_player->get_name(), receiver_player->get_channel_id());
+				send_packet(&packet);
+			}
 		}
 		break;
 	}
@@ -78,22 +86,28 @@ void Player::handle_chat_command()
 				return;
 			}
 
-			// send a packet
-			PacketCreator packet14;
-			packet14.WhisperPlayer(this, message);
-			receiver_player->send_packet(&packet14);
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.WhisperPlayer(this, message);
+				receiver_player->send_packet(&packet);
+			}
 
-			// send a packet
-			PacketCreator packet15;
-			packet15.FindPlayerReply(receiver_player->get_name(), true);
-			send_packet(&packet15);
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.FindPlayerReply(receiver_player->get_name(), true);
+				send_packet(&packet);
+			}
 		}
 		else
 		{
-			// packet
-			PacketCreator packet16;
-			packet16.FindPlayerReply(name, false);
-			send_packet(&packet16);
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.FindPlayerReply(name, false);
+				send_packet(&packet);
+			}
 		}
 		break;
 	}
@@ -150,130 +164,160 @@ void Player::handle_use_chat()
 
 		else if (command == "pos")
 		{
-			// packet
-			PacketCreator packet51;
-			packet51.ShowMessage("x: " + std::to_string(position_x_) + " y: " + std::to_string(position_y_) + " foothold: " + std::to_string(foothold_) + " map: " + std::to_string(map_->get_id()), 5);
-			send_packet(&packet51);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage("x: " + std::to_string(position_x_) + " y: " + std::to_string(position_y_) + " foothold: " + std::to_string(foothold_) + " map: " + std::to_string(map_->get_id()), 5);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posa")
 		{
-			// door skill test
-			PacketCreator packet2;
-			packet2.SpawnDoor(1, true, position_x_, position_y_);
-			send_packet(&packet2);
+			{
+				// door skill test
+				PacketCreator packet;
+				packet.SpawnDoor(1, true, position_x_, position_y_);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posb")
 		{
-			// packet
-			PacketCreator packet52;
-			packet52.ShowMessage("x: " + std::to_string(position_x_) + " y: " + std::to_string(position_y_) + " foothold: " + std::to_string(foothold_) + " map: " + std::to_string(map_->get_id()), 5);
-			send_packet(&packet52);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage("x: " + std::to_string(position_x_) + " y: " + std::to_string(position_y_) + " foothold: " + std::to_string(foothold_) + " map: " + std::to_string(map_->get_id()), 5);
+				send_packet(&packet);
+			}
 
-			// door skill test
-			PacketCreator packet2;
-			packet2.RemoveDoor(1, true);
-			send_packet(&packet2);
+			{
+				// door skill test
+				PacketCreator packet;
+				packet.RemoveDoor(1, true);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posc")
 		{
-			// packet
-			PacketCreator packet53;
-			packet53.ShowMessage("x: " + std::to_string(position_x_) + " y: " + std::to_string(position_y_) + " foothold: " + std::to_string(foothold_) + " map: " + std::to_string(map_->get_id()), 5);
-			send_packet(&packet53);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage("x: " + std::to_string(position_x_) + " y: " + std::to_string(position_y_) + " foothold: " + std::to_string(foothold_) + " map: " + std::to_string(map_->get_id()), 5);
+				send_packet(&packet);
+			}
 
-			// poison mist skill test
-			PacketCreator packet2;
-			int object_id = 1;
-			int skill_id = 2111003;
-			signed char skill_level = 10;
-			int mist_position_width = 300;
-			int mist_position_height = 300;
-			packet2.SpawnMist(object_id, id_, skill_id, position_x_, position_y_, mist_position_width, mist_position_height, skill_level);
-			send_packet(&packet2);
+			{
+				// poison mist skill test
+				int object_id = 1;
+				int skill_id = 2111003;
+				signed char skill_level = 10;
+				int mist_position_width = 300;
+				int mist_position_height = 300;
+				PacketCreator packet;				
+				packet.SpawnMist(object_id, id_, skill_id, position_x_, position_y_, mist_position_width, mist_position_height, skill_level);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posd")
 		{
-			// packet
-			PacketCreator packet54;
-			packet54.ShowMessage("x: " + std::to_string(position_x_) + " y: " + std::to_string(position_y_) + " foothold: " + std::to_string(foothold_) + " map: " + std::to_string(map_->get_id()), 5);
-			send_packet(&packet54);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage("x: " + std::to_string(position_x_) + " y: " + std::to_string(position_y_) + " foothold: " + std::to_string(foothold_) + " map: " + std::to_string(map_->get_id()), 5);
+				send_packet(&packet);
+			}
 
-			// poison mist skill test
-			PacketCreator packet2;
-			int object_id = 1;
-			packet2.RemoveMist(object_id);
-			send_packet(&packet2);
+			{
+				// poison mist skill test
+				int object_id = 1;
+				PacketCreator packet;
+				packet.RemoveMist(object_id);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "pose")
 		{
-			// packet
-			PacketCreator packet5;
-			packet5.obtain_cp();
-			send_packet(&packet5);
+			{
+				// packet
+				PacketCreator packet;
+				packet.obtain_cp();
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posf")
 		{
-			// packet
-			PacketCreator packet6;
-			packet6.obtain_party_cp(mcpq_constants::kTeamRed);
-			send_packet(&packet6);
+			{
+				// packet
+				PacketCreator packet;
+				packet.obtain_party_cp(mcpq_constants::kTeamRed);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posg")
 		{
-			// packet
-			PacketCreator packet7;
-			packet7.carnival_pq_message(5);
-			send_packet(&packet7);
+			{
+				// packet
+				PacketCreator packet;
+				packet.carnival_pq_message(5);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posh")
 		{
-			// packet
-			PacketCreator packet8;
-			packet8.carnival_pq_summon(0, 2, name_);
-			send_packet(&packet8);
+			{
+				// packet
+				PacketCreator packet;
+				packet.carnival_pq_summon(0, 2, name_);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posi")
 		{
-			// packet
-			PacketCreator packet9;
-			packet9.carnival_pq_died(10, mcpq_constants::kTeamRed, name_);
-			send_packet(&packet9);
+			{
+				// packet
+				PacketCreator packet;
+				packet.carnival_pq_died(10, mcpq_constants::kTeamRed, name_);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posj")
 		{
-			// packet
-			PacketCreator packet10;
-			packet10.leave_carnival_pq(false, mcpq_constants::kTeamBlue, name_);
-			send_packet(&packet10);
+			{
+				// packet
+				PacketCreator packet;
+				packet.leave_carnival_pq(false, mcpq_constants::kTeamBlue, name_);
+				send_packet(&packet);
+			}
 		}
 
 		// for development purposes only
 		else if (command == "posk")
 		{
-			// packet
-			PacketCreator packet11;
-			packet11.cpq_show_game_result(11);
-			send_packet(&packet11);
+			{
+				// packet
+				PacketCreator packet;
+				packet.cpq_show_game_result(11);
+				send_packet(&packet);
+			}
 		}
 
 		else if (command == "maxskills")
@@ -309,10 +353,13 @@ void Player::handle_use_chat()
 						skills_[skill_id] = skill;
 					}
 				}
-				// send a packet
-				PacketCreator packet1;
-				packet1.UpdateSkills(this);
-				send_packet(&packet1);
+
+				{
+					// send a packet
+					PacketCreator packet;
+					packet.UpdateSkills(this);
+					send_packet(&packet);
+				}
 			}
 			}
 		}
@@ -325,10 +372,12 @@ void Player::handle_use_chat()
 			{
 				shop_ = gmshop;
 
-				// packet
-				PacketCreator packet16;
-				packet16.ShowNpcShop(shop_);
-				send_packet(&packet16);
+				{
+					// packet
+					PacketCreator packet;
+					packet.ShowNpcShop(shop_);
+					send_packet(&packet);
+				}
 			}
 		}
 
@@ -365,10 +414,13 @@ void Player::handle_use_chat()
 			{
 				mesos_ = 0;
 			}
-			// packet
-			PacketCreator packet55;
-			packet55.UpdateStatInt(kCharacterStatsMesos, mesos_);
-			send_packet(&packet55);
+
+			{
+				// packet
+				PacketCreator packet;
+				packet.UpdateStatInt(kCharacterStatsMesos, mesos_);
+				send_packet(&packet);
+			}
 		}
 
 		else if (command == "level")
@@ -379,7 +431,7 @@ void Player::handle_use_chat()
 				set_exp(0);
 				set_level(stoi(message.substr(message.find(" ") + 1)));
 			}
-			
+
 		}
 
 		else if (command == "levelup")
@@ -547,40 +599,48 @@ void Player::handle_use_chat()
 			}
 			world->set_header_message(header_message);
 
-			// packet
-			PacketCreator packet57;
-			packet57.ShowMessage(header_message, 4);
-			world->send_packet(&packet57);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage(header_message, 4);
+				world->send_packet(&packet);
+			}
 		}
 
 		else if (command == "say")
 		{
 			std::string notice = message.substr(message.find(" ") + 1);
 
-			// packet
-			PacketCreator packet58;
-			packet58.ShowMessage("[" + get_name() + "] " + notice, 6);
-			world->send_packet(&packet58);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage("[" + get_name() + "] " + notice, 6);
+				world->send_packet(&packet);
+			}
 		}
 
 		else if (command == "notice")
 		{
 			std::string notice = message.substr(message.find(" ") + 1);
 
-			// packet
-			PacketCreator packet59;
-			packet59.ShowMessage(notice, 0);
-			world->send_packet(&packet59);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage(notice, 0);
+				world->send_packet(&packet);
+			}
 		}
 
 		else if (command == "notice2")
 		{
 			std::string notice = message.substr(message.find(" ") + 1);
 
-			// packet
-			PacketCreator packet60;
-			packet60.ShowMessage(notice, 1);
-			world->send_packet(&packet60);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage(notice, 1);
+				world->send_packet(&packet);
+			}
 		}
 
 		else if (command == "hide")
@@ -609,19 +669,23 @@ void Player::handle_use_chat()
 				{
 					std::string name = player->get_name();
 
-					// packet
-					PacketCreator packet90;
-					packet90.ShowMessage(name, 5);
-					send_packet(&packet90);
+					{
+						// packet
+						PacketCreator packet;
+						packet.ShowMessage(name, 5);
+						send_packet(&packet);
+					}
 				}
 			}
 
 			int online_amount = static_cast<int>(players->size());
 
-			// packet
-			PacketCreator packet91;
-			packet91.ShowMessage("There are " + std::to_string(online_amount) + " players online.", 5);
-			send_packet(&packet91);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage("There are " + std::to_string(online_amount) + " players online.", 5);
+				send_packet(&packet);
+			}
 		}
 
 		else if (command == "shutdown")
@@ -693,12 +757,14 @@ void Player::handle_use_chat()
 				if (target_player)
 				{
 					target_player->add_donation_points(point_amount);
-					
-					// packet
-					PacketCreator packet93;
-					packet93.ShowMessage("You have just gained " + std::to_string(point_amount) + " donation points. Visit Donator Npc Mos in FM.", 1);
-					target_player->send_packet(&packet93);
-					
+
+					{
+						// packet
+						PacketCreator packet;
+						packet.ShowMessage("You have just gained " + std::to_string(point_amount) + " donation points. Visit Donator Npc Mos in FM.", 1);
+						target_player->send_packet(&packet);
+					}
+
 					return;
 				}
 			}
@@ -723,10 +789,12 @@ void Player::handle_use_chat()
 
 			if (ticks < (last_gm_call_ticks_ + (3 * 60 * 1000)))
 			{
-				// packet
-				PacketCreator packet95;
-				packet95.ShowMessage("Contacting the staff has a time limit of 3 minutes.", 1);
-				send_packet(&packet95);
+				{
+					// packet
+					PacketCreator packet;
+					packet.ShowMessage("Contacting the staff has a time limit of 3 minutes.", 1);
+					send_packet(&packet);
+				}
 
 				return;
 			}
@@ -742,17 +810,21 @@ void Player::handle_use_chat()
 				Player *player = it.second;
 				if (player->get_is_gm())
 				{
-					// packet
-					PacketCreator packet96;
-					packet96.ShowMessage("[HELP CALL] player: " + name_ + " message: " + text, 6);
-					player->send_packet(&packet96);
+					{
+						// packet
+						PacketCreator packet;
+						packet.ShowMessage("[HELP CALL] player: " + name_ + " message: " + text, 6);
+						player->send_packet(&packet);
+					}
 				}
 			}
 
-			// packet
-			PacketCreator packet97;
-			packet97.ShowMessage("A staff member will get to you as soon as possible.", 0);
-			send_packet(&packet97);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage("A staff member will get to you as soon as possible.", 0);
+				send_packet(&packet);
+			}
 		}
 
 		else if (command == "pq")
@@ -762,15 +834,19 @@ void Player::handle_use_chat()
 
 		else if (command == "check")
 		{
-			// packet
-			PacketCreator packet98;
-			packet98.ShowMessage("NX Cash: " + std::to_string(nx_cash_credit_), 5);
-			send_packet(&packet98);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage("NX Cash: " + std::to_string(nx_cash_credit_), 5);
+				send_packet(&packet);
+			}
 
-			// packet
-			PacketCreator packet99;
-			packet99.ShowMessage("Donation Points: " + std::to_string(donation_points_), 5);
-			send_packet(&packet99);
+			{
+				// packet
+				PacketCreator packet;
+				packet.ShowMessage("Donation Points: " + std::to_string(donation_points_), 5);
+				send_packet(&packet);
+			}
 		}
 
 		else if (command == "str")
@@ -832,10 +908,12 @@ void Player::handle_use_chat()
 	}
 	else
 	{
-		// send a packet
-		PacketCreator packet;
-		packet.ShowChatMessage(this, message, bubble_only);
-		map_->send_packet(&packet);
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.ShowChatMessage(this, message, bubble_only);
+			map_->send_packet(&packet);
+		}
 	}
 }
 
@@ -874,9 +952,11 @@ void Player::handle_use_group_chat()
 	{
 		Player *target_player = it.second;
 
-		// packet
-		PacketCreator packet1;
-		packet1.ShowSpecialChat(type, name_, message);
-		target_player->send_packet(&packet1);
+		{
+			// packet
+			PacketCreator packet;
+			packet.ShowSpecialChat(type, name_, message);
+			target_player->send_packet(&packet);
+		}
 	}
 }

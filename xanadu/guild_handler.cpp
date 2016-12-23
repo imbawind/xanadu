@@ -42,11 +42,12 @@ void Player::handle_guild_action()
 		{
 			return;
 		}
-		// send a packet
-		PacketCreator packet21;
-		packet21.InviteGuild(this);
-		invited->send_packet(&packet21);
-
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.InviteGuild(this);
+			invited->send_packet(&packet);
+		}
 		break;
 	}
 	case 6: // Join a guild
@@ -67,11 +68,12 @@ void Player::handle_guild_action()
 		{
 			return;
 		}
-		// send a packet
-		PacketCreator packet22;
-		packet22.GuildPlayerLeave(guild_->get_id(), id_, name_);
-		guild_->send_packet(&packet22);
-		//
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.GuildPlayerLeave(guild_->get_id(), id_, name_);
+			guild_->send_packet(&packet);
+		}
 		guild_->DeleteMember(id_);
 		guild_ = nullptr;
 		guild_rank_ = 5;
@@ -110,12 +112,12 @@ void Player::handle_guild_action()
 		guild_->SetRank3(rank3, false);
 		guild_->SetRank4(rank4, false);
 		guild_->SetRank5(rank5, false);
-
-		// send a packet
-		PacketCreator packet24;
-		packet24.UpdateGuildRanks(guild_);
-		guild_->send_packet(&packet24);
-
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.UpdateGuildRanks(guild_);
+			guild_->send_packet(&packet);
+		}
 		break;
 	}
 	case 14: // Change someones rank
@@ -140,12 +142,12 @@ void Player::handle_guild_action()
 		{
 			target_player->set_guild_rank(new_rank);
 		}
-
-		// send a packet
-		PacketCreator packet25;
-		packet25.ChangeRank(guild_->get_id(), target_player_id, new_rank);
-		guild_->send_packet(&packet25);
-
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.ChangeRank(guild_->get_id(), target_player_id, new_rank);
+			guild_->send_packet(&packet);
+		}
 		break;
 	}
 	case 15: // Change emblem
@@ -159,12 +161,12 @@ void Player::handle_guild_action()
 		guild_->SetLogoBackgroundColor(read<signed char>(), false);
 		guild_->SetLogo(read<short>(), false);
 		guild_->SetLogoColor(read<signed char>(), false);
-
-		// send a packet
-		PacketCreator packet26;
-		packet26.ShowGuildEmblem(guild_);
-		guild_->send_packet(&packet26);
-
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.ShowGuildEmblem(guild_);
+			guild_->send_packet(&packet);
+		}
 		break;
 	}
 	case 16: // Change the notice
@@ -176,12 +178,12 @@ void Player::handle_guild_action()
 
 		std::string &notice = read<std::string>();
 		guild_->SetNotice(notice, false);
-
-		// send a packet
-		PacketCreator packet27;
-		packet27.UpdateGuildNotice(guild_);
-		guild_->send_packet(&packet27);
-
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.UpdateGuildNotice(guild_);
+			guild_->send_packet(&packet);
+		}
 		break;
 	}
 	}
@@ -253,9 +255,11 @@ void Player::handle_guild_bbs_action()
 
 		// to-do get guild bbs data from cache or mysql and use it in the packet
 
-		PacketCreator packet50;
-		packet50.guild_bbs_thread_list(start * 10);
-		send_packet(&packet50);
+		{
+			PacketCreator packet;
+			packet.guild_bbs_thread_list(start * 10);
+			send_packet(&packet);
+		}
 		break;
 	}
 	case kListThreadAndReply: // List thread + reply, followed by id (int).
