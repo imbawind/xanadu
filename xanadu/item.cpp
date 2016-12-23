@@ -128,7 +128,7 @@ Item::Item(int item_id, bool random_equip_stats):
 	// then get unique id
 
 	World *world = World::get_instance();
-	int commodity_id_sn_ = world->get_cash_item_unique_sn_id();
+	unique_id_ = world->get_cash_item_unique_sn_id();
 }
 
 bool Item::is_star()
