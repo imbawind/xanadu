@@ -514,14 +514,14 @@ _LARGE_INTEGER = struct of long and unsigned long = 4 + 4 bytes = 8 bytes
 
 void PacketCreator::CashShopAddCashItemData(const std::shared_ptr<Item> &item, int account_id)
 {
-	write<long long>(item->get_unique_id()); // cash unique id
+	write<long long>(item->get_unique_id());
 	write<int>(account_id);
 	write<int>(0); // character id? dwCharacterID
 	write<int>(item->get_item_id());
-	write<int>(item->get_commodity_id_sn()); // commodity ID/SN
+	write<int>(item->get_commodity_id_sn());
 	write<short>(item->get_amount());
-	write_string("", 13); // character name (who made the gift?)
-	write<long long>(0); // expiration date
+	write_string("", 13); // character name? (who made the gift?)
+	write<long long>(item->get_expiration_time());
 	write<int>(0); // nPaybackRate
 	write<int>(0); // nDiscountRate
 }
