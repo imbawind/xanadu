@@ -807,7 +807,7 @@ void PacketCreator::AddSkillInfo(Player *player)
 void PacketCreator::AddCoolDownInfo(Player *player)
 {
 	write<short>(0); // size
-	
+
 	// (followed 1. by skillid (int)
 	// and 2. time (short))
 }
@@ -878,9 +878,55 @@ void PacketCreator::change_map(Player *player, bool is_connect_packet)
 {
 	write<short>(send_headers::kWARP_TO_MAP);
 	write<int>(player->get_channel_id());
-	write<signed char>(1); // portal count? (probably starts with 1 upon login, increases each when entering portal)
+	write<signed char>(1);
 	write<bool>(is_connect_packet);
-	write<short>(0); // amount for some kind of message on the screen?
+
+	// messages on the screen that disappears after some seconds
+
+	write<short>(0); // 0 = nothing, more than 0 = amount of message lines
+
+	// if more than 0:
+
+	// write string title
+
+	// and for each message line: write string message
+
+	// extract follows
+
+	/*
+	for the 2 bytes above this comment (v96):
+
+	  v96 = (unsigned __int16)CInPacket::Decode2(v2);
+  Src = 0;
+  sub_414EDD(&Str2, 0xFFFFFFFF);
+  v103 = 0;
+  v89 = 0;
+  LOBYTE(v103) = 1;
+  if ( v96 )
+  {
+    v3 = CInPacket::DecodeStr(&v102);
+    LOBYTE(v103) = 2;
+    ZXString_char_::operator_(v3);
+    LOBYTE(v103) = 1;
+    if ( v102 )
+      sub_434E38((volatile LONG *)(v102 - 12));
+    if ( v96 > 0 )
+    {
+      v101 = v96;
+      do
+      {
+        CInPacket::DecodeStr(&v102);
+        LOBYTE(v103) = 3;
+        sub_4655D4(-1);
+        ZXString_char_::operator_(&v102);
+        LOBYTE(v103) = 1;
+        if ( v102 )
+          sub_434E38((volatile LONG *)(v102 - 12));
+        --v101;
+      }
+      while ( v101 );
+    }
+  }*/
 
 	if (is_connect_packet)
 	{

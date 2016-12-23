@@ -96,28 +96,8 @@ void Player::handle_cash_shop_action()
 
 		cashshop_storage_items_.push_back(item);
 
-		// to-do check if cashshop storage still has space
-
-		/*if (!give_item(item_id, amount))
-		{
-			// to-do send the cashshop error packet instead of those packets down there
-
-			{
-				// send a packet
-				PacketCreator packet;
-				packet.ShowCashPoints(nx_cash_credit_);
-				send_packet(&packet);
-			}
-
-			{
-				// send a packet
-				PacketCreator packet;
-				packet.EnableAction();
-				send_packet(&packet);
-			}
-
-			return;
-		}*/
+		// to-do check if cash storage still has space for it
+		// to-do send the cashshop error packet then
 
 		nx_cash_credit_ -= price;
 
@@ -282,14 +262,6 @@ void Player::handle_cash_shop_action()
 
 		cashshop_storage_items_.clear();
 
-		// might not be needed
-		{
-			// send a packet
-			PacketCreator packet;
-			packet.GetCashShopInventory(cashshop_storage_items_, user_id_, storage_slots_, character_slots_);
-			send_packet(&packet);
-		}
-
 		break;
 	}
 	/*case CashShopReceivePacketActions::kStoreCashItem:
@@ -335,32 +307,23 @@ void Player::handle_cash_shop_action()
 
 			cashshop_storage_items_.push_back(item);
 
-			/*if (!give_item(item_id, amount))
-			{
-				{
-					// send a packet
-					PacketCreator packet;
-					packet.ShowCashPoints(nx_cash_credit_);
-					send_packet(&packet);
-				}
+			// to-do check if cash storage still has space for it
+			// to-do send the cashshop error packet then
 
-				{
-					// send a packet
-					PacketCreator packet;
-					packet.EnableAction();
-					send_packet(&packet);
-				}
-
-				return;
-			}
 			nx_cash_credit_ -= price;
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.ShowCashPoints(nx_cash_credit_);
+				send_packet(&packet);
+			}
 
 			{
 				// send a packet
 				PacketCreator packet;
 				packet.ShowBoughtCashItem(item, user_id_);
 				send_packet(&packet);
-			}*/
+			}
 		}
 
 		break;
