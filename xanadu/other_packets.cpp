@@ -1119,12 +1119,7 @@ void PacketCreator::ShowInfo(Player *player)
 	write<signed char>(player->get_level());
 	write<short>(player->get_job());
 	write<short>(player->get_fame());
-
-	// marriage info
-
-	bool is_maried = player->is_married();
-
-	write<bool>(is_maried);
+	write<bool>(player->is_married());
 
 	// guild info
 
@@ -1140,6 +1135,8 @@ void PacketCreator::ShowInfo(Player *player)
 	}
 
 	write<std::string>(""); // guild alliance name
+
+	// end of guild info
 
 	write<signed char>(0);
 
@@ -1209,11 +1206,11 @@ void PacketCreator::ShowInfo(Player *player)
 	// end of wishlist info
 
 	// monster book info
-	write<int>(1);
-	write<int>(0);
-	write<int>(0);
-	write<int>(0);
-	write<int>(0);
+	write<int>(1); // book level?
+	write<int>(0); // normal card?
+	write<int>(0); // special card?
+	write<int>(0); // total cards?
+	write<int>(0); // monster book cover?
 	// end of monster book info
 }
 
