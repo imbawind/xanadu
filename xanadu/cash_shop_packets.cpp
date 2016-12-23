@@ -43,6 +43,9 @@ void PacketCreator::EnterCashShop(Player *player)
 	write<std::string>(player->get_user_name());
 
 	/*
+
+	the following data is about removing specific cashshop items from the cashshop totally
+
 	some info for the following write<int>
 
 	  v12 = CInPacket::Decode4(iPacket);
@@ -54,7 +57,9 @@ void PacketCreator::EnterCashShop(Player *player)
 	CInPacket::DecodeBuffer(iPacket, (void *)i, 4 * v13);
   }
   */
-	write<int>(0); // size for something in CWvsContext::SetSaleInfo (nNotSaleCount?)
+	write<int>(0); // size for nNotSaleCount in CWvsContext::SetSaleInfo
+
+	// loop with the size amount, write SN's 4 bytes int each
 
 
 	// -------------------------------------------------------------------------------
