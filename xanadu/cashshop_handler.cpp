@@ -10,6 +10,7 @@
 #include "cash_shop_package_data_provider.hpp"
 #include "cash_item_data.hpp"
 #include "cashshop_constants.hpp"
+#include "constants.hpp"
 
 void Player::handle_cash_shop_enter()
 {
@@ -266,11 +267,12 @@ void Player::handle_cash_shop_action()
 
 					continue;
 				}
-
-				// send a packet
-				PacketCreator packet;
-				packet.TakeOutFromCashShopInventory(it.get(), 1);
-				send_packet(&packet);
+				{
+					// send a packet
+					PacketCreator packet;
+					packet.TakeOutFromCashShopInventory(it.get(), 1);
+					send_packet(&packet);
+				}
 			}
 		}
 
@@ -278,14 +280,63 @@ void Player::handle_cash_shop_action()
 
 		break;
 	}
-	/*case CashShopReceivePacketActions::kStoreCashItem:
+	case CashShopReceivePacketActions::kStoreCashItem:
+	{
+		int cash_item_unique_id_sn = read<int>();
+
+		// to-do check if cashshop storage still has space left
+
+		Inventory *equip_inventory = get_inventory(kInventoryConstantsTypesEquip);
+
+		bool worked = false;
+
+		for (auto it : *equip_inventory->get_items())
 		{
-			//int cash_sn = read<int>();
+			if (it.second->get_unique_id() != cash_item_unique_id_sn)
+				continue;
 
-			//send_packet(PacketCreator().transfer_to_cash_shop_inventory(user_id_, 0, 0, 0));
+			cashshop_storage_items_.push_back(it.second);
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.TransferToCashShopInventory(it.second, user_id_);
+				send_packet(&packet);
+			}
 
+			signed char target_item_slot = it.second->get_slot();
+			equip_inventory->remove_item_by_slot(target_item_slot, 1, false);
+
+			worked = true;
 			break;
-		}*/
+		}
+
+		if (!worked)
+		{
+			Inventory *cash_inventory = get_inventory(kInventoryConstantsTypesCash);
+
+			for (auto it : *cash_inventory->get_items())
+			{
+				if (it.second->get_unique_id() != cash_item_unique_id_sn)
+					continue;
+
+				cashshop_storage_items_.push_back(it.second);
+				{
+					// send a packet
+					PacketCreator packet;
+					packet.TransferToCashShopInventory(it.second, user_id_);
+					send_packet(&packet);
+				}
+
+				signed char target_item_slot = it.second->get_slot();
+				cash_inventory->remove_item_by_slot(target_item_slot, 1, false);
+
+				worked = true;
+				break;
+			}
+		}
+
+		break;
+	}
 	case CashShopReceivePacketActions::kBuyPackage:
 	{
 		skip_bytes(1);
