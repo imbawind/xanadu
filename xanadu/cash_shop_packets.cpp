@@ -225,7 +225,7 @@ void PacketCreator::EnterCashShop(Player *player)
   CCashShop::DecodeLimitGoods(v53, v54);
   */
 
-	/*for (int i = 1; i <= 36; i++)
+	/*for (int i = 1; i <= 8; i++)
 	{
 		// for both genders
 		for (int j = 0; j < 2; j++)
@@ -425,6 +425,20 @@ void PacketCreator::GetCashShopInventory(std::vector<std::shared_ptr<Item>> item
 	}
 	write<short>(storage_slots);
 	write<short>(character_slots);
+}
+
+void PacketCreator::CashShopShowGifts()
+{
+	write<short>(send_headers::kCASHSHOP_OPERATION);
+	write<signed char>(0x31); // action
+	write<short>(0); // size
+}
+
+void PacketCreator::CashShopShowWishlist()
+{
+	write<short>(send_headers::kCASHSHOP_OPERATION);
+	write<signed char>(0x33); // action
+	write_null(40);
 }
 
 void PacketCreator::TakeOutFromCashShopInventory(Item *item, short position)

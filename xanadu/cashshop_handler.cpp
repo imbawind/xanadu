@@ -33,6 +33,20 @@ void Player::handle_cash_shop_enter()
 	{
 		// send a packet
 		PacketCreator packet;
+		packet.CashShopShowGifts();
+		send_packet(&packet);
+	}
+
+	{
+		// send a packet
+		PacketCreator packet;
+		packet.CashShopShowWishlist();
+		send_packet(&packet);
+	}
+
+	{
+		// send a packet
+		PacketCreator packet;
 		packet.ShowCashPoints(nx_cash_credit_);
 		send_packet(&packet);
 	}

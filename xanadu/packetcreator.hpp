@@ -82,6 +82,8 @@ public:
 	void IncreaseInventorySlots(signed char inventory, signed char slots);
 	void IncreaseStorageSlots(signed char slots);
 	void GetCashShopInventory(std::vector<std::shared_ptr<Item>> items, int account_id, short storage_slots, short character_slots);
+	void CashShopShowGifts();
+	void CashShopShowWishlist();
 	void TakeOutFromCashShopInventory(Item *item, short position);
 	void TransferToCashShopInventory(const std::shared_ptr<Item> &item, int account_id);
 	void CashShopAddCashItemData(const std::shared_ptr<Item> &item, int account_id);
