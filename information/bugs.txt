@@ -109,7 +109,7 @@ need to work out the details of these features first
 
 - storage slots need to be saved to and loaded from sql
 
--------------------- bugs --------------------
+-------------------- guilds --------------------
 
 - guild bbs needs to be fully implemented (need to check and fix sql tables draft, add bbs class, use it, make handlers and packets finished, then code mysql data saving and data loading)
 
@@ -117,7 +117,11 @@ need to work out the details of these features first
 
 - when a guild emblem is added/changed/removed, the guild emblem name isn't shown/updated/removed to other players in the map
 
-- player summontimer needs to be fixed
+- make sure guild master cannot delete his character (need check at character deletion)? or atleast prevent guild messing up due to that
+
+- when a character is deleted, maybe delete it from guilds cache too and send that update to all online guild members?
+
+-------------------- buddys --------------------
 
 - to-do fix target character doesn't get buddy invite after logging in if someone sent buddy request while he was offline
 
@@ -126,6 +130,12 @@ need to work out the details of these features first
 - to-do fix buddy's don't get the info that player changed channel
 
 - to-do fix when buddy is deleted, the buddy still see's the deleter as online (not sure if this is a bug)
+
+-------------------- bugs --------------------
+
+- need to make a change in Item.cpp: unique id is only needed for cash stuff (cash items, cash equips and pets), change it to be that way
+
+- player summontimer needs to be fixed
 
 - to-do fix when trying to fame/defame someone within the blocked time, it says try again later instead of the correct message (not sure if this is a bug)
 
@@ -148,8 +158,6 @@ need to work out the details of these features first
 - to-do apply design rules like function naming convention
 
 - to-do make correct use of const and reference usage and passing
-
-- make sure guild master cannot delete his character (need check at character deletion)? or atleast prevent guild messing up due to that
 
 - INFO: look up odinms based repacks how they load info from wz xmls which are simply extracts from .wz files, this will help to make proper use of .wz files
 
