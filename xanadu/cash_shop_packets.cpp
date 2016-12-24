@@ -419,6 +419,13 @@ void PacketCreator::IncreaseStorageSlots(signed char slots)
 	write<short>(slots);
 }
 
+void PacketCreator::CashShopIncreaseCharacterSlots(short slots)
+{
+	write<short>(send_headers::kCASHSHOP_OPERATION);
+	write<unsigned char>(0x48); // action
+	write<short>(slots);
+}
+
 void PacketCreator::GetCashShopInventory(std::vector<std::shared_ptr<Item>> items, int account_id, short storage_slots, short character_slots)
 {
 	write<short>(send_headers::kCASHSHOP_OPERATION);

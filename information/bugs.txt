@@ -97,11 +97,7 @@ need to work out the details of these features first
 
 - to-do fix when closing hired merchant, items are stored, but it seems that amount of items stays at 1, so if multiple items were put it, some are lost
 
--------------------- bugs --------------------
-
-- probably need to merge pet unique id and cash unique id
-
-- buying character slot needs to be fixed
+-------------------- cashshop --------------------
 
 - when buying cash item or package or storing or retrieving cash items, it needs to be checked first if the cash storage/item inventory has space for it
 
@@ -109,9 +105,11 @@ need to work out the details of these features first
 
 - when buying a cashitem fails, it should send the packet for that case
 
+- when an item is retrieved from the cash storage, it has a display bug: it is shown duplicate instead of one item that was already there (only a display bug, maybe an error in the packet)
+
 - storage slots need to be saved to and loaded from sql
 
-- cashshop buying slots needs to be fixed
+-------------------- bugs --------------------
 
 - guild bbs needs to be fully implemented (need to check and fix sql tables draft, add bbs class, use it, make handlers and packets finished, then code mysql data saving and data loading)
 

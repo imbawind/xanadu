@@ -71,7 +71,7 @@ Item::Item(int item_id, bool random_equip_stats):
 		PetData *data = PetDataProvider::get_instance()->get_data_by_id(item_id);
 		if (data)
 		{
-			unique_id_ = World::get_instance()->get_pet_id();
+			unique_id_ = World::get_instance()->get_cash_item_unique_sn_id();
 			name_ = data->get_name();
 		}
 	}
@@ -124,8 +124,7 @@ Item::Item(int item_id, bool random_equip_stats):
 		}
 	}
 
-	// item data check if is cash
-	// then get unique id
+	// to-do item data check if is cash then get unique id
 
 	World *world = World::get_instance();
 	unique_id_ = world->get_cash_item_unique_sn_id();

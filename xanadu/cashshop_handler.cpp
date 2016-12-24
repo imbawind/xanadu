@@ -213,18 +213,23 @@ void Player::handle_cash_shop_action()
 	{
 		skip_bytes(1);
 		skip_bytes(4); // type of cash used
-		int cash_sn = read<int>(); // ? sn of the character slot item maybe?
+		int commodity_id_sn = read<int>();
 
-		if (character_slots_ < 21 && nx_cash_credit_ > 6700)
+		if (character_slots_ < 6 && nx_cash_credit_ > 6900)
 		{
-			nx_cash_credit_ -= 6700;
+			nx_cash_credit_ -= 6900;
 			character_slots_ += 1;
 
-			// to-do use original packet for it?
 			{
 				// send a packet
 				PacketCreator packet;
-				packet.ShowMessage("1 slot has been added to your account character slots.", 1);
+				packet.CashShopIncreaseCharacterSlots(character_slots_);
+				send_packet(&packet);
+			}
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.ShowCashPoints(nx_cash_credit_);
 				send_packet(&packet);
 			}
 		}
