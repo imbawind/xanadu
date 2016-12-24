@@ -356,6 +356,13 @@ void Player::handle_cash_shop_action()
 		int package_id = package_cash_item->item_id;
 		std::vector<int> serial_numbers = CashShopPackageDataProvider::get_instance()->get_serial_numbers_in_cash_package(package_id);
 
+		// to-do check first if cash storage still has space for it
+		// to-do send the cashshop error packet then and return;
+
+		size_t item_amount = serial_numbers.size();
+
+		std::vector<std::shared_ptr<Item>> items;
+
 		for (int serial_number : serial_numbers)
 		{
 			CashItemData *cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(serial_number);
@@ -377,25 +384,21 @@ void Player::handle_cash_shop_action()
 
 			cashshop_storage_items_.push_back(item);
 
-			// to-do check if cash storage still has space for it
-			// to-do send the cashshop error packet then
+			items.push_back(item);
 
 			nx_cash_credit_ -= price;
-			{
-				// send a packet
-				PacketCreator packet;
-				packet.ShowCashPoints(nx_cash_credit_);
-				send_packet(&packet);
-			}
-
-			// to-do maybe package has it's own packet?
-
-			{
-				// send a packet
-				PacketCreator packet;
-				packet.ShowBoughtCashItem(item, user_id_);
-				send_packet(&packet);
-			}
+		}
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.CashShopShowBoughtPackage(items, user_id_);
+			send_packet(&packet);
+		}
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.ShowCashPoints(nx_cash_credit_);
+			send_packet(&packet);
 		}
 
 		break;

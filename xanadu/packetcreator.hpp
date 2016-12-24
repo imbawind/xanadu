@@ -78,15 +78,16 @@ public:
 	// cash
 	void EnterCashShop(Player *player);
 	void ShowCashPoints(int nx_credit);
+	void GetCashShopInventory(std::vector<std::shared_ptr<Item>> items, int account_id, short storage_slots, short character_slots);
+	void CashShopShowGifts();
+	void CashShopShowWishlist();
 	void ShowBoughtCashItem(const std::shared_ptr<Item> &item, int account_id);
 	void IncreaseInventorySlots(signed char inventory, signed char slots);
 	void IncreaseStorageSlots(signed char slots);
 	void CashShopIncreaseCharacterSlots(short slots);
-	void GetCashShopInventory(std::vector<std::shared_ptr<Item>> items, int account_id, short storage_slots, short character_slots);
-	void CashShopShowGifts();
-	void CashShopShowWishlist();
 	void TakeOutFromCashShopInventory(Item *item, short position);
 	void TransferToCashShopInventory(const std::shared_ptr<Item> &item, int account_id);
+	void CashShopShowBoughtPackage(std::vector<std::shared_ptr<Item>> items, int account_id);
 	void CashShopAddCashItemData(const std::shared_ptr<Item> &item, int account_id);
 	// chat
 	void ShowChatMessage(Player *player, const std::string &message, bool bubble_only);
