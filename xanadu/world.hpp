@@ -55,7 +55,6 @@ public:
 	int get_messenger_id();
 	int get_party_id();
 	int get_guild_id();
-	int get_pet_id();
 	int get_cash_item_unique_sn_id();
 
 	// properties
@@ -135,7 +134,6 @@ private:
 	int messenger_ids_;
 	int party_ids_;
 	int guild_ids_;
-	int pet_ids_;
 	int cash_item_unique_sn_ids_;
 	int exp_rate_;
 	std::string header_message_;

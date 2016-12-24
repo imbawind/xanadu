@@ -10,6 +10,7 @@
 #include "cash_shop_package_data_provider.hpp"
 #include "cash_item_data.hpp"
 #include "cashshop_constants.hpp"
+#include "constants.hpp"
 
 void Player::handle_cash_shop_enter()
 {
@@ -212,18 +213,23 @@ void Player::handle_cash_shop_action()
 	{
 		skip_bytes(1);
 		skip_bytes(4); // type of cash used
-		int cash_sn = read<int>(); // ? sn of the character slot item maybe?
+		int commodity_id_sn = read<int>();
 
-		if (character_slots_ < 21 && nx_cash_credit_ > 6700)
+		if (character_slots_ < 6 && nx_cash_credit_ > 6900)
 		{
-			nx_cash_credit_ -= 6700;
+			nx_cash_credit_ -= 6900;
 			character_slots_ += 1;
 
-			// to-do use original packet for it?
 			{
 				// send a packet
 				PacketCreator packet;
-				packet.ShowMessage("1 slot has been added to your account character slots.", 1);
+				packet.CashShopIncreaseCharacterSlots(character_slots_);
+				send_packet(&packet);
+			}
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.ShowCashPoints(nx_cash_credit_);
 				send_packet(&packet);
 			}
 		}
@@ -266,11 +272,12 @@ void Player::handle_cash_shop_action()
 
 					continue;
 				}
-
-				// send a packet
-				PacketCreator packet;
-				packet.TakeOutFromCashShopInventory(it.get(), 1);
-				send_packet(&packet);
+				{
+					// send a packet
+					PacketCreator packet;
+					packet.TakeOutFromCashShopInventory(it.get(), 1);
+					send_packet(&packet);
+				}
 			}
 		}
 
@@ -278,14 +285,63 @@ void Player::handle_cash_shop_action()
 
 		break;
 	}
-	/*case CashShopReceivePacketActions::kStoreCashItem:
+	case CashShopReceivePacketActions::kStoreCashItem:
+	{
+		int cash_item_unique_id_sn = read<int>();
+
+		// to-do check if cashshop storage still has space left
+
+		Inventory *equip_inventory = get_inventory(kInventoryConstantsTypesEquip);
+
+		bool worked = false;
+
+		for (auto it : *equip_inventory->get_items())
 		{
-			//int cash_sn = read<int>();
+			if (it.second->get_unique_id() != cash_item_unique_id_sn)
+				continue;
 
-			//send_packet(PacketCreator().transfer_to_cash_shop_inventory(user_id_, 0, 0, 0));
+			cashshop_storage_items_.push_back(it.second);
+			{
+				// send a packet
+				PacketCreator packet;
+				packet.TransferToCashShopInventory(it.second, user_id_);
+				send_packet(&packet);
+			}
 
+			signed char target_item_slot = it.second->get_slot();
+			equip_inventory->remove_item_by_slot(target_item_slot, 1, false);
+
+			worked = true;
 			break;
-		}*/
+		}
+
+		if (!worked)
+		{
+			Inventory *cash_inventory = get_inventory(kInventoryConstantsTypesCash);
+
+			for (auto it : *cash_inventory->get_items())
+			{
+				if (it.second->get_unique_id() != cash_item_unique_id_sn)
+					continue;
+
+				cashshop_storage_items_.push_back(it.second);
+				{
+					// send a packet
+					PacketCreator packet;
+					packet.TransferToCashShopInventory(it.second, user_id_);
+					send_packet(&packet);
+				}
+
+				signed char target_item_slot = it.second->get_slot();
+				cash_inventory->remove_item_by_slot(target_item_slot, 1, false);
+
+				worked = true;
+				break;
+			}
+		}
+
+		break;
+	}
 	case CashShopReceivePacketActions::kBuyPackage:
 	{
 		skip_bytes(1);
@@ -299,6 +355,13 @@ void Player::handle_cash_shop_action()
 
 		int package_id = package_cash_item->item_id;
 		std::vector<int> serial_numbers = CashShopPackageDataProvider::get_instance()->get_serial_numbers_in_cash_package(package_id);
+
+		// to-do check first if cash storage still has space for it
+		// to-do send the cashshop error packet then and return;
+
+		size_t item_amount = serial_numbers.size();
+
+		std::vector<std::shared_ptr<Item>> items;
 
 		for (int serial_number : serial_numbers)
 		{
@@ -321,25 +384,21 @@ void Player::handle_cash_shop_action()
 
 			cashshop_storage_items_.push_back(item);
 
-			// to-do check if cash storage still has space for it
-			// to-do send the cashshop error packet then
+			items.push_back(item);
 
 			nx_cash_credit_ -= price;
-			{
-				// send a packet
-				PacketCreator packet;
-				packet.ShowCashPoints(nx_cash_credit_);
-				send_packet(&packet);
-			}
-
-			// to-do maybe package has it's own packet?
-
-			{
-				// send a packet
-				PacketCreator packet;
-				packet.ShowBoughtCashItem(item, user_id_);
-				send_packet(&packet);
-			}
+		}
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.CashShopShowBoughtPackage(items, user_id_);
+			send_packet(&packet);
+		}
+		{
+			// send a packet
+			PacketCreator packet;
+			packet.ShowCashPoints(nx_cash_credit_);
+			send_packet(&packet);
 		}
 
 		break;

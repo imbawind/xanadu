@@ -97,23 +97,19 @@ need to work out the details of these features first
 
 - to-do fix when closing hired merchant, items are stored, but it seems that amount of items stays at 1, so if multiple items were put it, some are lost
 
--------------------- bugs --------------------
+-------------------- cashshop --------------------
 
-- probably need to merge pet unique id and cash unique id
-
-- buying character slot needs to be fixed
-
-- when buying cash item or package with cash items, it needs to be checked first if the cash storage still has space
-
-- moving cash items into the cashshop storage/inventory doesn't work yet
+- when buying cash item or package or storing or retrieving cash items, it needs to be checked first if the cash storage/item inventory has space for it
 
 - cashshop storage/inventory isn't saved to sql or loaded from it
 
 - when buying a cashitem fails, it should send the packet for that case
 
+- when an item is retrieved from the cash storage, it has a display bug: it is shown duplicate instead of one item that was already there (only a display bug, maybe an error in the packet)
+
 - storage slots need to be saved to and loaded from sql
 
-- cashshop buying slots needs to be fixed
+-------------------- guilds --------------------
 
 - guild bbs needs to be fully implemented (need to check and fix sql tables draft, add bbs class, use it, make handlers and packets finished, then code mysql data saving and data loading)
 
@@ -121,7 +117,11 @@ need to work out the details of these features first
 
 - when a guild emblem is added/changed/removed, the guild emblem name isn't shown/updated/removed to other players in the map
 
-- player summontimer needs to be fixed
+- make sure guild master cannot delete his character (need check at character deletion)? or atleast prevent guild messing up due to that
+
+- when a character is deleted, maybe delete it from guilds cache too and send that update to all online guild members?
+
+-------------------- buddys --------------------
 
 - to-do fix target character doesn't get buddy invite after logging in if someone sent buddy request while he was offline
 
@@ -130,6 +130,12 @@ need to work out the details of these features first
 - to-do fix buddy's don't get the info that player changed channel
 
 - to-do fix when buddy is deleted, the buddy still see's the deleter as online (not sure if this is a bug)
+
+-------------------- bugs --------------------
+
+- need to make a change in Item.cpp: unique id is only needed for cash stuff (cash items, cash equips and pets), change it to be that way
+
+- player summontimer needs to be fixed
 
 - to-do fix when trying to fame/defame someone within the blocked time, it says try again later instead of the correct message (not sure if this is a bug)
 
@@ -152,8 +158,6 @@ need to work out the details of these features first
 - to-do apply design rules like function naming convention
 
 - to-do make correct use of const and reference usage and passing
-
-- make sure guild master cannot delete his character (need check at character deletion)? or atleast prevent guild messing up due to that
 
 - INFO: look up odinms based repacks how they load info from wz xmls which are simply extracts from .wz files, this will help to make proper use of .wz files
 

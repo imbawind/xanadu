@@ -45,7 +45,6 @@ World::World(bool is_dedicated_server) :
 	is_dedicated_server_(is_dedicated_server),
 	is_accepting_connections_(true),
 	id_(0),
-	pet_ids_(0),
 	cash_item_unique_sn_ids_(0),
 	summon_ids_(0),
 	messenger_ids_(0),
@@ -387,11 +386,6 @@ int World::get_party_id()
 int World::get_guild_id()
 {
 	return ++guild_ids_;
-}
-
-int World::get_pet_id()
-{
-	return ++pet_ids_;
 }
 
 int World::get_cash_item_unique_sn_id()

@@ -723,6 +723,8 @@ void PacketCreator::AddInventoryInfo(Player *player)
 		}
 	}
 
+	write<signed char>(kEndInventory);
+
 	// equipped inventory (only cash)
 	for (auto &it : *items)
 	{
@@ -734,7 +736,7 @@ void PacketCreator::AddInventoryInfo(Player *player)
 		}
 	}
 
-	write<short>(kEndInventory);
+	write<signed char>(kEndInventory);
 
 	// equip inventory
 	items = player->get_inventory(kInventoryConstantsTypesEquip)->get_items();

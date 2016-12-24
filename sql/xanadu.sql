@@ -165,7 +165,7 @@ CREATE TABLE users (
   `gm` INT NOT NULL DEFAULT '0',
   `nxcash_credit` INT NOT NULL DEFAULT '0',
   `banned` INT NOT NULL DEFAULT '0',
-  `character_slots` INT NOT NULL DEFAULT '6',
+  `character_slots` INT NOT NULL DEFAULT '5',
   `donation_points` INT NOT NULL DEFAULT '0',
   `storage_mesos` BIGINT NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
